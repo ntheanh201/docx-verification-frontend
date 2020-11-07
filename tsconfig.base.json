@@ -1,0 +1,18 @@
+{
+    "compilerOptions": {
+      "baseUrl": "./src",
+      "paths": {
+        "core": ["./packages/core"],
+        "http": ["./packages/http"],
+        "redux-core": ["./packages/redux-core"],
+        "form": ["./packages/form"],
+        "ui": ["./packages/ui"],
+        "layout": ["./packages/layout"],
+        "router": ["./packages/router"],
+        "Store": ["./app/Store/actions"],
+        "Shared/utils": ["./app/Shared/utils"],
+        "Shared/components": ["./app/Shared/components"]
+      }
+    }
+  }
+  

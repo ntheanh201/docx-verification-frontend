@@ -10,12 +10,8 @@ import {
   required,
   FORM_ERROR
 } from 'form'
-import {
-  ButtonWrapper,
-  // Icon as DefaultIcon,
-  PrimaryButton,
-  RingLoader as Ring
-} from 'ui'
+import { ButtonWrapper, PrimaryButton, RingLoader as Ring } from 'ui'
+import { registerService } from 'service'
 
 export const Register: FC = () => {
   const history = useHistory()
@@ -32,6 +28,22 @@ export const Register: FC = () => {
     transmitting: false
   })
   // const dispatch = useDispatch()
+
+  const registerActionCreator = async ({ username, password, name }) => {
+    try {
+      const user = await registerService.add({
+        username: username.trim().toLowerCase(),
+        password,
+        name
+      })
+      if (user) {
+        return 200
+      }
+      return 401
+    } catch (e) {
+      return console.error(e.message)
+    }
+  }
 
   const onSubmit = async value => {
     await setState({ transmitting: true })

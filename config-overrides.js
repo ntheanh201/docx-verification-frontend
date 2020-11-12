@@ -17,7 +17,7 @@ module.exports = function override(config, env) {
     'redux-core': path.resolve(process.cwd(), 'src', 'packages', 'redux-core'),
     router: path.resolve(process.cwd(), 'src', 'packages', 'router'),
     service: path.resolve(process.cwd(), 'src', 'packages', 'services'),
-    Store: path.resolve(process.cwd(), 'src', 'app', 'Store'),
+    Store: path.resolve(process.cwd(), 'src', 'app', 'Store', 'actions'),
     Shared: path.resolve(process.cwd(), 'src', 'app', 'Shared')
   }
 

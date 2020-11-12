@@ -1,6 +1,6 @@
 import { React, styled, FC, useState, useEffect } from 'core'
 import { useHistory } from 'router'
-// import { useDispatch, useSelector } from 'redux-core'
+import { useDispatch, useSelector } from 'redux-core'
 
 import {
   Form,
@@ -10,17 +10,13 @@ import {
   required,
   FORM_ERROR
 } from 'form'
-import {
-  ButtonWrapper,
-  // Icon as DefaultIcon,
-  PrimaryButton,
-  RingLoader as Ring
-} from 'ui'
+import { ButtonWrapper, PrimaryButton, RingLoader as Ring } from 'ui'
+import { getCurrentUser, loginActionCreator } from 'Store'
 
 export const Login: FC = () => {
   const history = useHistory()
-  // const { currentUser } = useSelector(state => state.login)
-  const currentUser = false
+  const dispatch = useDispatch()
+  const { currentUser } = useSelector(getCurrentUser)
 
   useEffect(() => {
     if (currentUser) {
@@ -35,11 +31,13 @@ export const Login: FC = () => {
 
   const onSubmit = async value => {
     await setState({ transmitting: true })
-    // const loginStatus = await dispatch(loginActionCreator(value))
+    const loginStatus = await dispatch(loginActionCreator(value))
     await setState({ transmitting: false })
-    // if (loginStatus === 200) {
-    //   history.push('/')
-    // }
+
+    console.log(loginStatus)
+    if (loginStatus) {
+      history.push('/')
+    }
     return {
       [FORM_ERROR]: 'Wrong username or password',
       username: '*',
@@ -49,12 +47,6 @@ export const Login: FC = () => {
 
   return (
     <Wrapper>
-      {/* <Icon
-        fill='#4580c2'
-        source={require('assets/ProPTIT.svg')}
-        width='60px'
-        height='60px'
-      /> */}
       <Form
         onSubmit={onSubmit}
         render={({ handleSubmit, submitError, ...form }) => {
@@ -145,7 +137,3 @@ const ErrorMessage = styled.span`
   margin: 8px 0;
   color: red;
 `
-
-// const Icon = styled(DefaultIcon)`
-//   margin-bottom: 12px;
-// `

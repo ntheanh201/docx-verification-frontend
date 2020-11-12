@@ -3,6 +3,7 @@
       "baseUrl": "./src",
       "paths": {
         "environment": ["./environments"],
+        "assets": ["./app/assets"],
         "core": ["./packages/core"],
         "http-backend": ["./packages/http"],
         "redux-core": ["./packages/redux-core"],

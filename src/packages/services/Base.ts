@@ -9,7 +9,7 @@ export default class BaseService<T> {
       ? JSON.parse(localStorage.getItem('authToken'))
       : null
     if (authToken) {
-      axios.defaults.headers.Authorization = `Bearer ${authToken.access}`
+      axios.defaults.headers.Authorization = `Bearer ${authToken.access_token}`
     }
     this.baseURL = config.serverUrl
   }

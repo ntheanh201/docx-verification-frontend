@@ -2,6 +2,7 @@ import { RouteType } from 'app/routes'
 
 import { NotFoundPage } from './ErrorPage/NotFound'
 import { Login } from './Login/Login'
+import { Register } from './Register/Register'
 
 export const authRoutes: RouteType[] = [
   {
@@ -9,6 +10,12 @@ export const authRoutes: RouteType[] = [
     secure: false,
     withNormalLayout: true,
     component: Login
+  },
+  {
+    path: '/register',
+    secure: false,
+    withNormalLayout: true,
+    component: Register
   },
   {
     path: '/404',

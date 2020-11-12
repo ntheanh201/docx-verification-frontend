@@ -4,21 +4,6 @@ import { useField } from '../../adapters/react-final-form'
 import { Icon } from 'ui'
 
 interface FormInputProps {
-  // errorMessage?: string
-  // hasError?: boolean
-  // success?: boolean
-  // placeholder?: string
-  // value?: string
-  // name?: string
-  // tabIndex?: string
-  // maxLength?: string
-  // type?: string
-  // onChange?: (value: any) => void
-  // validate?: any
-  // noWhiteSpace?: any
-  // lowercase?: any
-  // prefix?: any
-  // disabled?: boolean
   [x: string]: any
 }
 

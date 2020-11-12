@@ -1,13 +1,7 @@
 import { React, styled } from 'core'
 
 interface IconProps {
-  source: any
-  height?: string
-  fill?: string
-  width?: string
-  className?: string
-  isImage?: string
-  onClick?: (value?: any) => void
+  [x: string]: any
 }
 
 export class Icon extends React.PureComponent<IconProps> {
@@ -45,7 +39,8 @@ export class Icon extends React.PureComponent<IconProps> {
           fill={fill}
           height={height}
           width={width}
-          dangerouslySetInnerHTML={{ __html: source }}
+          // dangerouslySetInnerHTML={{ __html: source }}
+          src={source}
           onClick={onClick}
           {...props}
         />
@@ -57,9 +52,7 @@ export class Icon extends React.PureComponent<IconProps> {
 const IconImage = styled.img``
 
 interface IconSourceProps {
-  height: string
-  width: string
-  fill: string
+  [x: string]: any
 }
 
 const IconSource = styled.div<IconSourceProps>`

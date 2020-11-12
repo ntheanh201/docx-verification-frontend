@@ -1,8 +1,13 @@
 const path = require('path')
 
 module.exports = function override(config, env) {
+  // const svgConfig = {
+  //   test: /\.svg$/,
+  //   loader: 'svg-inline-loader'
+  // }
   const alias = {
     environment: path.resolve(process.cwd(), 'src', 'environments'),
+    assets: path.resolve(process.cwd(), 'src', 'app', 'assets'),
     core: path.resolve(process.cwd(), 'src', 'packages', 'core'),
     'http-backend': path.resolve(process.cwd(), 'src', 'packages', 'http'),
     type: path.resolve(process.cwd(), 'src', 'packages', 'types'),
@@ -17,6 +22,7 @@ module.exports = function override(config, env) {
   }
 
   config.resolve.alias = alias
+  // config.module.rules.push(svgConfig)
 
   return config
 }

@@ -6,16 +6,16 @@ import { Register } from './Register/Register'
 
 export const authRoutes: RouteType[] = [
   {
-    path: '/login',
-    secure: false,
-    withNormalLayout: true,
-    component: Login
-  },
-  {
     path: '/register',
     secure: false,
     withNormalLayout: true,
     component: Register
+  },
+  {
+    path: '/login',
+    secure: false,
+    withNormalLayout: true,
+    component: Login
   },
   {
     path: '/404',

@@ -1,5 +1,5 @@
 import { loginSlice } from './slice'
-import { loginService, registerService } from 'service'
+import { loginService } from 'service'
 
 const { login, logout } = loginSlice.actions
 

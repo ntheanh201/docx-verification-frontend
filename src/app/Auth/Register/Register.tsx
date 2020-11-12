@@ -1,33 +1,25 @@
-import { React, styled, FC, useState, useEffect } from 'core'
+import { React, styled, FC, useState } from 'core'
 import { useHistory } from 'router'
-// import { useDispatch, useSelector } from 'redux-core'
+// import { useSelector } from 'redux-core'
 
-import {
-  Form,
-  FormField,
-  FormInput,
-  FormFieldGroup,
-  required,
-  FORM_ERROR
-} from 'form'
-import { ButtonWrapper, PrimaryButton, RingLoader as Ring } from 'ui'
+import { Form, FormField, FormInput, FormFieldGroup, required } from 'form'
+import { ButtonWrapper, PrimaryButton, RingLoader as Ring, toast } from 'ui'
 import { registerService } from 'service'
+// import { getCurrentUser } from 'Store'
 
 export const Register: FC = () => {
   const history = useHistory()
-  // const { currentUser } = useSelector(state => state.login)
-  const currentUser = false
+  // const currentUser = useSelector(getCurrentUser)
 
-  useEffect(() => {
-    if (currentUser) {
-      history.push('/')
-    }
-  }, [history, currentUser])
+  // useEffect(() => {
+  //   if (currentUser) {
+  //     history.push('/')
+  //   }
+  // }, [history, currentUser])
 
   const [state, setState] = useState({
     transmitting: false
   })
-  // const dispatch = useDispatch()
 
   const registerActionCreator = async ({ username, password, name }) => {
     try {
@@ -47,26 +39,18 @@ export const Register: FC = () => {
 
   const onSubmit = async value => {
     await setState({ transmitting: true })
-    // const loginStatus = await dispatch(loginActionCreator(value))
+    const registerStatus = await registerActionCreator(value)
     await setState({ transmitting: false })
-    // if (loginStatus === 200) {
-    //   history.push('/')
-    // }
-    return {
-      [FORM_ERROR]: 'Wrong username or password',
-      username: '*',
-      password: '*'
+    if (registerStatus === 200) {
+      toast('Register successfully')
+      history.push('/')
+    } else {
+      toast.error('Something goes wrong!')
     }
   }
 
   return (
     <Wrapper>
-      {/* <Icon
-        fill='#4580c2'
-        source={require('assets/ProPTIT.svg')}
-        width='60px'
-        height='60px'
-      /> */}
       <Form
         onSubmit={onSubmit}
         render={({ handleSubmit, submitError, ...form }) => {

@@ -8,5 +8,11 @@ export const verifyRoutes: RouteType[] = [
     secure: false,
     withNormalLayout: true,
     component: VerifyScene
+  },
+  {
+    path: '/verify/:bookId',
+    secure: false,
+    withNormalLayout: true,
+    component: VerifyScene
   }
 ]

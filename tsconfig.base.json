@@ -2,13 +2,16 @@
     "compilerOptions": {
       "baseUrl": "./src",
       "paths": {
+        "environment": ["./environments"],
         "core": ["./packages/core"],
-        "http": ["./packages/http"],
+        "http-backend": ["./packages/http"],
         "redux-core": ["./packages/redux-core"],
-        "form": ["./packages/form"],
+        "form": ["./packages/forms"],
         "ui": ["./packages/ui"],
         "layout": ["./packages/layout"],
         "router": ["./packages/router"],
+        "service": ["./packages/services"],
+        "type": ["./packages/types"],
         "Store": ["./app/Store/actions"],
         "Shared/utils": ["./app/Shared/utils"],
         "Shared/components": ["./app/Shared/components"]

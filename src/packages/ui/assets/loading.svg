@@ -1,0 +1,29 @@
+<svg width="100%" height="100%" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" preserveAspectRatio="xMidYMid">
+  <circle
+    cx="50"
+    cy="50"
+    fill="none"
+    stroke-linecap="round"
+    r="10"
+    stroke-width="2"
+    stroke="#00AA9B"
+    stroke-dasharray="15.707963267948966 15.707963267948966"
+    transform="rotate(355.714 49.9999 49.9999)"
+  >
+    <animateTransform attributeName="transform" type="rotate" calcMode="linear" values="0 50 50;360 50 50" keyTimes="0;1" dur="1.4s" begin="0s" repeatCount="indefinite" />
+  </circle>
+  <circle
+    cx="50"
+    cy="50"
+    fill="none"
+    stroke-linecap="round"
+    r="7"
+    stroke-width="2"
+    stroke="#18b4de"
+    stroke-dasharray="10.995574287564276 10.995574287564276"
+    stroke-dashoffset="10.995574287564276"
+    transform="rotate(-355.714 49.9999 49.9999)"
+  >
+    <animateTransform attributeName="transform" type="rotate" calcMode="linear" values="0 50 50;-360 50 50" keyTimes="0;1" dur="1.4s" begin="0s" repeatCount="indefinite" />
+  </circle>
+</svg>

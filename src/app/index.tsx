@@ -1,6 +1,7 @@
 import { React, ReactDOM } from 'core'
 
 import { withNormalLayout } from 'layout'
+import { ToastContainer } from 'ui'
 import { Provider } from 'redux-core'
 import { BrowserRouter as Router, Switch, Redirect, Route } from 'router'
 
@@ -11,6 +12,7 @@ import Store from './Store'
 
 ReactDOM.render(
   <Provider store={Store}>
+    <ToastContainer />
     <Router>
       <Switch>
         {publicRoutes.map((route, i) => (

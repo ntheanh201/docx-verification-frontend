@@ -9,7 +9,11 @@ import { LoadingIndicator, PrimaryButton } from 'ui'
 import './UploadList.css'
 
 import { columns } from './UploadListHelper'
-import { getAllBooksActionCreator, getBooksState } from 'Store'
+import {
+  getAllBooksActionCreator,
+  getBooksState,
+  uploadBookActionCreator
+} from 'Store'
 
 export const UploadList: FC = () => {
   const dispatch = useDispatch()
@@ -19,11 +23,11 @@ export const UploadList: FC = () => {
     currentPage: 0
   })
 
-  const onHandleUpload = event => {
-    const files = event?.target?.files[0]
-    console.log(files)
-    // dispatch()
-    // history.push('/book')
+  const onHandleUpload = async event => {
+    const file = event?.target?.files[0]
+    const book = await dispatch(uploadBookActionCreator(file))
+    //@ts-ignore
+    history.push(`/book/${book?.id}`)
   }
 
   const onChangePage = page => {

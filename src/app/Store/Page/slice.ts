@@ -20,10 +20,18 @@ export const pageSlice = createSlice({
   initialState,
   reducers: {
     getPageInfo: (state, { payload }: PayloadAction<Page>) => {
-      console.log(payload)
       state.text_raw = payload.text_raw
       state.text_norm = payload.text_norm
-      state = payload
+      state.status = payload.status
+      state.book_id = payload.book_id
+      state.page_num = payload.page_num
+      state.id = payload.id
+      state.audio_url = payload.audio_url
+      state.reviewer = payload.reviewer
+      state.task_id = payload.task_id
+      state.voice_id = payload.voice_id
+      state.uploader = payload.uploader
+      // state = payload
     },
     editNormText: (state, { payload }: PayloadAction<string>) => {
       state.text_norm = payload

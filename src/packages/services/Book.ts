@@ -29,10 +29,13 @@ class BookService extends BaseService<Book> {
       })
   }
 
-  uploadBook(): Promise<Book> {
-    // const data = new FormData()
+  uploadBook(file: any): Promise<Book> {
+    const data = new FormData()
+    data.append('file', file)
     return axios
-      .post(this.baseURL + '/upload')
+      .post(this.baseURL + '/upload', data, {
+        headers: { 'Content-Type': 'multipart/form-data' }
+      })
       .then(res => res.data)
       .catch(err => {
         console.log(err)

@@ -2,7 +2,7 @@ import { React, styled, useState, useEffect } from 'core'
 import { useDispatch, useSelector } from 'redux-core'
 import { useParams } from 'router'
 
-import { Pagination } from 'antd'
+import { Pagination, Select } from 'antd'
 
 import { getBookTotalPages } from 'Shared/utils'
 import {
@@ -17,40 +17,45 @@ import { Container } from 'layout'
 import { TextArea } from '../../components/TextArea/TextArea'
 import { NormalText } from '../../components/NormalText/NormalText'
 
+const { Option } = Select
+
 export const BookScene = () => {
   const dispatch = useDispatch()
   let { bookId } = useParams<any>()
-  // const { books } = useSelector(getBooksState)
+  const { bookDetail: reduxBookDetail } = useSelector(getBooksState)
   const { book } = useSelector(getPageState)
 
   const [state, setState] = useState({
     currentPage: 1,
-    totalCount: 50
+    bookDetail: null
   })
 
-  const { currentPage, totalCount } = state
+  const { currentPage } = state
 
   useEffect(() => {
     const getBookInfo = async () => {
       await dispatch(getBookInfoActionCreator(bookId))
-      await dispatch(getPageInfoActionCreator(bookId, currentPage))
+      const bookDetail = await dispatch(
+        getPageInfoActionCreator(bookId, currentPage)
+      )
+      await setState({
+        bookDetail
+      })
     }
     getBookInfo()
   }, [dispatch, bookId, currentPage])
 
-  console.log(book)
+  const bookDetail = book || state.bookDetail
 
-  if (!book) {
+  if (!bookDetail || !reduxBookDetail) {
     return <LoadingIndicator />
   }
-
-  // const totalPages = getBookTotalPages(books, bookId)
 
   const onChangePage = page => {
     setState({ currentPage: page })
   }
 
-  const { text_norm, text_raw } = book
+  const { text_norm, text_raw } = bookDetail
 
   return (
     <Container>
@@ -65,8 +70,9 @@ export const BookScene = () => {
       <Pagination
         showQuickJumper
         current={currentPage}
+        pageSize={1}
         defaultCurrent={1}
-        total={totalCount}
+        total={reduxBookDetail.total_pages - 1}
         onChange={onChangePage}
       />
     </Container>

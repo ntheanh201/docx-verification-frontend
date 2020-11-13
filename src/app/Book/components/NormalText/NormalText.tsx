@@ -1,5 +1,9 @@
-import { React } from 'core'
+import { React, styled } from 'core'
 
 export const NormalText = ({ content }) => {
-  return <div>{content}</div>
+  return <Wrapper>{content}</Wrapper>
 }
+
+const Wrapper = styled.div`
+  width: 50%;
+`

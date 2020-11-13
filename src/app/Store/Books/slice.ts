@@ -25,6 +25,9 @@ export const docSlice = createSlice({
     },
     getBookInfo: (state, { payload }: PayloadAction<Book>) => {
       state.bookDetail = payload
+    },
+    uploadBook: (state, { payload }: PayloadAction<Book>) => {
+      state.bookDetail = payload
     }
   }
 })

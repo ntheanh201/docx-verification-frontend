@@ -16,6 +16,7 @@ export const getPageInfoActionCreator = (
   try {
     const data = await pageService.getPageInfo(bookId, pageNumber)
     await dispatch(getPageInfo(data))
+    return data
   } catch (e) {
     return console.error(e.message)
   }

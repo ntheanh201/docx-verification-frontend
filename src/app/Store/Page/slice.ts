@@ -20,15 +20,17 @@ export const pageSlice = createSlice({
   initialState,
   reducers: {
     getPageInfo: (state, { payload }: PayloadAction<Page>) => {
-      // console.log(payload)
-      // state = payload
-      state.text_norm = payload.text_norm
+      console.log(payload)
       state.text_raw = payload.text_raw
+      state.text_norm = payload.text_norm
+      state = payload
     },
     editNormText: (state, { payload }: PayloadAction<string>) => {
       state.text_norm = payload
     },
-    verifyNormText: (state, { payload }: PayloadAction<string>) => {},
+    verifyNormText: (state, { payload }: PayloadAction<string>) => {
+      state.status = 'verified'
+    },
     genAudio: (state, { payload }: PayloadAction<string>) => {
       state.audio_url = payload
     }

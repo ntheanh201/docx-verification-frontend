@@ -1,3 +1,3 @@
 export * from '../Auth'
-export * from '../Doc'
+export * from '../Books'
 export * from '../Page'

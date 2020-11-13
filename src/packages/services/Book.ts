@@ -19,6 +19,16 @@ class BookService extends BaseService<Book> {
       })
   }
 
+  getBookInfo(bookdId: number): Promise<Book> {
+    return axios
+      .get(this.baseURL + `/${bookdId}`)
+      .then(res => res.data)
+      .catch(err => {
+        console.log(err)
+        throw err
+      })
+  }
+
   uploadBook(): Promise<Book> {
     // const data = new FormData()
     return axios

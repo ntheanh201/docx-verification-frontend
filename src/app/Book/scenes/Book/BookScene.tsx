@@ -5,8 +5,13 @@ import { useParams } from 'router'
 import { Pagination } from 'antd'
 
 import { getBookTotalPages } from 'Shared/utils'
-import { getBooksState, getPageState, getPageInfoActionCreator } from 'Store'
-import { LoadingIndicator } from 'ui'
+import {
+  getBooksState,
+  getPageState,
+  getPageInfoActionCreator,
+  getBookInfoActionCreator
+} from 'Store'
+import { LoadingIndicator, PrimaryButton } from 'ui'
 import { Container } from 'layout'
 
 import { TextArea } from '../../components/TextArea/TextArea'
@@ -27,6 +32,7 @@ export const BookScene = () => {
 
   useEffect(() => {
     const getBookInfo = async () => {
+      await dispatch(getBookInfoActionCreator(bookId))
       await dispatch(getPageInfoActionCreator(bookId, currentPage))
     }
     getBookInfo()
@@ -50,7 +56,11 @@ export const BookScene = () => {
     <Container>
       <Wrapper>
         <NormalText content={text_raw} />
-        <TextArea content={text_norm} />
+        <div>
+          <PrimaryButton>Gen Audio</PrimaryButton>
+          <PrimaryButton>Verify</PrimaryButton>
+          <TextArea content={text_norm} />
+        </div>
       </Wrapper>
       <Pagination
         showQuickJumper

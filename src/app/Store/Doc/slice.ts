@@ -13,7 +13,6 @@ export const docSlice = createSlice({
   initialState,
   reducers: {
     getAllBooks: (state, { payload }: PayloadAction<BooksPaged>) => {
-      console.log(payload)
       state.books = payload.books
       state.current_page = payload.current_page
       state.total_pages = payload.total_pages

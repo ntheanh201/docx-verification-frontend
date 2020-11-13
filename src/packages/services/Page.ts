@@ -1,5 +1,5 @@
 import { axios } from 'http-backend'
-import { Book } from 'type'
+import { Book, Page } from 'type'
 
 import BaseService from './Base'
 
@@ -19,9 +19,9 @@ class PageService extends BaseService<Book> {
   //     })
   // }
 
-  getPageInfo(bookId, pageNumber): Promise<{ content: number }> {
+  getPageInfo(bookId, pageNumber): Promise<Page> {
     return axios
-      .get(this.baseURL + `${bookId}/${pageNumber}/info`)
+      .get(this.baseURL + `/${bookId}/${pageNumber}/info`)
       .then(res => res.data)
       .catch(err => {
         console.log(err)
@@ -44,7 +44,7 @@ class PageService extends BaseService<Book> {
 
   verifyNormText(bookId): Promise<string> {
     return axios
-      .put(this.baseURL + '/verify', {
+      .put(this.baseURL + '/verified', {
         page_id: bookId
       })
       .then(res => res.data)
@@ -54,7 +54,7 @@ class PageService extends BaseService<Book> {
       })
   }
 
-  genAudio(bookId, voiceId): Promise<string> {
+  genAudio(bookId, voiceId): Promise<any> {
     return axios
       .post(this.baseURL + '/gen_audio', {
         page_id: bookId,

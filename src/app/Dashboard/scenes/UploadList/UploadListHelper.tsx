@@ -2,6 +2,7 @@
 import { React } from 'core'
 
 import { Space, Tag } from 'antd'
+import { Link } from 'router'
 
 export const columns = [
   {
@@ -36,10 +37,10 @@ export const columns = [
     render: (text: any, record: { id: string }) => (
       <Space size='middle'>
         <Tag color='geekblue'>
-          <a href={`/book/${record.id}`}>Check out</a>
+          <Link to={`/book/${record.id}`}>Check out</Link>
         </Tag>
         <Tag color='red'>
-          <a href={`/book/${record.id}`}>Delete</a>
+          <Link to={`/book/${record.id}`}>Delete</Link>
         </Tag>
         {/* {record.id} */}
       </Space>

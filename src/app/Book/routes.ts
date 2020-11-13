@@ -1,6 +1,6 @@
 import { RouteType } from 'app/routes'
 
-import { BookScene } from './scenes/Verify/BookScene'
+import { BookScene } from './scenes/Book/BookScene'
 
 export const bookRoutes: RouteType[] = [
   {

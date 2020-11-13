@@ -32,6 +32,22 @@ export const audioSlice = createSlice({
       state.status = payload.status
       state.version = payload.version
       state.voices = payload.voices
+    },
+    updatePlayStatus: (state, { payload }: PayloadAction<string>) => {
+      state.playStatus = payload
+    },
+    updateAudioPosition: (state, { payload }: PayloadAction<number>) => {
+      // state.position = payload
+    },
+    updateDuration: (state, { payload }: PayloadAction<number>) => {
+      state.duration = payload
     }
   }
 })
+
+const {
+  updatePlayStatus,
+  updateAudioPosition,
+  updateDuration
+} = audioSlice.actions
+export { updatePlayStatus, updateAudioPosition, updateDuration }

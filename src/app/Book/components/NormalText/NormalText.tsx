@@ -19,6 +19,6 @@ const Title = styled.h2`
 `
 
 const Content = styled.div`
-  max-height: 70vh;
+  max-height: 65vh;
   overflow: scroll;
 `

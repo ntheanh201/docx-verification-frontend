@@ -19,10 +19,10 @@ import {
 export const UploadList: FC = () => {
   const dispatch = useDispatch()
   const history = useHistory()
-  const { books } = useSelector(getBooksState)
+  const { books, total_pages, page_size } = useSelector(getBooksState)
 
   const [state, setState] = useState({
-    currentPage: 0,
+    currentPage: 1,
     deleteModalVisible: false,
     deleteId: null,
     transmitting: false
@@ -56,7 +56,7 @@ export const UploadList: FC = () => {
 
   useEffect(() => {
     const getAllBooks = async () => {
-      await dispatch(getAllBooksActionCreator(state.currentPage))
+      await dispatch(getAllBooksActionCreator(state.currentPage - 1))
     }
     getAllBooks()
   }, [dispatch, state.currentPage])
@@ -88,9 +88,8 @@ export const UploadList: FC = () => {
         dataSource={books}
         rowKey={record => record.id}
         pagination={{
-          current: books.current_page,
-          total: books.length,
-          defaultPageSize: books.page_size,
+          total: total_pages * page_size,
+          defaultPageSize: page_size,
           onChange: onChangePage
         }}
       />

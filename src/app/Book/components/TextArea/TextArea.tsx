@@ -37,7 +37,7 @@ const Title = styled.h2`
 `
 
 const TextBox = styled(TextInput)`
-  min-height: 70vh !important;
+  min-height: 65vh !important;
 `
 
 const Button = styled(ButtonAntd)`

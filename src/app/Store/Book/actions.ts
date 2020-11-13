@@ -23,11 +23,11 @@ export const getPageInfoActionCreator = (
 }
 
 export const editNormTextActionCreator = (
-  bookId: number,
+  pageId: number,
   normText: string
 ) => async dispatch => {
   try {
-    await pageService.editNormText(bookId, normText)
+    await pageService.editNormText(pageId, normText)
     await dispatch(editNormText(normText))
   } catch (e) {
     return console.error(e.message)
@@ -35,10 +35,10 @@ export const editNormTextActionCreator = (
 }
 
 export const verifyNormTextActionCreator = (
-  bookId: number
+  pageId: number
 ) => async dispatch => {
   try {
-    await pageService.verifyNormText(bookId)
+    await pageService.verifyNormText(pageId)
     await dispatch(verifyNormText())
   } catch (e) {
     return console.error(e.message)
@@ -46,11 +46,11 @@ export const verifyNormTextActionCreator = (
 }
 
 export const genAudioActionCreator = (
-  bookId: number,
+  pageId: number,
   voiceId: number
 ) => async dispatch => {
   try {
-    const data = await pageService.genAudio(bookId, voiceId)
+    const data = await pageService.genAudio(pageId, voiceId)
     if (data.statusCode !== 404) {
       await dispatch(genAudio(data))
     }

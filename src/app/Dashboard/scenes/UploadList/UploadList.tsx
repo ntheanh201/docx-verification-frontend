@@ -2,7 +2,7 @@ import { React, styled, useEffect, FC, useState } from 'core'
 import { useDispatch, useSelector } from 'redux-core'
 import { useHistory } from 'router'
 
-import { Table } from 'antd'
+import { Modal, Table } from 'antd'
 import { Container } from 'layout'
 import { LoadingIndicator, PrimaryButton } from 'ui'
 
@@ -12,15 +12,19 @@ import { columns } from './UploadListHelper'
 import {
   getAllBooksActionCreator,
   getBooksState,
-  uploadBookActionCreator
+  uploadBookActionCreator,
+  deleteBookActionCreator
 } from 'Store'
 
 export const UploadList: FC = () => {
   const dispatch = useDispatch()
   const history = useHistory()
+  const { books } = useSelector(getBooksState)
 
   const [state, setState] = useState({
-    currentPage: 0
+    currentPage: 0,
+    deleteModalVisible: false,
+    deleteId: null
   })
 
   const onHandleUpload = async event => {
@@ -34,14 +38,25 @@ export const UploadList: FC = () => {
     setState({ currentPage: page })
   }
 
+  const onModalVisible = id => {
+    setState({ deleteModalVisible: true, deleteId: id })
+  }
+
+  const onModalCancel = () => {
+    setState({ deleteModalVisible: false })
+  }
+
+  const onModalConfirm = async () => {
+    await dispatch(deleteBookActionCreator(state.deleteId))
+    await setState({ deleteModalVisible: false })
+  }
+
   useEffect(() => {
     const getAllBooks = async () => {
       await dispatch(getAllBooksActionCreator(state.currentPage))
     }
     getAllBooks()
   }, [dispatch, state.currentPage])
-
-  const { books } = useSelector(getBooksState)
 
   if (!books) {
     return <LoadingIndicator />
@@ -59,18 +74,24 @@ export const UploadList: FC = () => {
       </Header>
 
       <Table
-        columns={columns}
+        columns={columns(onModalVisible)}
         dataSource={books}
         rowKey={record => record.id}
         pagination={{
           current: books.current_page,
-          total: books.total_pages,
+          total: books.length,
           defaultPageSize: books.page_size,
-          showSizeChanger: true,
-          pageSizeOptions: ['10', '20', '30'],
           onChange: onChangePage
         }}
       />
+      <Modal
+        title='Xoá Sách'
+        visible={state.deleteModalVisible}
+        onOk={onModalConfirm}
+        onCancel={onModalCancel}
+      >
+        <p>Bạn có chắc chắn muốn xoá sách này?</p>
+      </Modal>
     </Container>
   )
 }

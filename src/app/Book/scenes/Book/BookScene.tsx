@@ -12,7 +12,8 @@ import {
   getBookInfoActionCreator,
   getVoicesActionCreator,
   verifyNormTextActionCreator,
-  genAudioActionCreator
+  genAudioActionCreator,
+  editNormTextActionCreator
 } from 'Store'
 import { LoadingIndicator, PrimaryButton, toast } from 'ui'
 import { Container } from 'layout'
@@ -66,11 +67,15 @@ export const BookScene = () => {
   }
 
   const onClickVerify = async () => {
-    await dispatch(verifyNormTextActionCreator(+bookId))
+    await dispatch(verifyNormTextActionCreator(bookDetail.id))
+  }
+
+  const onSubmitNormText = async () => {
+    await dispatch(editNormTextActionCreator(bookDetail.id, ''))
   }
 
   const onClickGenAudio = async () => {
-    await dispatch(genAudioActionCreator(+bookId, voiceId))
+    await dispatch(genAudioActionCreator(bookDetail.id, voiceId))
     toast('Audio sẽ được xử lý trong vài phút')
   }
 
@@ -89,13 +94,14 @@ export const BookScene = () => {
           </Option>
         ))}
       </Select>
+      <PrimaryButton onClick={onClickGenAudio}>Gen Audio</PrimaryButton>
+      <PrimaryButton onClick={onClickVerify}>Verify</PrimaryButton>
       <Wrapper>
         <NormalText content={text_raw} />
-        <div>
-          <PrimaryButton onClick={onClickGenAudio}>Gen Audio</PrimaryButton>
-          <PrimaryButton onClick={onClickVerify}>Verify</PrimaryButton>
+        <NormArea>
           <TextArea content={text_norm} />
-        </div>
+          <PrimaryButton onClick={onSubmitNormText}>Submit</PrimaryButton>
+        </NormArea>
       </Wrapper>
       <Pagination
         showQuickJumper
@@ -112,4 +118,8 @@ export const BookScene = () => {
 const Wrapper = styled.div`
   display: flex;
   justify-content: center;
+`
+
+const NormArea = styled.div`
+  width: 50%;
 `

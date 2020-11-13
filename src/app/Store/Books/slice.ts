@@ -28,6 +28,12 @@ export const docSlice = createSlice({
     },
     uploadBook: (state, { payload }: PayloadAction<Book>) => {
       state.bookDetail = payload
+    },
+    deleteBook: (state, { payload }: PayloadAction<{ id: number }>) => {
+      const index = state.books?.findIndex(book => book.id === payload.id)
+      if (index !== -1) {
+        state.books.splice(index, 1)
+      }
     }
   }
 })

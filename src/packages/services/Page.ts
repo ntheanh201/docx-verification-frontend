@@ -29,10 +29,10 @@ class PageService extends BaseService<Book> {
       })
   }
 
-  editNormText(bookId, textNorm): Promise<string> {
+  editNormText(pageId, textNorm): Promise<string> {
     return axios
       .put(this.baseURL + '/norm_text', {
-        page_id: bookId,
+        page_id: pageId,
         text_norm: textNorm
       })
       .then(res => res.data)
@@ -42,10 +42,10 @@ class PageService extends BaseService<Book> {
       })
   }
 
-  verifyNormText(bookId): Promise<string> {
+  verifyNormText(pageId): Promise<string> {
     return axios
       .put(this.baseURL + '/verified', {
-        page_id: bookId
+        page_id: pageId
       })
       .then(res => res.data)
       .catch(err => {
@@ -54,10 +54,10 @@ class PageService extends BaseService<Book> {
       })
   }
 
-  genAudio(bookId, voiceId): Promise<any> {
+  genAudio(pageId, voiceId): Promise<any> {
     return axios
       .post(this.baseURL + '/gen_audio', {
-        page_id: bookId,
+        page_id: pageId,
         voice_id: voiceId
       })
       .then(res => res.data)

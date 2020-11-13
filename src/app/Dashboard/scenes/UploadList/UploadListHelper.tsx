@@ -4,33 +4,13 @@ import { React } from 'core'
 import { Space, Tag } from 'antd'
 import { Link } from 'router'
 
-export const columns = [
+export const columns = onModalVisible => [
   {
     title: 'Name',
     dataIndex: 'name',
     key: 'name',
     render: (text: React.ReactNode) => <>{text}</>
   },
-  // {
-  //   title: 'Tags',
-  //   key: 'tags',
-  //   dataIndex: 'tags',
-  //   render: (tags: any[]) => (
-  //     <>
-  //       {tags.map((tag: string) => {
-  //         let color = tag.length > 5 ? 'geekblue' : 'green'
-  //         if (tag === 'loser') {
-  //           color = 'volcano'
-  //         }
-  //         return (
-  //           <Tag color={color} key={tag}>
-  //             {tag.toUpperCase()}
-  //           </Tag>
-  //         )
-  //       })}
-  //     </>
-  //   )
-  // },
   {
     title: 'Action',
     key: 'action',
@@ -40,7 +20,8 @@ export const columns = [
           <Link to={`/book/${record.id}`}>Check out</Link>
         </Tag>
         <Tag color='red'>
-          <Link to={`/book/${record.id}`}>Delete</Link>
+          {/* <Link to={`/delete/${record.id}`}>Delete</Link> */}
+          <a onClick={() => onModalVisible(record.id)}>Delete</a>
         </Tag>
         {/* {record.id} */}
       </Space>

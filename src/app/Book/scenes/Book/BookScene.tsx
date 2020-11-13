@@ -4,14 +4,17 @@ import { useParams } from 'router'
 
 import { Pagination, Select } from 'antd'
 
-import { getBookTotalPages } from 'Shared/utils'
 import {
   getBooksState,
+  getAudioState,
   getPageState,
   getPageInfoActionCreator,
-  getBookInfoActionCreator
+  getBookInfoActionCreator,
+  getVoicesActionCreator,
+  verifyNormTextActionCreator,
+  genAudioActionCreator
 } from 'Store'
-import { LoadingIndicator, PrimaryButton } from 'ui'
+import { LoadingIndicator, PrimaryButton, toast } from 'ui'
 import { Container } from 'layout'
 
 import { TextArea } from '../../components/TextArea/TextArea'
@@ -24,16 +27,19 @@ export const BookScene = () => {
   let { bookId } = useParams<any>()
   const { bookDetail: reduxBookDetail } = useSelector(getBooksState)
   const { book } = useSelector(getPageState)
+  const { voices } = useSelector(getAudioState)
 
   const [state, setState] = useState({
     currentPage: 1,
-    bookDetail: null
+    bookDetail: null,
+    voiceId: (voices && voices[0]?.id) || '11'
   })
 
-  const { currentPage } = state
+  const { currentPage, voiceId } = state
 
   useEffect(() => {
     const getBookInfo = async () => {
+      await dispatch(getVoicesActionCreator())
       await dispatch(getBookInfoActionCreator(bookId))
       const bookDetail = await dispatch(
         getPageInfoActionCreator(bookId, currentPage)
@@ -55,15 +61,39 @@ export const BookScene = () => {
     setState({ currentPage: page })
   }
 
+  const onChangeVoice = id => {
+    setState({ voiceId: id })
+  }
+
+  const onClickVerify = async () => {
+    await dispatch(verifyNormTextActionCreator(+bookId))
+  }
+
+  const onClickGenAudio = async () => {
+    await dispatch(genAudioActionCreator(+bookId, voiceId))
+    toast('Audio sẽ được xử lý trong vài phút')
+  }
+
   const { text_norm, text_raw } = bookDetail
 
   return (
     <Container>
+      <Select
+        defaultValue={voices[0].id}
+        style={{ width: 120 }}
+        onChange={onChangeVoice}
+      >
+        {voices?.map(({ id, name }) => (
+          <Option key={id} value={id}>
+            {name}
+          </Option>
+        ))}
+      </Select>
       <Wrapper>
         <NormalText content={text_raw} />
         <div>
-          <PrimaryButton>Gen Audio</PrimaryButton>
-          <PrimaryButton>Verify</PrimaryButton>
+          <PrimaryButton onClick={onClickGenAudio}>Gen Audio</PrimaryButton>
+          <PrimaryButton onClick={onClickVerify}>Verify</PrimaryButton>
           <TextArea content={text_norm} />
         </div>
       </Wrapper>

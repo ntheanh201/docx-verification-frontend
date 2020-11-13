@@ -39,8 +39,8 @@ export const pageSlice = createSlice({
     verifyNormText: (state, { payload }: PayloadAction<string>) => {
       state.status = 'verified'
     },
-    genAudio: (state, { payload }: PayloadAction<string>) => {
-      state.audio_url = payload
+    genAudio: (state, { payload }: PayloadAction<{ status: string }>) => {
+      state.status = payload.status
     }
   }
 })

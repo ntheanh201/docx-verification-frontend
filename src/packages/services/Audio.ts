@@ -11,7 +11,7 @@ class AudioService extends BaseService<Book> {
 
   getAudioVoice(): Promise<VoiceBack> {
     return axios
-      .post(this.baseURL + '/voices')
+      .get(this.baseURL + '/voices')
       .then(res => res.data)
       .catch(err => {
         console.log(err)

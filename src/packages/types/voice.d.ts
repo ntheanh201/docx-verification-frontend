@@ -4,8 +4,8 @@ export interface Voice {
 }
 
 export interface VoiceBack {
-  msg: string
+  msg?: string
   status: number
-  version: string
+  version?: string
   voices: Voice[]
 }

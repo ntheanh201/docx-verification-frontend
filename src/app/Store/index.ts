@@ -2,7 +2,7 @@ import { configureStore } from 'redux-core'
 
 import { loginSlice } from './Auth'
 import { docSlice } from './Books'
-import { pageSlice } from './Page'
+import { pageSlice } from './Book'
 
 const reducer = {
   login: loginSlice.reducer,

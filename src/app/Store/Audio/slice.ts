@@ -1,13 +1,26 @@
 import { createSlice, PayloadAction } from 'redux-core'
 import { VoiceBack } from 'type'
 
-interface AudioState extends VoiceBack {}
+interface AudioState extends VoiceBack {
+  audioUrl: string
+  playStatus: string
+  audioPosition: number
+  resumePosition: number
+  duration: number
+  position: number
+}
 
 const initialState: AudioState = {
   msg: null,
   status: null,
   version: null,
-  voices: null
+  voices: null,
+  audioUrl: null,
+  playStatus: 'STOPPED',
+  position: 0,
+  audioPosition: 0,
+  resumePosition: 0,
+  duration: 100
 }
 
 export const audioSlice = createSlice({
@@ -19,7 +32,6 @@ export const audioSlice = createSlice({
       state.status = payload.status
       state.version = payload.version
       state.voices = payload.voices
-      // state = payload
     }
   }
 })

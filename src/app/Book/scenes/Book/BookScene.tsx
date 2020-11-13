@@ -1,8 +1,8 @@
-import { React, styled, useState, useEffect } from 'core'
+import { React, styled, useState, useEffect, useCallback } from 'core'
 import { useDispatch, useSelector } from 'redux-core'
 import { useParams } from 'router'
 
-import { Pagination, Select } from 'antd'
+import { Pagination, Select, Button } from 'antd'
 
 import {
   getBooksState,
@@ -15,11 +15,12 @@ import {
   genAudioActionCreator,
   editNormTextActionCreator
 } from 'Store'
-import { LoadingIndicator, PrimaryButton, toast } from 'ui'
+import { LoadingIndicator, toast } from 'ui'
 import { Container } from 'layout'
 
 import { TextArea } from '../../components/TextArea/TextArea'
 import { NormalText } from '../../components/NormalText/NormalText'
+import { AudioPlayer } from '../../components/AudioPlayer/AudioPlayer'
 
 const { Option } = Select
 
@@ -32,29 +33,25 @@ export const BookScene = () => {
 
   const [state, setState] = useState({
     currentPage: 1,
-    bookDetail: null,
     voiceId: (voices && voices[0]?.id) || '11'
   })
 
   const { currentPage, voiceId } = state
 
+  const fetchBookDetail = useCallback(async () => {
+    await dispatch(getPageInfoActionCreator(bookId, currentPage))
+  }, [bookId, currentPage, dispatch])
+
   useEffect(() => {
     const getBookInfo = async () => {
       await dispatch(getVoicesActionCreator())
       await dispatch(getBookInfoActionCreator(bookId))
-      const bookDetail = await dispatch(
-        getPageInfoActionCreator(bookId, currentPage)
-      )
-      await setState({
-        bookDetail
-      })
+      fetchBookDetail()
     }
     getBookInfo()
-  }, [dispatch, bookId, currentPage])
+  }, [dispatch, bookId, currentPage, fetchBookDetail])
 
-  const bookDetail = book || state.bookDetail
-
-  if (!bookDetail || !reduxBookDetail) {
+  if (!book || !reduxBookDetail) {
     return <LoadingIndicator />
   }
 
@@ -67,43 +64,60 @@ export const BookScene = () => {
   }
 
   const onClickVerify = async () => {
-    await dispatch(verifyNormTextActionCreator(bookDetail.id))
+    await dispatch(verifyNormTextActionCreator(book.id))
   }
 
-  const onSubmitNormText = async () => {
-    await dispatch(editNormTextActionCreator(bookDetail.id, ''))
+  const onSubmitNormText = async textNorm => {
+    await dispatch(editNormTextActionCreator(book.id, textNorm))
   }
 
   const onClickGenAudio = async () => {
-    await dispatch(genAudioActionCreator(bookDetail.id, voiceId))
+    await dispatch(genAudioActionCreator(book.id, voiceId))
     toast('Audio sẽ được xử lý trong vài phút')
+
+    if (!book.audio_url) {
+      setTimeout(() => {
+        fetchBookDetail()
+      }, 2000)
+    }
   }
 
-  const { text_norm, text_raw } = bookDetail
+  const { text_norm, text_raw, status } = book
 
   return (
-    <Container>
-      <Select
-        defaultValue={voices[0].id}
-        style={{ width: 120 }}
-        onChange={onChangeVoice}
-      >
-        {voices?.map(({ id, name }) => (
-          <Option key={id} value={id}>
-            {name}
-          </Option>
-        ))}
-      </Select>
-      <PrimaryButton onClick={onClickGenAudio}>Gen Audio</PrimaryButton>
-      <PrimaryButton onClick={onClickVerify}>Verify</PrimaryButton>
-      <Wrapper>
+    <Wrapper>
+      <ActionBar>
+        <Select
+          defaultValue={voices[0].id}
+          style={{ width: 240 }}
+          onChange={onChangeVoice}
+        >
+          {voices?.map(({ id, name }) => (
+            <Option key={id} value={id}>
+              {name}
+            </Option>
+          ))}
+        </Select>
+        <Button type='primary' onClick={onClickGenAudio}>
+          Gen Audio
+        </Button>
+        <AudioPlayer />
+        {status === 'verified' ? (
+          <Button type='primary' danger onClick={onClickVerify}>
+            Đã verify
+          </Button>
+        ) : (
+          <Button type='primary' onClick={onClickVerify}>
+            Verify
+          </Button>
+        )}
+      </ActionBar>
+      <ContentWrapper>
         <NormalText content={text_raw} />
-        <NormArea>
-          <TextArea content={text_norm} />
-          <PrimaryButton onClick={onSubmitNormText}>Submit</PrimaryButton>
-        </NormArea>
-      </Wrapper>
+        <TextArea content={text_norm} onSubmitNormText={onSubmitNormText} />
+      </ContentWrapper>
       <Pagination
+        style={{ textAlign: 'center' }}
         showQuickJumper
         current={currentPage}
         pageSize={1}
@@ -111,15 +125,23 @@ export const BookScene = () => {
         total={reduxBookDetail.total_pages - 1}
         onChange={onChangePage}
       />
-    </Container>
+    </Wrapper>
   )
 }
 
-const Wrapper = styled.div`
-  display: flex;
-  justify-content: center;
+const Wrapper = styled(Container)`
+  padding: 15px 0;
 `
 
-const NormArea = styled.div`
-  width: 50%;
+const ActionBar = styled.div`
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+`
+
+const ContentWrapper = styled.div`
+  display: flex;
+  justify-content: center;
+  padding: 1rem 0;
 `

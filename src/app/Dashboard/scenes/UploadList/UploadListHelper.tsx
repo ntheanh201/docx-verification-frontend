@@ -6,22 +6,22 @@ import { Link } from 'router'
 
 export const columns = onModalVisible => [
   {
-    title: 'Name',
+    title: 'Tên Sách',
     dataIndex: 'name',
     key: 'name',
     render: (text: React.ReactNode) => <>{text}</>
   },
   {
-    title: 'Action',
+    title: 'Hành động',
     key: 'action',
     render: (text: any, record: { id: string }) => (
       <Space size='middle'>
         <Tag color='geekblue'>
-          <Link to={`/book/${record.id}`}>Check out</Link>
+          <Link to={`/book/${record.id}`}>Kiểm tra</Link>
         </Tag>
         <Tag color='red'>
           {/* <Link to={`/delete/${record.id}`}>Delete</Link> */}
-          <a onClick={() => onModalVisible(record.id)}>Delete</a>
+          <a onClick={() => onModalVisible(record.id)}>Xoá</a>
         </Tag>
         {/* {record.id} */}
       </Space>

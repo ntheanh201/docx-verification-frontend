@@ -1,7 +1,7 @@
 import { React, styled } from 'core'
 // import { Icon } from 'ui'
 
-// import Loading from '../../assets/loading.svg'
+import Loading from '../../assets/loading.svg'
 
 export class LoadingIndicator extends React.PureComponent<{
   message?: string
@@ -9,12 +9,12 @@ export class LoadingIndicator extends React.PureComponent<{
   render() {
     return (
       <LoadingIndicatorWrapper>
-        {/* <LoadingIcon
+        <LoadingIcon
+          src={Loading}
           width='200px'
           height='200px'
-          source={require('../../assets/loading.svg')}
-        /> */}
-        {/* <Loading /> */}
+          alt='Loading...'
+        />
         Loading...
         {this.props.message ? (
           <LoadingMessage>{this.props.message}</LoadingMessage>
@@ -41,8 +41,8 @@ const LoadingMessage = styled.span`
   color: #000;
 `
 
-// const LoadingIcon = styled(Icon)`
-//   align-items: center;
-//   justify-content: center;
-//   display: flex;
-// `
+const LoadingIcon = styled.img`
+  align-items: center;
+  justify-content: center;
+  display: flex;
+`

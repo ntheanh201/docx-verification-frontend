@@ -1,19 +1,28 @@
 import { React, styled, FC } from 'core'
 
+import { Layout } from 'antd'
+
 import { Header } from '../Header/Header'
 import { Footer } from '../Footer/Footer'
+
+const { Content } = Layout
 
 export const NormalLayout: FC<{
   children: React.ReactChild
 }> = ({ children }) => {
   return (
     <ContentContainer>
-      <Header />
-      <NormalLayoutWrapper>
-        {/* <div className='row'>{children}</div> */}
-        {children}
-      </NormalLayoutWrapper>
-      <Footer />
+      <Layout style={{ minHeight: '100vh' }}>
+        <Header />
+        <Content style={{ padding: '0 50px', marginTop: 64 }}>
+          <NormalLayoutWrapper>
+            {/* <div className='row'>{children}</div> */}
+
+            {children}
+          </NormalLayoutWrapper>
+        </Content>
+        <Footer />
+      </Layout>
     </ContentContainer>
   )
 }
@@ -34,4 +43,6 @@ const ContentContainer = styled.div`
   height: 100%;
 `
 
-const NormalLayoutWrapper = styled.div``
+const NormalLayoutWrapper = styled.div`
+  background: #ffffff;
+`

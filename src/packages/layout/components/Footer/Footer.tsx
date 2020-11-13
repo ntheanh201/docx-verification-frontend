@@ -1,21 +1,9 @@
-// import { React, FC, styled } from 'core'
+import { React, FC } from 'core'
 
-import { FC } from 'react'
+import { Layout } from 'antd'
 
-// export const Footer: FC = () => {
-//   return (
-//     <FooterWrapper>
-//       <Copyright>ProPTIT</Copyright>
-//     </FooterWrapper>
-//   )
-// }
-
-// const FooterWrapper = styled.footer``
-
-// const Copyright = styled.div`
-//   text-align: center;
-// `
+const { Footer: FooterAntd } = Layout
 
 export const Footer: FC = () => {
-  return null
+  return <FooterAntd style={{ textAlign: 'center' }}>©2020 AISol</FooterAntd>
 }

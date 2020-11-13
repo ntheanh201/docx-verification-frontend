@@ -38,8 +38,8 @@ export const verifyNormTextActionCreator = (
   pageId: number
 ) => async dispatch => {
   try {
-    await pageService.verifyNormText(pageId)
-    await dispatch(verifyNormText())
+    const data = await pageService.verifyNormText(pageId)
+    await dispatch(verifyNormText(data))
   } catch (e) {
     return console.error(e.message)
   }

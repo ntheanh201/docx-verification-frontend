@@ -42,7 +42,7 @@ class PageService extends BaseService<Book> {
       })
   }
 
-  verifyNormText(pageId): Promise<string> {
+  verifyNormText(pageId): Promise<Page> {
     return axios
       .put(this.baseURL + '/verified', {
         page_id: pageId

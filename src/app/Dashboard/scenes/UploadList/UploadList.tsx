@@ -65,8 +65,15 @@ export const UploadList: FC = () => {
   return (
     <Container>
       <Header>
+        <input
+          accept='.docx'
+          type='file'
+          name='file'
+          id='file'
+          onChange={onHandleUpload}
+        />
+
         <Button>
-          <input type='file' name='file' id='file' onChange={onHandleUpload} />
           <Label htmlFor='file'>
             <i className='fa fa-cloud-upload icon-upload'></i> Upload
           </Label>
@@ -102,9 +109,13 @@ const Header = styled.div`
   padding: 2rem 0;
 `
 
-const Label = styled.label``
+const Label = styled.label`
+  cursor: pointer;
+`
 
 const Button = styled(PrimaryButton)`
   height: unset;
   padding: 10px 30px;
+  flex: none;
+  width: 25%;
 `

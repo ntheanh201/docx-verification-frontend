@@ -1,52 +1,47 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
 import { React } from 'core'
 
-import { Tag, Space } from 'antd'
+import { Space, Tag } from 'antd'
 
 export const columns = [
   {
     title: 'Name',
     dataIndex: 'name',
     key: 'name',
-    render: (text: React.ReactNode) => <a>{text}</a>
+    render: (text: React.ReactNode) => <>{text}</>
   },
-  {
-    title: 'Age',
-    dataIndex: 'age',
-    key: 'age'
-  },
-  {
-    title: 'Address',
-    dataIndex: 'address',
-    key: 'address'
-  },
-  {
-    title: 'Tags',
-    key: 'tags',
-    dataIndex: 'tags',
-    render: (tags: any[]) => (
-      <>
-        {tags.map((tag: string) => {
-          let color = tag.length > 5 ? 'geekblue' : 'green'
-          if (tag === 'loser') {
-            color = 'volcano'
-          }
-          return (
-            <Tag color={color} key={tag}>
-              {tag.toUpperCase()}
-            </Tag>
-          )
-        })}
-      </>
-    )
-  },
+  // {
+  //   title: 'Tags',
+  //   key: 'tags',
+  //   dataIndex: 'tags',
+  //   render: (tags: any[]) => (
+  //     <>
+  //       {tags.map((tag: string) => {
+  //         let color = tag.length > 5 ? 'geekblue' : 'green'
+  //         if (tag === 'loser') {
+  //           color = 'volcano'
+  //         }
+  //         return (
+  //           <Tag color={color} key={tag}>
+  //             {tag.toUpperCase()}
+  //           </Tag>
+  //         )
+  //       })}
+  //     </>
+  //   )
+  // },
   {
     title: 'Action',
     key: 'action',
-    render: (text: any, record: { name: React.ReactNode }) => (
+    render: (text: any, record: { id: string }) => (
       <Space size='middle'>
-        <a>Invite {record.name}</a>
-        <a>Delete</a>
+        <Tag color='geekblue'>
+          <a href={`/book/${record.id}`}>Check out</a>
+        </Tag>
+        <Tag color='red'>
+          <a href={`/book/${record.id}`}>Delete</a>
+        </Tag>
+        {/* {record.id} */}
       </Space>
     )
   }

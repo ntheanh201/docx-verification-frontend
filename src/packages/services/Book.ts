@@ -1,27 +1,17 @@
 import { axios } from 'http-backend'
-import { Book } from 'type'
+import { Book, BooksPaged } from 'type'
 
 import BaseService from './Base'
 
 class BookService extends BaseService<Book> {
   constructor() {
     super()
-    this.baseURL += 'book'
+    this.baseURL += 'books'
   }
 
-  //   getAllBooks(): Promise<Book[]> {
-  //     return axios
-  //       .get(this.baseURL)
-  //       .then(res => res.data)
-  //       .catch(err => {
-  //         console.log(err)
-  //         throw err
-  //       })
-  //   }
-
-  getBookCount(): Promise<number> {
+  getAllBooks(currentPage: number = 0): Promise<BooksPaged> {
     return axios
-      .get(this.baseURL + '/count')
+      .get(this.baseURL + `?page=${currentPage}`)
       .then(res => res.data)
       .catch(err => {
         console.log(err)
@@ -30,6 +20,7 @@ class BookService extends BaseService<Book> {
   }
 
   uploadBook(): Promise<Book> {
+    // const data = new FormData()
     return axios
       .post(this.baseURL + '/upload')
       .then(res => res.data)

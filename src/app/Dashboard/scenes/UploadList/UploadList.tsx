@@ -1,62 +1,81 @@
-import { React, styled } from 'core'
+import { React, styled, useEffect, FC, useState } from 'core'
 import { useDispatch, useSelector } from 'redux-core'
 import { useHistory } from 'router'
 
 import { Table } from 'antd'
 import { Container } from 'layout'
-import { PrimaryButton } from 'ui'
+import { LoadingIndicator, PrimaryButton } from 'ui'
 
 import './UploadList.css'
 
 import { columns } from './UploadListHelper'
+import { getAllBooksActionCreator, getBooksState } from 'Store'
 
-const data = [
-  {
-    key: '1',
-    name: 'John Brown',
-    age: 32,
-    address: 'New York No. 1 Lake Park',
-    tags: ['nice', 'developer']
-  },
-  {
-    key: '2',
-    name: 'Jim Green',
-    age: 42,
-    address: 'London No. 1 Lake Park',
-    tags: ['loser']
-  },
-  {
-    key: '3',
-    name: 'Joe Black',
-    age: 32,
-    address: 'Sidney No. 1 Lake Park',
-    tags: ['cool', 'teacher']
-  }
-]
-
-export const UploadList = () => {
+export const UploadList: FC = () => {
   const dispatch = useDispatch()
   const history = useHistory()
+
+  const [state, setState] = useState({
+    currentPage: 0
+  })
 
   const onHandleUpload = event => {
     const files = event?.target?.files[0]
     console.log(files)
     // dispatch()
-    history.push('/verify')
+    // history.push('/book')
+  }
+
+  const onChangePage = page => {
+    setState({ currentPage: page })
+  }
+
+  useEffect(() => {
+    const getAllBooks = async () => {
+      await dispatch(getAllBooksActionCreator(state.currentPage))
+    }
+    getAllBooks()
+  }, [dispatch, state.currentPage])
+
+  const { books } = useSelector(getBooksState)
+
+  if (!books) {
+    return <LoadingIndicator />
   }
 
   return (
     <Container>
-      <Button>
-        <input type='file' name='file' id='file' onChange={onHandleUpload} />
-        <Label htmlFor='file'>
-          <i className='fa fa-cloud-upload icon-upload'></i> Upload
-        </Label>
-      </Button>
-      <Table columns={columns} dataSource={data} />
+      <Header>
+        <Button>
+          <input type='file' name='file' id='file' onChange={onHandleUpload} />
+          <Label htmlFor='file'>
+            <i className='fa fa-cloud-upload icon-upload'></i> Upload
+          </Label>
+        </Button>
+      </Header>
+
+      <Table
+        columns={columns}
+        dataSource={books}
+        rowKey={record => record.id}
+        pagination={{
+          current: books.current_page,
+          total: books.total_pages,
+          defaultPageSize: books.page_size,
+          showSizeChanger: true,
+          pageSizeOptions: ['10', '20', '30'],
+          onChange: onChangePage
+        }}
+      />
     </Container>
   )
 }
+
+const Header = styled.div`
+  display: flex;
+  justify-content: flex-end;
+  padding: 2rem 0;
+`
 
 const Label = styled.label``
 

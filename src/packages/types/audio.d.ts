@@ -1,9 +1,4 @@
-export interface AudioTask {
+export interface Audio {
   page_id: number
-  task_id: string
-}
-
-export interface AudioPublish {
-  page_id: number
-  text: string
+  voice_id: string
 }

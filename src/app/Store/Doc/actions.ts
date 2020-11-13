@@ -1,6 +1,8 @@
 import { docSlice } from './slice'
 
-// const {  } = docSlice.actions
+import { bookService } from 'service'
+
+const { getAllBooks } = docSlice.actions
 
 // export const loginActionCreator = ({
 //   username,
@@ -24,9 +26,12 @@ import { docSlice } from './slice'
 //   }
 // }
 
-export const setFileActionCreator = () => async dispatch => {
+export const getAllBooksActionCreator = (
+  currentPage: number
+) => async dispatch => {
   try {
-    // return await dispatch(logout())
+    const booksPaged = await bookService.getAllBooks(currentPage)
+    await dispatch(getAllBooks(booksPaged))
   } catch (e) {
     return console.error(e.message)
   }

@@ -1,3 +1,5 @@
 export * from './User'
 export * from './Auth'
 export * from './Book'
+export * from './Page'
+export * from './Audio'

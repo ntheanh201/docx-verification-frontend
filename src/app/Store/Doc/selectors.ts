@@ -1,1 +1,1 @@
-export const getFileDoc = (state: { file: any }) => state.file
+export const getBooksState = (state: { books: any }) => state?.books

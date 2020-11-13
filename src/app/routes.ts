@@ -2,7 +2,7 @@ import { React } from 'core'
 
 import { authRoutes } from './Auth/routes'
 import { dashboardRoutes } from './Dashboard/routes'
-import { verifyRoutes } from './Verify/routes'
+import { bookRoutes } from './Book/routes'
 
 export interface RouteType {
   path: string
@@ -13,4 +13,4 @@ export interface RouteType {
 
 export const publicRoutes = [...authRoutes]
 
-export const secureRoutes = [...dashboardRoutes, ...verifyRoutes]
+export const secureRoutes = [...dashboardRoutes, ...bookRoutes]

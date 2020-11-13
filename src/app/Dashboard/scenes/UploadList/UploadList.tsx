@@ -24,12 +24,15 @@ export const UploadList: FC = () => {
   const [state, setState] = useState({
     currentPage: 0,
     deleteModalVisible: false,
-    deleteId: null
+    deleteId: null,
+    transmitting: false
   })
 
   const onHandleUpload = async event => {
     const file = event?.target?.files[0]
+    await setState({ transmitting: true })
     const book = await dispatch(uploadBookActionCreator(file))
+    await setState({ transmitting: false })
     //@ts-ignore
     history.push(`/book/${book?.id}`)
   }
@@ -58,7 +61,7 @@ export const UploadList: FC = () => {
     getAllBooks()
   }, [dispatch, state.currentPage])
 
-  if (!books) {
+  if (!books || state.transmitting) {
     return <LoadingIndicator />
   }
 

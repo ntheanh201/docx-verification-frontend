@@ -15,7 +15,6 @@ export class LoadingIndicator extends React.PureComponent<{
           height='200px'
           alt='Loading...'
         />
-        Loading...
         {this.props.message ? (
           <LoadingMessage>{this.props.message}</LoadingMessage>
         ) : null}
@@ -45,4 +44,5 @@ const LoadingIcon = styled.img`
   align-items: center;
   justify-content: center;
   display: flex;
+  margin: auto;
 `

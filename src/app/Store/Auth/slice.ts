@@ -39,3 +39,6 @@ export const loginSlice = createSlice({
     }
   }
 })
+
+const { logout } = loginSlice.actions
+export { logout }

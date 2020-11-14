@@ -1,4 +1,4 @@
-import { React, useState } from 'core'
+import { React } from 'core'
 
 import { useSelector } from 'redux-core'
 import { getPageState } from 'Store'

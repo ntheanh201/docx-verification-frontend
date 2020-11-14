@@ -1,8 +1,8 @@
 import { React, styled, useState, useEffect, useCallback } from 'core'
 import { useDispatch, useSelector } from 'redux-core'
-import { useParams } from 'router'
+import { useParams, useHistory } from 'router'
 
-import { Pagination, Select, Button } from 'antd'
+import { Pagination, Select, Button, PageHeader } from 'antd'
 
 import {
   getBooksState,
@@ -21,13 +21,15 @@ import { Container } from 'layout'
 import { TextArea } from '../../components/TextArea/TextArea'
 import { NormalText } from '../../components/NormalText/NormalText'
 import { AudioPlayer } from '../../components/AudioPlayer/AudioPlayer'
+import { bookService } from 'service'
 
 const { Option } = Select
 
 export const BookScene = () => {
   const dispatch = useDispatch()
+  const history = useHistory()
   let { bookId } = useParams<any>()
-  const { bookDetail: reduxBookDetail } = useSelector(getBooksState)
+  const { bookDetail } = useSelector(getBooksState)
   const { book } = useSelector(getPageState)
   const { voices } = useSelector(getAudioState)
 
@@ -51,7 +53,7 @@ export const BookScene = () => {
     getBookInfo()
   }, [dispatch, bookId, currentPage, fetchBookDetail])
 
-  if (!book || !reduxBookDetail) {
+  if (!book || !bookDetail) {
     return <LoadingIndicator />
   }
 
@@ -71,6 +73,11 @@ export const BookScene = () => {
     await dispatch(editNormTextActionCreator(book.id, textNorm))
   }
 
+  const onClickDownloadBook = async () => {
+    const data = await bookService.downloadBook(bookDetail.saved_name)
+    console.log(data)
+  }
+
   const onClickGenAudio = async () => {
     await dispatch(genAudioActionCreator(book.id, voiceId))
     toast('Audio sẽ được xử lý trong vài phút')
@@ -86,7 +93,12 @@ export const BookScene = () => {
 
   return (
     <Wrapper>
+      <PageHeader onBack={() => history.push('/')} title='Kiểm tra sách' />
       <ActionBar>
+        {/* <a href='http://example.com/files/myfile.pdf' target='_blank'>
+          Download
+        </a> */}
+        <span onClick={onClickDownloadBook}>Download</span>
         <Select
           defaultValue={voices[0].id}
           style={{ width: 240 }}
@@ -122,7 +134,7 @@ export const BookScene = () => {
         current={currentPage}
         pageSize={1}
         defaultCurrent={1}
-        total={reduxBookDetail.total_pages - 1}
+        total={bookDetail.total_pages - 1}
         onChange={onChangePage}
       />
     </Wrapper>

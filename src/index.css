@@ -12,3 +12,20 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+.ant-page-header {
+  padding: 0 !important;
+}
+
+.ant-layout-header {
+  background-color: #fff !important;
+}
+
+.ant-layout-header .ant-menu {
+  line-height: unset !important;
+  height: 100%;
+}
+
+.ant-menu-horizontal {
+  border: none !important;
+}

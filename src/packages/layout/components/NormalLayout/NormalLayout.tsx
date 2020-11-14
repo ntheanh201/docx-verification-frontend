@@ -14,12 +14,8 @@ export const NormalLayout: FC<{
     <ContentContainer>
       <Layout style={{ minHeight: '100vh' }}>
         <Header />
-        <Content style={{ padding: '0 50px', marginTop: 64 }}>
-          <NormalLayoutWrapper>
-            {/* <div className='row'>{children}</div> */}
-
-            {children}
-          </NormalLayoutWrapper>
+        <Content style={{ padding: '0 50px', marginTop: 80 }}>
+          <NormalLayoutWrapper>{children}</NormalLayoutWrapper>
         </Content>
         <Footer />
       </Layout>

@@ -13,7 +13,6 @@ export const Header: FC = () => {
     <HeaderAntd style={{ position: 'fixed', zIndex: 1, width: '100%' }}>
       <div className='logo' />
       <Menu
-        theme='dark'
         mode='horizontal'
         defaultSelectedKeys={['1']}
         selectedKeys={pathname.includes('book') ? ['2'] : ['1']}

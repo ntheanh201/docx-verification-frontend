@@ -2,9 +2,10 @@ import { React, styled, useEffect, FC, useState } from 'core'
 import { useDispatch, useSelector } from 'redux-core'
 import { useHistory } from 'router'
 
-import { Modal, Table } from 'antd'
+import { Modal, Table, Button as PrimaryButton } from 'antd'
+import { CloudUploadOutlined } from '@ant-design/icons'
 import { Container } from 'layout'
-import { LoadingIndicator, PrimaryButton } from 'ui'
+import { LoadingIndicator } from 'ui'
 
 import './UploadList.css'
 
@@ -68,17 +69,17 @@ export const UploadList: FC = () => {
   return (
     <Container>
       <Header>
-        <input
-          accept='.docx'
-          type='file'
-          name='file'
-          id='file'
-          onChange={onHandleUpload}
-        />
-
+        <Title>Sách</Title>
         <Button>
+          <input
+            accept='.docx'
+            type='file'
+            name='file'
+            id='file'
+            onChange={onHandleUpload}
+          />
           <Label htmlFor='file'>
-            <i className='fa fa-cloud-upload icon-upload'></i> Upload
+            <CloudUploadOutlined /> Tải sách lên
           </Label>
         </Button>
       </Header>
@@ -107,17 +108,19 @@ export const UploadList: FC = () => {
 
 const Header = styled.div`
   display: flex;
-  justify-content: flex-end;
+  justify-content: space-between;
   padding: 2rem 0;
 `
+
+const Title = styled.h2``
 
 const Label = styled.label`
   cursor: pointer;
 `
 
 const Button = styled(PrimaryButton)`
-  height: unset;
-  padding: 10px 30px;
-  flex: none;
-  width: 25%;
+  // height: unset;
+  // padding: 10px 30px;
+  // flex: none;
+  // width: 25%;
 `

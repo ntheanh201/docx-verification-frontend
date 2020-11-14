@@ -1,30 +1,29 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
 import { React } from 'core'
 
-import { Space, Tag } from 'antd'
+import { Button } from 'antd'
 import { Link } from 'router'
 
 export const columns = onModalVisible => [
   {
-    title: 'Tên Sách',
+    title: 'Tên sách',
     dataIndex: 'name',
     key: 'name',
     render: (text: React.ReactNode) => <>{text}</>
   },
   {
-    title: 'Hành động',
+    title: 'Chức năng',
     key: 'action',
     render: (text: any, record: { id: string }) => (
-      <Space size='middle'>
-        <Tag color='geekblue'>
+      <>
+        {' '}
+        <Button type='link'>
           <Link to={`/book/${record.id}`}>Kiểm tra</Link>
-        </Tag>
-        <Tag color='red'>
-          {/* <Link to={`/delete/${record.id}`}>Delete</Link> */}
-          <a onClick={() => onModalVisible(record.id)}>Xoá</a>
-        </Tag>
-        {/* {record.id} */}
-      </Space>
+        </Button>
+        <Button type='link' danger>
+          <span onClick={() => onModalVisible(record.id)}>Xoá</span>
+        </Button>
+      </>
     )
   }
 ]

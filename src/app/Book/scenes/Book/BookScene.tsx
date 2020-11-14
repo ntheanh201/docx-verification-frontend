@@ -108,21 +108,17 @@ export const BookScene = () => {
     <Wrapper>
       <PageHeader onBack={() => history.push('/')} title='Kiểm tra sách' />
       <ActionBar>
-        {!isGenerated && (
-          <>
-            <Select
-              defaultValue={voices[0].id}
-              style={{ width: 240 }}
-              onChange={onChangeVoice}
-            >
-              {voices?.map(({ id, name }) => (
-                <Option key={id} value={id}>
-                  {name}
-                </Option>
-              ))}
-            </Select>
-          </>
-        )}
+        <Select
+          defaultValue={voices[0].id}
+          style={{ width: 240 }}
+          onChange={onChangeVoice}
+        >
+          {voices?.map(({ id, name }) => (
+            <Option key={id} value={id}>
+              {name}
+            </Option>
+          ))}
+        </Select>
         <AudioContainer>
           <AudioWrapper>
             <AudioBox reGenAudio={reGenAudio} />
@@ -160,6 +156,7 @@ export const BookScene = () => {
         pageSize={1}
         defaultCurrent={1}
         total={bookDetail.total_pages - 1}
+        showSizeChanger={false}
         onChange={onChangePage}
       />
     </Wrapper>

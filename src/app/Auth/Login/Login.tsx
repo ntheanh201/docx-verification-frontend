@@ -34,8 +34,8 @@ export const Login: FC = () => {
     const loginStatus = await dispatch(loginActionCreator(value))
     await setState({ transmitting: false })
 
-    console.log(loginStatus)
-    if (loginStatus) {
+    //@ts-ignore
+    if (loginStatus === 200) {
       history.push('/')
     }
     return {

@@ -1,4 +1,4 @@
-import { React } from 'core'
+import { React, useState } from 'core'
 
 import { useSelector } from 'redux-core'
 import { getPageState } from 'Store'
@@ -6,8 +6,16 @@ import { Button } from 'antd'
 
 import { AudioPlayer } from './components/AudioPlayer'
 
-export const AudioBox = () => {
+export const AudioBox = ({ reGenAudio }) => {
   const { book } = useSelector(getPageState)
+
+  if (reGenAudio) {
+    return (
+      <Button type='primary' loading>
+        Đang gen lại file audio
+      </Button>
+    )
+  }
 
   if (book?.task_id && !book.audio_url) {
     return (

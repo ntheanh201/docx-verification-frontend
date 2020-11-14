@@ -34,10 +34,11 @@ export const BookScene = () => {
 
   const [state, setState] = useState({
     currentPage: 1,
-    voiceId: (voices && voices[0]?.id) || '11'
+    voiceId: (voices && voices[0]?.id) || '11',
+    reGenAudio: false
   })
 
-  const { currentPage, voiceId } = state
+  const { currentPage, voiceId, reGenAudio } = state
 
   const fetchBookDetail = useCallback(async () => {
     await dispatch(getPageInfoActionCreator(bookId, currentPage))
@@ -73,6 +74,9 @@ export const BookScene = () => {
   }
 
   const onClickGenAudio = async () => {
+    if (book.audio_url) {
+      await setState({ reGenAudio: true })
+    }
     await dispatch(genAudioActionCreator(book.id, voiceId))
     toast('Audio sẽ được xử lý trong vài phút')
 
@@ -103,7 +107,7 @@ export const BookScene = () => {
         <Button type='primary' onClick={onClickGenAudio}>
           Gen Audio
         </Button>
-        <AudioBox />
+        <AudioBox reGenAudio={reGenAudio} />
         {status === 'verified' ? (
           <Button type='primary' danger onClick={onClickVerify}>
             Đã verify

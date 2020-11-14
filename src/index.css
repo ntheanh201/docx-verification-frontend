@@ -30,3 +30,11 @@ code {
 .ant-menu-horizontal {
   border: none !important;
 }
+
+.ant-btn-loading-icon {
+  margin-right: 8px;
+}
+
+.ant-btn > .ant-btn-loading-icon .anticon {
+  padding-right: unset !important;
+}

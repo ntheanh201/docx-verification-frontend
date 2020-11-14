@@ -25,9 +25,10 @@ export const AudioBox = ({ reGenAudio }) => {
     )
   } else if (!book?.audio_url) {
     return (
-      <Button type='primary' danger disabled>
-        Chưa gen audio
-      </Button>
+      <></>
+      // <Button type='primary' danger disabled>
+      //   Chưa gen audio
+      // </Button>
     )
   }
 

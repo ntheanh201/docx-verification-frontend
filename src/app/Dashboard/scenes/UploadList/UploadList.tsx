@@ -1,24 +1,22 @@
-import { React, styled, useEffect, FC, useState } from 'core'
-import { useDispatch, useSelector } from 'redux-core'
-import { useHistory } from 'router'
-
-import { Modal, Table, Button as PrimaryButton } from 'antd'
 import { CloudUploadOutlined } from '@ant-design/icons'
+import { Modal, Table, Button as PrimaryButton  } from 'antd'
+
 import { Container } from 'layout'
 import { LoadingIndicator } from 'ui'
-
-import './UploadList.css'
-
-import { columns } from './UploadListHelper'
+import { React, styled, useEffect, FC, useState } from 'core'
+import { bookService } from 'service'
 import {
   getAllBooksActionCreator,
   getBooksState,
   uploadBookActionCreator,
   deleteBookActionCreator
 } from 'Store'
-import { bookService } from 'service'
+import { useDispatch, useSelector } from 'redux-core'
+import { useHistory } from 'router'
 
-export const UploadList: FC = () => {
+import { columns } from './UploadListHelper'
+
+const _UploadList: FC<{ className?: string }> = ({ className }) => {
   const dispatch = useDispatch()
   const history = useHistory()
   const { books, total_pages, page_size } = useSelector(getBooksState)
@@ -75,7 +73,7 @@ export const UploadList: FC = () => {
   }
 
   return (
-    <Container>
+    <Container className={className}>
       <Header>
         <Title>Sách</Title>
         <Button>
@@ -117,10 +115,12 @@ export const UploadList: FC = () => {
 const Header = styled.div`
   display: flex;
   justify-content: space-between;
-  padding: 2rem 0;
+  padding: 1.5rem 0 1rem 0;
 `
 
-const Title = styled.h2``
+const Title = styled.h2`
+  margin-left: 1rem;
+`
 
 const Label = styled.label`
   cursor: pointer;
@@ -131,4 +131,17 @@ const Button = styled(PrimaryButton)`
   // padding: 10px 30px;
   // flex: none;
   // width: 25%;
+  input {
+    width: 0;
+    height: 0;
+  }
+  margin-right: 10px;
+`
+
+export const UploadList = styled(_UploadList)`
+  margin-top: 20px;
+  
+  .ant-table-wrapper {
+    margin: 0 10px;
+  }
 `

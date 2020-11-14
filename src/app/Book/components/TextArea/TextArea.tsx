@@ -1,29 +1,35 @@
 import { React, styled, useState, useEffect } from 'core'
 
 import { Input, Button as ButtonAntd } from 'antd'
+import { useCallback, useContext } from 'react'
+import { NormValueContext } from './norm-value.context'
 
 const { TextArea: TextInput } = Input
 
-export const TextArea = ({ content, onSubmitNormText }) => {
-  const [state, setState] = useState({
-    text: content
-  })
-
-  useEffect(() => {
-    setState({ text: content })
-  }, [content])
-
-  const onChangeText = event => {
-    setState({ text: event.target.value })
-  }
+export const TextArea = () => {
+  const [value, setValue] = useContext(NormValueContext)
+  // const [state, setState] = useState({
+  //   text: content
+  // })
+  //
+  // useEffect(() => {
+  //   setState({ text: content })
+  // }, [content])
+  //
+  // const onChangeText = event => {
+  //   setState({ text: event.target.value })
+  // }
+  const onChangeText = useCallback(event => setValue(event.target.value), [
+    setValue
+  ])
 
   return (
     <Wrapper>
       <Title>Văn bản chuẩn hoá</Title>
-      <TextBox rows={10} value={state.text} onChange={onChangeText} />
-      <Button type='primary' onClick={() => onSubmitNormText(state.text)}>
-        Xác nhận sửa đổi
-      </Button>
+      <TextBox rows={10} value={value} onChange={onChangeText} />
+      {/*<Button type='primary' onClick={() => onSubmitNormText(state.text)}>*/}
+      {/*  Xác nhận sửa đổi*/}
+      {/*</Button>*/}
     </Wrapper>
   )
 }
@@ -36,8 +42,8 @@ const Title = styled.h2`
   text-align: center;
 `
 
-const TextBox = styled(TextInput)`
-  min-height: 65vh !important;
+export const TextBox = styled(TextInput)`
+  height: 65vh !important;
 `
 
 const Button = styled(ButtonAntd)`

@@ -1,10 +1,11 @@
 import { React, styled } from 'core'
+import { TextBox } from '../TextArea/TextArea'
 
 export const NormalText = ({ content }) => {
   return (
     <Wrapper>
       <Title>Văn bản gốc</Title>
-      <Content>{content}</Content>
+      <TextBox value={content}/>
     </Wrapper>
   )
 }

@@ -1,16 +1,17 @@
 import { React, FC } from 'core'
+import styled from 'styled-components'
 
 import { useHistory, useLocation } from 'router'
 import { Layout, Menu } from 'antd'
 
 const { Header: HeaderAntd } = Layout
 
-export const Header: FC = () => {
+const _Header: FC<{ className?: string }> = ({ className }) => {
   const history = useHistory()
   const { pathname } = useLocation()
 
   return (
-    <HeaderAntd style={{ position: 'fixed', zIndex: 1, width: '100%' }}>
+    <HeaderAntd className={className}>
       <div className='logo' />
       <Menu
         mode='horizontal'
@@ -20,8 +21,17 @@ export const Header: FC = () => {
         <Menu.Item key='1' onClick={() => history.push('/')}>
           Trang chủ
         </Menu.Item>
-        <Menu.Item key='2'>Sách</Menu.Item>
+        {pathname.includes('book') && <Menu.Item key='2'>Sách</Menu.Item>}
       </Menu>
     </HeaderAntd>
   )
 }
+
+export const Header = styled(_Header)`
+  position: fixed;
+  z-index: 1;
+  width: 100%;
+  .ant-menu-item {
+    font-weight: 500;
+  }
+`

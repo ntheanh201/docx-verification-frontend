@@ -40,6 +40,7 @@ export const verifyNormTextActionCreator = (
   try {
     const data = await pageService.verifyNormText(pageId)
     await dispatch(verifyNormText(data))
+
   } catch (e) {
     return console.error(e.message)
   }
@@ -56,5 +57,15 @@ export const genAudioActionCreator = (
     }
   } catch (e) {
     return console.error(e.message)
+  }
+}
+
+export const checkIsGenerated = (
+  bookID: number,
+  pageID: number
+) => async dispatch => {
+  const result = await pageService.checkGenerated(pageID)
+  if (result) {
+    dispatch(getPageInfoActionCreator(bookID, pageID))
   }
 }

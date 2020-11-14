@@ -44,7 +44,7 @@ class PageService extends BaseService<Book> {
 
   verifyNormText(pageId): Promise<Page> {
     return axios
-      .put(this.baseURL + '/verified', {
+      .put(this.baseURL + '/toggle_verify', {
         page_id: pageId
       })
       .then(res => res.data)
@@ -64,6 +64,15 @@ class PageService extends BaseService<Book> {
       .catch(err => {
         console.log(err)
         throw err
+      })
+  }
+  checkGenerated(pageId): Promise<boolean> {
+    return axios
+      .get(this.baseURL + '/gen_audio/status/' + pageId)
+      .then(res => res.data)
+      .catch(err => {
+        console.log(err.toString())
+        return false;
       })
   }
 }

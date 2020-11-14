@@ -1,9 +1,7 @@
-import { React, styled, useState, useEffect, useCallback } from 'core'
+import { React, styled, useState, useEffect, useCallback, useMemo } from 'core'
 import { useDispatch, useSelector } from 'redux-core'
 import { useParams, useHistory } from 'router'
-
 import { Pagination, Select, Button, PageHeader } from 'antd'
-
 import {
   getBooksState,
   getAudioState,
@@ -13,15 +11,15 @@ import {
   getVoicesActionCreator,
   verifyNormTextActionCreator,
   genAudioActionCreator,
-  editNormTextActionCreator
+  editNormTextActionCreator,
+  checkIsGenerated
 } from 'Store'
 import { LoadingIndicator, toast } from 'ui'
 import { Container } from 'layout'
-
 import { TextArea } from '../../components/TextArea/TextArea'
 import { NormalText } from '../../components/NormalText/NormalText'
 import { AudioBox } from '../../components/AudioBox/AudioBox'
-
+import { NormValueContext } from '../../components/TextArea/norm-value.context'
 const { Option } = Select
 
 export const BookScene = () => {
@@ -37,6 +35,12 @@ export const BookScene = () => {
     voiceId: (voices && voices[0]?.id) || '11',
     reGenAudio: false
   })
+  const [normText, setNormtext] = useState('')
+  useEffect(() => {
+    if (book && book.text_norm) {
+      setNormtext(book.text_norm)
+    }
+  }, [book])
 
   const { currentPage, voiceId, reGenAudio } = state
 
@@ -48,10 +52,21 @@ export const BookScene = () => {
     const getBookInfo = async () => {
       await dispatch(getVoicesActionCreator())
       await dispatch(getBookInfoActionCreator(bookId))
-      fetchBookDetail()
+      await fetchBookDetail()
     }
     getBookInfo()
   }, [dispatch, bookId, currentPage, fetchBookDetail])
+  useEffect(() => {
+    if (book && book.task_id && !book.audio_url) {
+      const interval = setInterval(() => {
+        dispatch(checkIsGenerated(bookId, currentPage))
+      }, 5000)
+      return () => clearInterval(interval)
+    }
+  }, [book, dispatch, currentPage, bookId])
+  const isGenerated = useMemo(() => {
+    return book && book.task_id && book.audio_url
+  }, [book])
 
   if (!book || !bookDetail) {
     return <LoadingIndicator />
@@ -69,8 +84,8 @@ export const BookScene = () => {
     await dispatch(verifyNormTextActionCreator(book.id))
   }
 
-  const onSubmitNormText = async textNorm => {
-    await dispatch(editNormTextActionCreator(book.id, textNorm))
+  const onSubmitNormText = async () => {
+    dispatch(editNormTextActionCreator(book.id, normText))
   }
 
   const onClickGenAudio = async () => {
@@ -87,40 +102,56 @@ export const BookScene = () => {
     }
   }
 
-  const { text_norm, text_raw, status } = book
+  const { text_raw, status } = book
 
   return (
     <Wrapper>
       <PageHeader onBack={() => history.push('/')} title='Kiểm tra sách' />
       <ActionBar>
-        <Select
-          defaultValue={voices[0].id}
-          style={{ width: 240 }}
-          onChange={onChangeVoice}
-        >
-          {voices?.map(({ id, name }) => (
-            <Option key={id} value={id}>
-              {name}
-            </Option>
-          ))}
-        </Select>
-        <Button type='primary' onClick={onClickGenAudio}>
-          Gen Audio
-        </Button>
-        <AudioBox reGenAudio={reGenAudio} />
-        {status === 'verified' ? (
-          <Button type='primary' danger onClick={onClickVerify}>
-            Đã verify
-          </Button>
-        ) : (
-          <Button type='primary' onClick={onClickVerify}>
-            Verify
-          </Button>
+        {!isGenerated && (
+          <>
+            <Select
+              defaultValue={voices[0].id}
+              style={{ width: 240 }}
+              onChange={onChangeVoice}
+            >
+              {voices?.map(({ id, name }) => (
+                <Option key={id} value={id}>
+                  {name}
+                </Option>
+              ))}
+            </Select>
+            <Button type='primary' onClick={onClickGenAudio}>
+              Gen Audio
+            </Button>
+          </>
         )}
+        <AudioContainer>
+          <AudioWrapper>
+            <AudioBox reGenAudio={reGenAudio} />
+          </AudioWrapper>
+
+          {isGenerated &&
+            (status === 'verified' ? (
+              <Button type='primary' danger onClick={onClickVerify}>
+                Bỏ xác minh
+              </Button>
+            ) : (
+              <Button type='primary' onClick={onClickVerify}>
+                Xác minh
+              </Button>
+            ))}
+        </AudioContainer>
+
+        <Button type='primary' onClick={onSubmitNormText}>
+          Cập nhật nội dung
+        </Button>
       </ActionBar>
       <ContentWrapper>
         <NormalText content={text_raw} />
-        <TextArea content={text_norm} onSubmitNormText={onSubmitNormText} />
+        <NormValueContext.Provider value={[normText, setNormtext]}>
+          <TextArea />
+        </NormValueContext.Provider>
       </ContentWrapper>
       <Pagination
         style={{ textAlign: 'center' }}
@@ -144,6 +175,25 @@ const ActionBar = styled.div`
   flex-wrap: wrap;
   justify-content: space-between;
   align-items: center;
+`
+
+const AudioContainer = styled.div`
+  display: flex;
+  align-items: center;
+  //flex-grow: 1;
+  button {
+    margin-left: 20px;
+  }
+`
+
+const AudioWrapper = styled.div`
+  flex-grow: 1;
+  > * {
+    width: 400px;
+    border-radius: 5px;
+  }
+
+  //display: flex;
 `
 
 const ContentWrapper = styled.div`

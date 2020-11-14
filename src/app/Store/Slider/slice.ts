@@ -28,9 +28,5 @@ export const sliderSlice = createSlice({
   }
 })
 
-const {
-  updateAudioPosition,
-  updateDuration,
-  updatePlayStatus
-} = sliderSlice.actions
-export { updateAudioPosition, updateDuration, updatePlayStatus }
+const { updateAudioPosition, updateDuration } = sliderSlice.actions
+export { updateAudioPosition, updateDuration }

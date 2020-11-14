@@ -4,10 +4,6 @@ import { VoiceBack } from 'type'
 interface AudioState extends VoiceBack {
   audioUrl: string
   playStatus: string
-  audioPosition: number
-  resumePosition: number
-  duration: number
-  position: number
 }
 
 const initialState: AudioState = {
@@ -16,11 +12,7 @@ const initialState: AudioState = {
   version: null,
   voices: null,
   audioUrl: null,
-  playStatus: 'STOPPED',
-  position: 0,
-  audioPosition: 0,
-  resumePosition: 0,
-  duration: 100
+  playStatus: 'STOPPED'
 }
 
 export const audioSlice = createSlice({
@@ -35,19 +27,9 @@ export const audioSlice = createSlice({
     },
     updatePlayStatus: (state, { payload }: PayloadAction<string>) => {
       state.playStatus = payload
-    },
-    updateAudioPosition: (state, { payload }: PayloadAction<number>) => {
-      state.position = payload
-    },
-    updateDuration: (state, { payload }: PayloadAction<number>) => {
-      state.duration = payload
     }
   }
 })
 
-// const {
-//   updatePlayStatus,
-//   updateAudioPosition,
-//   updateDuration
-// } = audioSlice.actions
-// export { updatePlayStatus, updateAudioPosition, updateDuration }
+const { updatePlayStatus } = audioSlice.actions
+export { updatePlayStatus }

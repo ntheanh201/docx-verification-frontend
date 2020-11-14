@@ -7,8 +7,7 @@ import {
   updatePlayStatus,
   updateAudioPosition,
   getPageState,
-  updateDuration,
-  getSliderState
+  updateDuration
 } from 'Store'
 
 import PlayIcon from 'assets/play.svg'
@@ -28,7 +27,7 @@ export const AudioPlayer = () => {
 
   const { playing, resumePos, onFetch } = state
 
-  const { playStatus } = useSelector(getSliderState)
+  const { playStatus } = useSelector(getAudioState)
   const { book } = useSelector(getPageState)
 
   const onFetchPlayButton = () => {

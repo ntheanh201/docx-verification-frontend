@@ -4,28 +4,18 @@ import Sound from 'react-sound'
 import { useSelector, useDispatch } from 'redux-core'
 import {
   getAudioState,
-  getPageState,
   updatePlayStatus,
   updateAudioPosition,
-  updateDuration
+  getPageState,
+  updateDuration,
+  getSliderState
 } from 'Store'
-import { Button, Slider as SliderAntd } from 'antd'
 
 import PlayIcon from 'assets/play.svg'
 import ResumeIcon from 'assets/pause.svg'
 import StopIcon from 'assets/stop.svg'
 
-const SliderAudio = ({ setResumePos }) => {
-  const { position, duration } = useSelector(getAudioState)
-
-  return (
-    <Slider value={position} min={0} max={duration} onChange={setResumePos} />
-  )
-
-  // const { duration } = useSelector(getAudioState)
-
-  // return <Slider value={0} min={0} max={duration} onChange={setResumePos} />
-}
+import { PositionSlider } from './PositionSlider'
 
 export const AudioPlayer = () => {
   const dispatch = useDispatch()
@@ -33,29 +23,13 @@ export const AudioPlayer = () => {
   const [state, setState] = useState({
     playing: false,
     onFetch: true,
-    resumePos: 0,
-    loading: false
+    resumePos: 0
   })
-  console.log(state)
-
-  const { book } = useSelector(getPageState)
-  const { playStatus } = useSelector(getAudioState)
 
   const { playing, resumePos, onFetch } = state
 
-  if (book?.task_id && !book.audio_url) {
-    return (
-      <Button type='primary' loading>
-        Đang xử lý file audio
-      </Button>
-    )
-  } else if (!book?.audio_url) {
-    return (
-      <Button type='primary' danger disabled>
-        Chưa gen audio
-      </Button>
-    )
-  }
+  const { playStatus } = useSelector(getSliderState)
+  const { book } = useSelector(getPageState)
 
   const onFetchPlayButton = () => {
     setState({ playing: !playing })
@@ -117,7 +91,9 @@ export const AudioPlayer = () => {
             dispatch(updatePlayStatus(Sound.status.STOPPED))
           }}
         />
-        <SliderAudio setResumePos={value => setState({ resumePos: value })} />
+        <PositionSlider
+          setResumePos={value => setState({ resumePos: value })}
+        />
       </MediaPlayer>
     </>
   )
@@ -141,8 +117,4 @@ const MediaPlayer = styled.div`
   grid-gap: 16px;
   align-items: center;
   border-radius: 0.8rem;
-`
-
-const Slider = styled(SliderAntd)`
-  width: 60px;
 `

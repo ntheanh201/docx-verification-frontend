@@ -16,6 +16,7 @@ import {
   uploadBookActionCreator,
   deleteBookActionCreator
 } from 'Store'
+import { bookService } from 'service'
 
 export const UploadList: FC = () => {
   const dispatch = useDispatch()
@@ -26,7 +27,8 @@ export const UploadList: FC = () => {
     currentPage: 1,
     deleteModalVisible: false,
     deleteId: null,
-    transmitting: false
+    transmitting: false,
+    file: null
   })
 
   const onHandleUpload = async event => {
@@ -53,6 +55,12 @@ export const UploadList: FC = () => {
   const onModalConfirm = async () => {
     await dispatch(deleteBookActionCreator(state.deleteId))
     await setState({ deleteModalVisible: false })
+  }
+
+  const onClickDownloadBook = async (savedName: string) => {
+    const data = await bookService.downloadBook(savedName)
+    console.log(data)
+    await setState({ file: data })
   }
 
   useEffect(() => {
@@ -85,7 +93,7 @@ export const UploadList: FC = () => {
       </Header>
 
       <Table
-        columns={columns(onModalVisible)}
+        columns={columns(onModalVisible, onClickDownloadBook)}
         dataSource={books}
         rowKey={record => record.id}
         pagination={{

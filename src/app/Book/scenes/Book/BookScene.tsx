@@ -20,8 +20,7 @@ import { Container } from 'layout'
 
 import { TextArea } from '../../components/TextArea/TextArea'
 import { NormalText } from '../../components/NormalText/NormalText'
-import { AudioPlayer } from '../../components/AudioPlayer/AudioPlayer'
-import { bookService } from 'service'
+import { AudioBox } from '../../components/AudioBox/AudioBox'
 
 const { Option } = Select
 
@@ -73,11 +72,6 @@ export const BookScene = () => {
     await dispatch(editNormTextActionCreator(book.id, textNorm))
   }
 
-  const onClickDownloadBook = async () => {
-    const data = await bookService.downloadBook(bookDetail.saved_name)
-    console.log(data)
-  }
-
   const onClickGenAudio = async () => {
     await dispatch(genAudioActionCreator(book.id, voiceId))
     toast('Audio sẽ được xử lý trong vài phút')
@@ -95,10 +89,6 @@ export const BookScene = () => {
     <Wrapper>
       <PageHeader onBack={() => history.push('/')} title='Kiểm tra sách' />
       <ActionBar>
-        {/* <a href='http://example.com/files/myfile.pdf' target='_blank'>
-          Download
-        </a> */}
-        <span onClick={onClickDownloadBook}>Download</span>
         <Select
           defaultValue={voices[0].id}
           style={{ width: 240 }}
@@ -113,7 +103,7 @@ export const BookScene = () => {
         <Button type='primary' onClick={onClickGenAudio}>
           Gen Audio
         </Button>
-        <AudioPlayer />
+        <AudioBox />
         {status === 'verified' ? (
           <Button type='primary' danger onClick={onClickVerify}>
             Đã verify

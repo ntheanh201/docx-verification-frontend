@@ -37,7 +37,7 @@ export const audioSlice = createSlice({
       state.playStatus = payload
     },
     updateAudioPosition: (state, { payload }: PayloadAction<number>) => {
-      // state.position = payload
+      state.position = payload
     },
     updateDuration: (state, { payload }: PayloadAction<number>) => {
       state.duration = payload
@@ -45,9 +45,9 @@ export const audioSlice = createSlice({
   }
 })
 
-const {
-  updatePlayStatus,
-  updateAudioPosition,
-  updateDuration
-} = audioSlice.actions
-export { updatePlayStatus, updateAudioPosition, updateDuration }
+// const {
+//   updatePlayStatus,
+//   updateAudioPosition,
+//   updateDuration
+// } = audioSlice.actions
+// export { updatePlayStatus, updateAudioPosition, updateDuration }

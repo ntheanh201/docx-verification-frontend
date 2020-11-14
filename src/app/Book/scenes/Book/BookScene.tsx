@@ -121,9 +121,6 @@ export const BookScene = () => {
                 </Option>
               ))}
             </Select>
-            <Button type='primary' onClick={onClickGenAudio}>
-              Gen Audio
-            </Button>
           </>
         )}
         <AudioContainer>
@@ -141,6 +138,9 @@ export const BookScene = () => {
                 Xác minh
               </Button>
             ))}
+          <Button type='primary' onClick={onClickGenAudio}>
+            Gen Audio
+          </Button>
         </AudioContainer>
 
         <Button type='primary' onClick={onSubmitNormText}>

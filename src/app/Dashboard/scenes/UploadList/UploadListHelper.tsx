@@ -38,7 +38,7 @@ export const columns = (onModalVisible, onClickDownloadBook) => [
             download={record.name}
           >
             <DownloadOutlined />
-            Download
+            <Text>Download</Text>
           </a>
         </Button>
         <Button type='link' danger onClick={() => onModalVisible(record.id)}>
@@ -51,3 +51,7 @@ export const columns = (onModalVisible, onClickDownloadBook) => [
 ]
 
 const Button = styled(ButtonAntd)``
+
+const Text = styled.span`
+  margin-left: 8px;
+`

@@ -8,13 +8,13 @@ export const authRoutes: RouteType[] = [
   {
     path: '/register',
     secure: false,
-    withNormalLayout: true,
+    withNormalLayout: false,
     component: Register
   },
   {
     path: '/login',
     secure: false,
-    withNormalLayout: true,
+    withNormalLayout: false,
     component: Login
   },
   {

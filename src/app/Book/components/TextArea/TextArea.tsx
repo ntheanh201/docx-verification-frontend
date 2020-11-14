@@ -1,6 +1,6 @@
-import { React, styled, useState, useEffect } from 'core'
+import { React, styled } from 'core'
 
-import { Input, Button as ButtonAntd } from 'antd'
+import { Input } from 'antd'
 import { useCallback, useContext } from 'react'
 import { NormValueContext } from './norm-value.context'
 
@@ -46,7 +46,7 @@ export const TextBox = styled(TextInput)`
   height: 65vh !important;
 `
 
-const Button = styled(ButtonAntd)`
-  margin-top: 15px;
-  text-align: right;
-`
+// const Button = styled(ButtonAntd)`
+//   margin-top: 15px;
+//   text-align: right;
+// `

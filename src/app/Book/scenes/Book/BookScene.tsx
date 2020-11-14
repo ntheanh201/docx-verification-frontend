@@ -73,7 +73,7 @@ export const BookScene = () => {
   }
 
   const onChangePage = page => {
-    setState({ currentPage: page })
+    setState({ currentPage: page, reGenAudio: false })
   }
 
   const onChangeVoice = id => {

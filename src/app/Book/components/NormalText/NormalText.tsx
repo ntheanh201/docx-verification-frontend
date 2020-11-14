@@ -5,7 +5,7 @@ export const NormalText = ({ content }) => {
   return (
     <Wrapper>
       <Title>Văn bản gốc</Title>
-      <TextBox value={content}/>
+      <TextBox value={content} />
     </Wrapper>
   )
 }
@@ -17,9 +17,4 @@ const Wrapper = styled.div`
 
 const Title = styled.h2`
   text-align: center;
-`
-
-const Content = styled.div`
-  max-height: 65vh;
-  overflow: scroll;
 `

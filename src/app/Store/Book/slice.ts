@@ -24,6 +24,9 @@ export const pageSlice = createSlice({
     },
     genAudio: (state, { payload }: PayloadAction<{ status: string }>) => {
       // state.book.status = payload.status
+    },
+    clearAudioURL: state => {
+      state.book = { ...state.book, audio_url: '' }
     }
   }
 })

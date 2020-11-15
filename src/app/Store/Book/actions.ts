@@ -6,7 +6,8 @@ const {
   getPageInfo,
   verifyNormText,
   editNormText,
-  genAudio
+  genAudio,
+  clearAudioURL
 } = pageSlice.actions
 
 export const getPageInfoActionCreator = (
@@ -40,7 +41,6 @@ export const verifyNormTextActionCreator = (
   try {
     const data = await pageService.verifyNormText(pageId)
     await dispatch(verifyNormText(data))
-
   } catch (e) {
     return console.error(e.message)
   }
@@ -51,6 +51,7 @@ export const genAudioActionCreator = (
   voiceId: number
 ) => async dispatch => {
   try {
+    await dispatch(clearAudioURL())
     const data = await pageService.genAudio(pageId, voiceId)
     if (data.statusCode !== 404) {
       await dispatch(genAudio(data))
@@ -62,10 +63,11 @@ export const genAudioActionCreator = (
 
 export const checkIsGenerated = (
   bookID: number,
-  pageID: number
+  pageID: number,
+  taskID: string
 ) => async dispatch => {
-  const result = await pageService.checkGenerated(pageID)
-  if (result) {
+  const result = await pageService.checkGenerated(taskID)
+  if (result && result.completed) {
     dispatch(getPageInfoActionCreator(bookID, pageID))
   }
 }

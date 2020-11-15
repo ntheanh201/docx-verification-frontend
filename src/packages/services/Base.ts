@@ -34,7 +34,8 @@ export default class BaseService<T> {
     return axios
       .post(this.baseURL, item)
       .then(res => res.data)
-      .catch(() => {
+      .catch(e => {
+        console.log(e)
         return null
       })
   }

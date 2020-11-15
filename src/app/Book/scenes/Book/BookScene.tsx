@@ -32,8 +32,8 @@ export const BookScene = () => {
 
   const [state, setState] = useState({
     currentPage: 1,
-    voiceId: (voices && voices[0]?.id) || '11',
-    reGenAudio: false
+    voiceId: (voices && voices[0]?.id) || '11'
+    // reGenAudio: false
   })
   const [normText, setNormtext] = useState('')
   useEffect(() => {
@@ -42,7 +42,7 @@ export const BookScene = () => {
     }
   }, [book])
 
-  const { currentPage, voiceId, reGenAudio } = state
+  const { currentPage, voiceId } = state
 
   const fetchBookDetail = useCallback(async () => {
     await dispatch(getPageInfoActionCreator(bookId, currentPage))
@@ -59,13 +59,16 @@ export const BookScene = () => {
   useEffect(() => {
     if (book && book.task_id && !book.audio_url) {
       const interval = setInterval(() => {
-        dispatch(checkIsGenerated(bookId, currentPage))
+        dispatch(checkIsGenerated(bookId, currentPage, book.task_id))
       }, 5000)
       return () => clearInterval(interval)
     }
   }, [book, dispatch, currentPage, bookId])
   const isGenerated = useMemo(() => {
-    return book && book.task_id && book.audio_url
+    return book && book.task_id && book.audio_url !== ''
+  }, [book])
+  const isGenerating = useMemo(() => {
+    return book && book.task_id && !book.audio_url
   }, [book])
 
   if (!book || !bookDetail) {
@@ -73,7 +76,7 @@ export const BookScene = () => {
   }
 
   const onChangePage = page => {
-    setState({ currentPage: page, reGenAudio: false })
+    setState({ currentPage: page })
   }
 
   const onChangeVoice = id => {
@@ -89,9 +92,9 @@ export const BookScene = () => {
   }
 
   const onClickGenAudio = async () => {
-    if (book.audio_url) {
-      await setState({ reGenAudio: true })
-    }
+    // if (book.audio_url) {
+    //   await setState({ reGenAudio: true })
+    // }
     await dispatch(genAudioActionCreator(book.id, voiceId))
     toast('Audio sẽ được xử lý trong vài phút')
 
@@ -121,8 +124,11 @@ export const BookScene = () => {
         </Select>
         <AudioContainer>
           <AudioWrapper>
-            <AudioBox reGenAudio={reGenAudio} />
+            <AudioBox reGenAudio={isGenerating} />
           </AudioWrapper>
+          <Button type='primary' onClick={onClickGenAudio}>
+            Gen Audio
+          </Button>
 
           {isGenerated &&
             (status === 'verified' ? (
@@ -134,9 +140,6 @@ export const BookScene = () => {
                 Xác minh
               </Button>
             ))}
-          <Button type='primary' onClick={onClickGenAudio}>
-            Gen Audio
-          </Button>
         </AudioContainer>
 
         <Button type='primary' onClick={onSubmitNormText}>

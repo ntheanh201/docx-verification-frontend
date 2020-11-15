@@ -66,13 +66,13 @@ class PageService extends BaseService<Book> {
         throw err
       })
   }
-  checkGenerated(pageId): Promise<boolean> {
+  async checkGenerated(task_id: string): Promise<{ completed: boolean }> {
     return axios
-      .get(this.baseURL + '/gen_audio/status/' + pageId)
+      .get(this.baseURL + '/gen_audio/status/' + task_id)
       .then(res => res.data)
       .catch(err => {
         console.log(err.toString())
-        return false;
+        return false
       })
   }
 }

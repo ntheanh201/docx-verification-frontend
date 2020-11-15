@@ -75,6 +75,17 @@ class PageService extends BaseService<Book> {
         return false
       })
   }
+  async getProgress(
+    book_id: number
+  ): Promise<{ totals: number; verified: number }> {
+    return axios
+      .get(this.baseURL + '/progress/' + book_id)
+      .then(res => res.data)
+      .catch(err => {
+        console.log(err.toString())
+        return { totals: 1, verified: 0 }
+      })
+  }
 }
 
 export const pageService = new PageService()

@@ -1,11 +1,11 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
-import { React, styled } from 'core'
-
 import { Button as ButtonAntd } from 'antd'
-import { Link } from 'router'
-import config from 'environment'
-
 import { DownloadOutlined, DeleteOutlined } from '@ant-design/icons'
+
+import { Link } from 'router'
+import { React, styled } from 'core'
+import config from 'environment'
+import { BookProgress } from '../../components/BookProgress/BookProgress'
 
 export const columns = (onModalVisible, onClickDownloadBook) => [
   {
@@ -13,6 +13,13 @@ export const columns = (onModalVisible, onClickDownloadBook) => [
     dataIndex: 'name',
     key: 'name',
     render: (text: React.ReactNode) => <>{text}</>
+  },
+  {
+    title: 'Tiến trình',
+    key: 'progress',
+    render: (_: React.ReactNode, record: { id: string }) => (
+      <BookProgress id={record.id} />
+    )
   },
   {
     title: 'Chức năng',

@@ -95,6 +95,7 @@ export const BookScene = () => {
     // if (book.audio_url) {
     //   await setState({ reGenAudio: true })
     // }
+    await onSubmitNormText()
     await dispatch(genAudioActionCreator(book.id, voiceId))
     toast('Audio sẽ được xử lý trong vài phút')
 
@@ -142,9 +143,9 @@ export const BookScene = () => {
             ))}
         </AudioContainer>
 
-        <Button type='primary' onClick={onSubmitNormText}>
+        {/* <Button type='primary' onClick={onSubmitNormText}>
           Cập nhật nội dung
-        </Button>
+        </Button> */}
       </ActionBar>
       <ContentWrapper>
         <NormalText content={text_raw} />

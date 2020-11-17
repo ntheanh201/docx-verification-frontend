@@ -12,7 +12,7 @@ export const AudioBox = ({ reGenAudio }) => {
   if (reGenAudio) {
     return (
       <Button type='primary' loading>
-        Đang gen lại file audio
+        Đang gen file audio
       </Button>
     )
   }

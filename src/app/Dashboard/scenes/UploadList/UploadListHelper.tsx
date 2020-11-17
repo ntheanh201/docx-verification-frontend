@@ -6,6 +6,7 @@ import { Link } from 'router'
 import { React, styled } from 'core'
 import config from 'environment'
 import { BookProgress } from '../../components/BookProgress/BookProgress'
+import { BookGenAudioProgress } from '../../components/BookGenAudioProgress/BookGenAudioProgress'
 
 export const columns = (onModalVisible, onClickDownloadBook) => [
   {
@@ -15,7 +16,14 @@ export const columns = (onModalVisible, onClickDownloadBook) => [
     render: (text: React.ReactNode) => <>{text}</>
   },
   {
-    title: 'Tiến trình',
+    title: 'Tiến trình audio',
+    key: 'progress',
+    render: (_: React.ReactNode, record: { id: string }) => (
+      <BookGenAudioProgress id={record.id} />
+    )
+  },
+  {
+    title: 'Tiến trình xác minh',
     key: 'progress',
     render: (_: React.ReactNode, record: { id: string }) => (
       <BookProgress id={record.id} />

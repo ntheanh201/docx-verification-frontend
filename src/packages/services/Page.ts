@@ -66,6 +66,7 @@ class PageService extends BaseService<Book> {
         throw err
       })
   }
+
   async checkGenerated(task_id: string): Promise<{ completed: boolean }> {
     return axios
       .get(this.baseURL + '/gen_audio/status/' + task_id)
@@ -75,6 +76,7 @@ class PageService extends BaseService<Book> {
         return false
       })
   }
+
   async getProgress(
     book_id: number
   ): Promise<{ totals: number; verified: number }> {
@@ -86,6 +88,19 @@ class PageService extends BaseService<Book> {
         return { totals: 1, verified: 0 }
       })
   }
+
+  async getGenAudioProgress(
+    book_id: number
+  ): Promise<{ totals: number; generated: number }> {
+    return axios
+      .get(this.baseURL + '/gen_audio/progress/' + book_id)
+      .then(res => res.data)
+      .catch(err => {
+        console.log(err.toString())
+        return { totals: 1, generated: 0 }
+      })
+  }
+
 }
 
 export const pageService = new PageService()

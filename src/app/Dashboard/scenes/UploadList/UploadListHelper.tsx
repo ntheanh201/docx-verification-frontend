@@ -27,7 +27,8 @@ export const columns = (
   },
   {
     title: 'Tiến trình audio',
-    key: 'progress',
+    key: 'audioProgress',
+    width: '25%',
     render: (_: React.ReactNode, record: { id: string }) => (
       <BookGenAudioProgress id={record.id} />
     )
@@ -35,13 +36,15 @@ export const columns = (
   {
     title: 'Tiến trình xác minh',
     key: 'progress',
+    width: '25%',
     render: (_: React.ReactNode, record: { id: string }) => (
       <BookProgress id={record.id} />
     )
   },
   {
     title: 'Chức năng',
-    width: '30%',
+    width: '15%',
+    align: 'center',
     key: 'action',
     render: (
       _: React.ReactNode,

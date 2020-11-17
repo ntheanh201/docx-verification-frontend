@@ -18,6 +18,16 @@ class AudioService extends BaseService<Book> {
         throw err
       })
   }
+
+  getPendingTasks(): Promise<VoiceBack> {
+    return axios
+      .get(this.baseURL + '/pendings')
+      .then(res => res.data)
+      .catch(err => {
+        console.log(err)
+        throw err
+      })
+  }
 }
 
 export const audioService = new AudioService()

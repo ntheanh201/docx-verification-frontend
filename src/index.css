@@ -39,3 +39,7 @@ code {
 .ant-btn > .ant-btn-loading-icon .anticon {
   padding-right: unset !important;
 }
+
+.space-bottom {
+  margin-bottom: 10px !important;
+}

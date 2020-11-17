@@ -1,3 +1,4 @@
+import { Progress } from 'antd'
 import { React, useState, useEffect } from 'core'
 import { pageService } from 'service'
 export const BookProgress = ({ id }) => {
@@ -10,5 +11,6 @@ export const BookProgress = ({ id }) => {
       })
     }
   }, [id, setProgress])
-  return <div>{progress}%</div>
+  // return <div>{progress}%</div>
+  return <Progress percent={progress} size='small' status='active' />
 }

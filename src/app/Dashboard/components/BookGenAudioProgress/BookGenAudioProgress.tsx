@@ -1,3 +1,4 @@
+import { Progress } from 'antd'
 import { React, useState, useEffect } from 'core'
 import { pageService } from 'service'
 export const BookGenAudioProgress = ({ id }) => {
@@ -10,5 +11,16 @@ export const BookGenAudioProgress = ({ id }) => {
       })
     }
   }, [id, setProgress])
-  return <div>{progress}%</div>
+  // return <div>{progress}%</div>
+  return (
+    <Progress
+      strokeColor={{
+        '0%': '#52c41a',
+        '100%': '#52c41a'
+      }}
+      percent={progress}
+      size='small'
+      status='active'
+    />
+  )
 }

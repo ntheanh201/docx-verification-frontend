@@ -4,7 +4,7 @@ import { Modal, Table, Button as PrimaryButton } from 'antd'
 import { Container } from 'layout'
 import { LoadingIndicator, toast } from 'ui'
 import { React, styled, useEffect, FC, useState, useCallback } from 'core'
-import { bookService, pageService } from 'service'
+import { audioService, bookService, pageService } from 'service'
 import {
   getAllBooksActionCreator,
   getBooksState,
@@ -30,10 +30,11 @@ const _UploadList: FC<{ className?: string }> = ({ className }) => {
     transmitting: false,
     file: null,
     genAllAudioVisible: false,
-    voiceId: '11'
+    voiceId: '11',
+    pendingTasks: 0
   })
 
-  const { bookId, voiceId, currentPage } = state
+  const { bookId, voiceId, currentPage, pendingTasks } = state
 
   const getAllBooks = useCallback(async () => {
     await dispatch(getAllBooksActionCreator(currentPage - 1))
@@ -98,6 +99,7 @@ const _UploadList: FC<{ className?: string }> = ({ className }) => {
 
   useEffect(() => {
     getAllBooks()
+    audioService.getPendingTasks().then(res => setState({ pendingTasks: res }))
   }, [getAllBooks])
 
   if (!books || state.transmitting) {
@@ -121,8 +123,11 @@ const _UploadList: FC<{ className?: string }> = ({ className }) => {
           </Label>
         </Button>
       </Header>
-
+      <div className='ant-table-wrapper space-bottom'>
+        <Button type='dashed'>Pending tasks: {pendingTasks} </Button>
+      </div>
       <Table
+        //@ts-ignore
         columns={columns(
           onModalVisible,
           onClickDownloadBook,

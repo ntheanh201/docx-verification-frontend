@@ -1,14 +1,20 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
+import { React, styled } from 'core'
+
+import { Link } from 'router'
+import config from 'environment'
 import { Button as ButtonAntd } from 'antd'
 import { DownloadOutlined, DeleteOutlined } from '@ant-design/icons'
 
-import { Link } from 'router'
-import { React, styled } from 'core'
-import config from 'environment'
 import { BookProgress } from '../../components/BookProgress/BookProgress'
 import { BookGenAudioProgress } from '../../components/BookGenAudioProgress/BookGenAudioProgress'
+import { AudioDownload } from '../../components/AudioDownload/AudioDownload'
 
-export const columns = (onModalVisible, onClickDownloadBook) => [
+export const columns = (
+  onModalVisible,
+  onClickDownloadBook,
+  onClickGenBookAudio
+) => [
   {
     title: 'Tên sách',
     dataIndex: 'name',
@@ -34,7 +40,7 @@ export const columns = (onModalVisible, onClickDownloadBook) => [
     width: '30%',
     key: 'action',
     render: (
-      text: any,
+      _: React.ReactNode,
       record: { id: string; saved_name: string; name: string }
     ) => (
       <>
@@ -42,6 +48,10 @@ export const columns = (onModalVisible, onClickDownloadBook) => [
         <Button type='link'>
           <Link to={`/book/${record.id}`}>Kiểm tra</Link>
         </Button>
+        <Button type='link' onClick={() => onClickGenBookAudio(record.id)}>
+          Gen All Audio
+        </Button>
+        <AudioDownload id={record.id} />
         <Button
           type='link'
           onClick={() => onClickDownloadBook(record.saved_name)}
@@ -53,7 +63,7 @@ export const columns = (onModalVisible, onClickDownloadBook) => [
             download={record.name}
           >
             <DownloadOutlined />
-            <Text>Download</Text>
+            <Text>Download Book</Text>
           </a>
         </Button>
         <Button type='link' danger onClick={() => onModalVisible(record.id)}>

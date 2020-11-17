@@ -1,10 +1,10 @@
 import { CloudUploadOutlined } from '@ant-design/icons'
-import { Modal, Table, Button as PrimaryButton  } from 'antd'
+import { Modal, Table, Button as PrimaryButton } from 'antd'
 
 import { Container } from 'layout'
-import { LoadingIndicator } from 'ui'
-import { React, styled, useEffect, FC, useState } from 'core'
-import { bookService } from 'service'
+import { LoadingIndicator, toast } from 'ui'
+import { React, styled, useEffect, FC, useState, useCallback } from 'core'
+import { bookService, pageService } from 'service'
 import {
   getAllBooksActionCreator,
   getBooksState,
@@ -12,30 +12,46 @@ import {
   deleteBookActionCreator
 } from 'Store'
 import { useDispatch, useSelector } from 'redux-core'
-import { useHistory } from 'router'
+// import { useHistory } from 'router'
 
 import { columns } from './UploadListHelper'
+import { GenAllAudio } from '../../components/GenAllAudio/GenAllAudio'
 
 const _UploadList: FC<{ className?: string }> = ({ className }) => {
   const dispatch = useDispatch()
-  const history = useHistory()
+  // const history = useHistory()
   const { books, total_pages, page_size } = useSelector(getBooksState)
 
   const [state, setState] = useState({
+    bookId: 1,
     currentPage: 1,
     deleteModalVisible: false,
     deleteId: null,
     transmitting: false,
-    file: null
+    file: null,
+    genAllAudioVisible: false,
+    voiceId: '11'
   })
+
+  const { bookId, voiceId, currentPage } = state
+
+  const getAllBooks = useCallback(async () => {
+    await dispatch(getAllBooksActionCreator(currentPage - 1))
+  }, [dispatch, currentPage])
 
   const onHandleUpload = async event => {
     const file = event?.target?.files[0]
     await setState({ transmitting: true })
     const book = await dispatch(uploadBookActionCreator(file))
-    await setState({ transmitting: false })
-    //@ts-ignore
-    history.push(`/book/${book?.id}`)
+    await setState({
+      transmitting: false,
+      //@ts-ignore
+      bookId: book?.id,
+      genAllAudioVisible: true
+    })
+    await getAllBooks()
+
+    // history.push(`/book/${book?.id}`)
   }
 
   const onChangePage = page => {
@@ -47,7 +63,7 @@ const _UploadList: FC<{ className?: string }> = ({ className }) => {
   }
 
   const onModalCancel = () => {
-    setState({ deleteModalVisible: false })
+    setState({ deleteModalVisible: false, genAllAudioVisible: false })
   }
 
   const onModalConfirm = async () => {
@@ -57,16 +73,32 @@ const _UploadList: FC<{ className?: string }> = ({ className }) => {
 
   const onClickDownloadBook = async (savedName: string) => {
     const data = await bookService.downloadBook(savedName)
-    console.log(data)
+    // console.log(data)
     await setState({ file: data })
   }
 
+  const onConfirmGenAudio = async () => {
+    pageService.genAllAudio(bookId, voiceId).then(res => {
+      console.log(res)
+    })
+    await setState({ genAllAudioVisible: false })
+    toast('Gen audio đang được xử lý')
+  }
+
+  const onChangeVoice = async voiceId => {
+    await setState({ voiceId })
+  }
+
+  const onClickGenBookAudio = async id => {
+    await setState({
+      bookId: id,
+      genAllAudioVisible: true
+    })
+  }
+
   useEffect(() => {
-    const getAllBooks = async () => {
-      await dispatch(getAllBooksActionCreator(state.currentPage - 1))
-    }
     getAllBooks()
-  }, [dispatch, state.currentPage])
+  }, [getAllBooks])
 
   if (!books || state.transmitting) {
     return <LoadingIndicator />
@@ -91,7 +123,11 @@ const _UploadList: FC<{ className?: string }> = ({ className }) => {
       </Header>
 
       <Table
-        columns={columns(onModalVisible, onClickDownloadBook)}
+        columns={columns(
+          onModalVisible,
+          onClickDownloadBook,
+          onClickGenBookAudio
+        )}
         dataSource={books}
         rowKey={record => record.id}
         pagination={{
@@ -107,6 +143,14 @@ const _UploadList: FC<{ className?: string }> = ({ className }) => {
         onCancel={onModalCancel}
       >
         <p>Bạn có chắc chắn muốn xoá sách này?</p>
+      </Modal>
+      <Modal
+        title='Gen Audio'
+        visible={state.genAllAudioVisible}
+        onOk={onConfirmGenAudio}
+        onCancel={onModalCancel}
+      >
+        <GenAllAudio onChangeVoice={onChangeVoice} />
       </Modal>
     </Container>
   )
@@ -140,7 +184,7 @@ const Button = styled(PrimaryButton)`
 
 export const UploadList = styled(_UploadList)`
   margin-top: 20px;
-  
+
   .ant-table-wrapper {
     margin: 0 10px;
   }

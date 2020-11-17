@@ -7,6 +7,7 @@ export interface Book {
   mimetype?: string
   uploader?: number
   total_pages?: number
+  audio_url: string
   status?: Pick<'status', 'done'>
 }
 

@@ -1,9 +1,9 @@
 import { React, useState, useEffect } from 'core'
 import { bookService, pageService } from 'service'
 
-import { Button } from 'antd'
+import { Button, Menu } from 'antd'
 
-export const AudioDownload = ({ id }) => {
+export const AudioDownload = ({ id, audio_url }) => {
   const [acceptDownload, setAcceptDownload] = useState(false)
 
   useEffect(() => {
@@ -27,8 +27,17 @@ export const AudioDownload = ({ id }) => {
   }
 
   return (
-    <Button type='link' onClick={onClickDownloadAudio}>
-      Download Audio
-    </Button>
+    <Menu.Item>
+      <Button type='link' onClick={onClickDownloadAudio}>
+        <a
+          href={audio_url}
+          // eslint-disable-next-line react/jsx-no-target-blank
+          target='_blank'
+          download={audio_url}
+        >
+          Download Audio
+        </a>
+      </Button>
+    </Menu.Item>
   )
 }

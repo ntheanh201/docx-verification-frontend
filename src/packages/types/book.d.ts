@@ -9,6 +9,7 @@ export interface Book {
   total_pages?: number
   audio_url: string
   status?: Pick<'status', 'done'>
+  acceptAudioDownload?: boolean
 }
 
 export interface BooksPaged {

@@ -3,6 +3,7 @@ import { BooksPaged, Book } from 'type'
 
 interface BooksDetail extends BooksPaged {
   bookDetail: Book
+  loadingMergeAudio: boolean
 }
 
 const initialState: BooksDetail = {
@@ -10,7 +11,8 @@ const initialState: BooksDetail = {
   current_page: 0,
   total_pages: null,
   page_size: null,
-  bookDetail: null
+  bookDetail: null,
+  loadingMergeAudio: false
 }
 
 export const docSlice = createSlice({
@@ -34,6 +36,26 @@ export const docSlice = createSlice({
       if (index !== -1) {
         state.books.splice(index, 1)
       }
+    },
+    acceptAudioDownload: (
+      state,
+      { payload }: PayloadAction<{ id: number }>
+    ) => {
+      const index = state.books?.findIndex(book => book.id === payload.id)
+      state.books[index].acceptAudioDownload = true
+    },
+    mergeAudio: (
+      state,
+      { payload }: PayloadAction<{ id: number; audio_url: string }>
+    ) => {
+      const index = state.books?.findIndex(book => book.id === payload.id)
+      state.books[index].audio_url = payload.audio_url
+    },
+    setLoadingMergeAudio: (state, { payload }: PayloadAction<boolean>) => {
+      state.loadingMergeAudio = payload
     }
   }
 })
+
+const { acceptAudioDownload, setLoadingMergeAudio } = docSlice.actions
+export { acceptAudioDownload, setLoadingMergeAudio }

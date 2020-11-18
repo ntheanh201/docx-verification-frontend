@@ -3,7 +3,13 @@ import { docSlice } from './slice'
 import { bookService } from 'service'
 import { Book } from 'type'
 
-const { getAllBooks, getBookInfo, uploadBook, deleteBook } = docSlice.actions
+const {
+  getAllBooks,
+  getBookInfo,
+  uploadBook,
+  deleteBook,
+  mergeAudio
+} = docSlice.actions
 
 export const getAllBooksActionCreator = (
   currentPage: number
@@ -39,6 +45,15 @@ export const deleteBookActionCreator = (bookId: number) => async dispatch => {
   try {
     await bookService.delete(bookId)
     await dispatch(deleteBook({ id: bookId }))
+  } catch (e) {
+    return console.error(e.message)
+  }
+}
+
+export const mergeAudioActionCreator = (bookId: number) => async dispatch => {
+  try {
+    const { audio_url } = await bookService.mergeAudio(bookId)
+    await dispatch(mergeAudio({ id: bookId, audio_url }))
   } catch (e) {
     return console.error(e.message)
   }

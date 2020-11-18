@@ -3,10 +3,12 @@ import { Page } from 'type'
 
 interface BookInfo {
   book: Page
+  acceptAudioDownload: boolean
 }
 
 const initialState: BookInfo = {
-  book: null
+  book: null,
+  acceptAudioDownload: false
 }
 
 export const pageSlice = createSlice({

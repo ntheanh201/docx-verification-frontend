@@ -20,7 +20,9 @@ import { GenAllAudio } from '../../components/GenAllAudio/GenAllAudio'
 const _UploadList: FC<{ className?: string }> = ({ className }) => {
   const dispatch = useDispatch()
   // const history = useHistory()
-  const { books, total_pages, page_size } = useSelector(getBooksState)
+  const { books, total_pages, page_size, loadingMergeAudio } = useSelector(
+    getBooksState
+  )
 
   const [state, setState] = useState({
     bookId: 1,
@@ -102,7 +104,7 @@ const _UploadList: FC<{ className?: string }> = ({ className }) => {
     audioService.getPendingTasks().then(res => setState({ pendingTasks: res }))
   }, [getAllBooks])
 
-  if (!books || state.transmitting) {
+  if (!books || state.transmitting || loadingMergeAudio) {
     return <LoadingIndicator />
   }
 
@@ -181,6 +183,7 @@ const Button = styled(PrimaryButton)`
   // flex: none;
   // width: 25%;
   input {
+    display: none;
     width: 0;
     height: 0;
   }

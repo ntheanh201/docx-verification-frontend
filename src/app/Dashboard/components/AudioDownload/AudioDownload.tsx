@@ -1,43 +1,38 @@
-import { React, useState, useEffect } from 'core'
-import { bookService, pageService } from 'service'
+import { React, useState } from 'core'
+import { Button } from 'antd'
+import { setLoadingMergeAudio, mergeAudioActionCreator } from 'Store'
+import { useDispatch } from 'redux-core'
 
-import { Button, Menu } from 'antd'
+export const AudioDownload = ({ id, audio_url, acceptAudioDownload }) => {
+  const dispatch = useDispatch()
 
-export const AudioDownload = ({ id, audio_url }) => {
-  const [acceptDownload, setAcceptDownload] = useState(false)
+  const [state, setState] = useState({
+    audioUrl: null
+  })
 
-  useEffect(() => {
-    if (id) {
-      pageService.getGenAudioProgress(id).then(res => {
-        if (res.generated === res.totals) {
-          setAcceptDownload(true)
-        }
-      })
-    }
-  }, [id, setAcceptDownload])
-
-  const onClickDownloadAudio = () => {
-    bookService.mergeAudio(id).then(res => {
-      console.log(res)
-    })
+  const onClickDownloadAudio = async () => {
+    await dispatch(setLoadingMergeAudio(true))
+    const url = await dispatch(mergeAudioActionCreator(id))
+    await setState({ audioUrl: url })
+    await dispatch(setLoadingMergeAudio(false))
   }
 
-  if (!acceptDownload) {
+  if (!acceptAudioDownload) {
     return null
   }
 
+  const audioUrl = state.audioUrl || audio_url
+
   return (
-    <Menu.Item>
-      <Button type='link' onClick={onClickDownloadAudio}>
-        <a
-          href={audio_url}
-          // eslint-disable-next-line react/jsx-no-target-blank
-          target='_blank'
-          download={audio_url}
-        >
-          Download Audio
-        </a>
-      </Button>
-    </Menu.Item>
+    <Button type='link' onClick={onClickDownloadAudio}>
+      <a
+        href={audioUrl}
+        // eslint-disable-next-line react/jsx-no-target-blank
+        target='_blank'
+        download={audioUrl}
+      >
+        Download Audio
+      </a>
+    </Button>
   )
 }

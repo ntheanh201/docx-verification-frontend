@@ -53,6 +53,7 @@ export const columns = (
         saved_name: string
         name: string
         audio_url: string
+        acceptAudioDownload: boolean
       }
     ) => {
       const menu = (
@@ -67,7 +68,15 @@ export const columns = (
               Gen All Audio
             </Button>
           </Menu.Item>
-          <AudioDownload id={record.id} audio_url={record.audio_url} />
+          {record.acceptAudioDownload && (
+            <Menu.Item>
+              <AudioDownload
+                id={record.id}
+                audio_url={record.audio_url}
+                acceptAudioDownload={record.acceptAudioDownload}
+              />
+            </Menu.Item>
+          )}
           <Menu.Item>
             <Button
               type='link'

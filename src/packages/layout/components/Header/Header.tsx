@@ -3,6 +3,8 @@ import styled from 'styled-components'
 
 import { useHistory, useLocation } from 'router'
 import { Layout, Menu } from 'antd'
+import { getCurrentUser, logout } from 'Store'
+import { useSelector } from 'redux-core'
 
 const { Header: HeaderAntd } = Layout
 
@@ -10,9 +12,10 @@ const _Header: FC<{ className?: string }> = ({ className }) => {
   const history = useHistory()
   const { pathname } = useLocation()
 
+  const { currentUser } = useSelector(getCurrentUser)
+
   return (
     <HeaderAntd className={className}>
-      <div className='logo' />
       <Menu
         mode='horizontal'
         defaultSelectedKeys={['1']}
@@ -23,6 +26,11 @@ const _Header: FC<{ className?: string }> = ({ className }) => {
         </Menu.Item>
         {pathname.includes('book') && <Menu.Item key='2'>Sách</Menu.Item>}
       </Menu>
+      {currentUser && (
+        <Logout key='3' onClick={logout}>
+          Đăng xuất
+        </Logout>
+      )}
     </HeaderAntd>
   )
 }
@@ -31,7 +39,15 @@ export const Header = styled(_Header)`
   position: fixed;
   z-index: 1;
   width: 100%;
+  display: flex;
+  justify-content: space-between;
   .ant-menu-item {
     font-weight: 500;
+  }
+`
+const Logout = styled.div`
+  cursor: pointer;
+  &:hover {
+    color: #4580c2;
   }
 `

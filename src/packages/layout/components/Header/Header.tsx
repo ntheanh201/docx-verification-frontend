@@ -4,15 +4,20 @@ import styled from 'styled-components'
 import { useHistory, useLocation } from 'router'
 import { Layout, Menu } from 'antd'
 import { getCurrentUser, logout } from 'Store'
-import { useSelector } from 'redux-core'
+import { useSelector, useDispatch } from 'redux-core'
 
 const { Header: HeaderAntd } = Layout
 
 const _Header: FC<{ className?: string }> = ({ className }) => {
+  const dispatch = useDispatch()
   const history = useHistory()
   const { pathname } = useLocation()
 
   const { currentUser } = useSelector(getCurrentUser)
+
+  const onLogoutClick = async () => {
+    await dispatch(logout())
+  }
 
   return (
     <HeaderAntd className={className}>
@@ -27,7 +32,7 @@ const _Header: FC<{ className?: string }> = ({ className }) => {
         {pathname.includes('book') && <Menu.Item key='2'>Sách</Menu.Item>}
       </Menu>
       {currentUser && (
-        <Logout key='3' onClick={logout}>
+        <Logout key='3' onClick={onLogoutClick}>
           Đăng xuất
         </Logout>
       )}

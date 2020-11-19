@@ -34,6 +34,7 @@ export const loginSlice = createSlice({
     },
     logout: state => {
       localStorage.removeItem('userData')
+      localStorage.removeItem('authToken')
       state.authToken = null
       state.currentUser = null
     }

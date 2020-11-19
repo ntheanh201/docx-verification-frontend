@@ -19,7 +19,7 @@ export default class BaseService<T> {
       .get(this.baseURL)
       .then(res => res.data)
       .catch(() => {
-        window.location.href = '/logout'
+        window.location.href = '/'
       })
   }
 

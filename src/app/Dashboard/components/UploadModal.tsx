@@ -43,8 +43,7 @@ export function UploadModal() {
         const file = antFile.originFileObj
         return callUpload(file, values.voice_id)
       })
-      .then(() =>
-        form.resetFields())
+      .then(() => form.resetFields())
       .catch(info => {
         console.log('Validate Failed:', info)
         setVisible(false)
@@ -67,38 +66,36 @@ export function UploadModal() {
         onOk={onOk}
         onCancel={onCancel}
       >
-        {
-          loading ? <LoadingIndicator /> :
-            (
-              <Form form={form}>
-                <Form.Item
-                  name='voice_id'
-                  rules={[{ required: true, message: 'Trường này được yêu cầu' }]}
-                >
-                  <VoiceSelect />
-                </Form.Item>
-                <Form.Item
-                  name='files'
-                  valuePropName='fileList'
-                  getValueFromEvent={normFile}
-                  noStyle
-                >
-                  <Upload.Dragger name='files' action={null}>
-                    <p className='ant-upload-drag-icon'>
-                      <InboxOutlined />
-                    </p>
-                    <p className='ant-upload-text'>
-                      Click or drag file to this area to upload
-                    </p>
-                    <p className='ant-upload-hint'>
-                      Support for a single or bulk upload.
-                    </p>
-                  </Upload.Dragger>
-                </Form.Item>
-              </Form>
-            )
-        }
-
+        {loading ? (
+          <LoadingIndicator />
+        ) : (
+          <Form form={form}>
+            <Form.Item
+              name='voice_id'
+              rules={[{ required: true, message: 'Trường này được yêu cầu' }]}
+            >
+              <VoiceSelect />
+            </Form.Item>
+            <Form.Item
+              name='files'
+              valuePropName='fileList'
+              getValueFromEvent={normFile}
+              noStyle
+            >
+              <Upload.Dragger name='files' action={null} accept='.docx'>
+                <p className='ant-upload-drag-icon'>
+                  <InboxOutlined />
+                </p>
+                <p className='ant-upload-text'>
+                  Click or drag file to this area to upload
+                </p>
+                <p className='ant-upload-hint'>
+                  Support for a single or bulk upload.
+                </p>
+              </Upload.Dragger>
+            </Form.Item>
+          </Form>
+        )}
       </Modal>
     </>
   )

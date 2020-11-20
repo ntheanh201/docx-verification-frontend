@@ -7,20 +7,20 @@ import { LoadingIndicator } from 'ui'
 
 const { Option } = Select
 
-export const GenAllAudio = ({ onChangeVoice: onChangeVoiceProps }) => {
-  const dispatch = useDispatch()
+export const GenAllAudio = ({ onChangeVoice: onChangeVoiceProps, id, default_voice }) => {
+  // const dispatch = useDispatch()
   const { voices } = useSelector(getAudioState)
 
   const onChangeVoice = id => {
     onChangeVoiceProps(id)
   }
 
-  useEffect(() => {
-    const getVoicesInfo = async () => {
-      await dispatch(getVoicesActionCreator())
-    }
-    getVoicesInfo()
-  }, [dispatch])
+  // useEffect(() => {
+  //   const getVoicesInfo = async () => {
+  //     await dispatch(getVoicesActionCreator())
+  //   }
+  //   getVoicesInfo()
+  // }, [dispatch])
 
   if (!voices) {
     return <LoadingIndicator />

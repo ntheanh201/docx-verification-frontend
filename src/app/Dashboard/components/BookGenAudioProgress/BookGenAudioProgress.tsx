@@ -19,7 +19,7 @@ export const BookGenAudioProgress = ({ id }) => {
         }
       })
     }
-  }, [id, setProgress, dispatch])
+  }, [id, dispatch])
   // return <div>{progress}%</div>
   return (
     <Progress

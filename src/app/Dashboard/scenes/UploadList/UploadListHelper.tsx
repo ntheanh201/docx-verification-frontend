@@ -4,43 +4,53 @@ import { React, styled } from 'core'
 import { Link } from 'router'
 import config from 'environment'
 import { Button as ButtonAntd, Menu, Dropdown } from 'antd'
-import {
-  DownloadOutlined,
-  DeleteOutlined,
-  DownOutlined
-} from '@ant-design/icons'
+import { DownOutlined } from '@ant-design/icons'
 
 import { BookProgress } from '../../components/BookProgress/BookProgress'
 import { BookGenAudioProgress } from '../../components/BookGenAudioProgress/BookGenAudioProgress'
 import { AudioDownload } from '../../components/AudioDownload/AudioDownload'
+import VoiceColumn from '../../components/VoiceColumn'
+import CloneBookModal from '../../components/CloneBookModal'
+import GenAllAudioModal from '../../components/GenAllAudioModal'
 
-export const columns = (
-  onModalVisible,
-  onClickDownloadBook,
-  onClickGenBookAudio
-) => [
+export const columns = onModalVisible => [
   {
     title: 'Tên sách',
     dataIndex: 'name',
     key: 'name',
-    render: (text: React.ReactNode) => <>{text}</>
+    render: (text: React.ReactNode, record: { id: number }) => (
+      <Link to={`/book/${record.id}`}>{text}</Link>
+    )
   },
   {
     title: 'Tiến trình audio',
     key: 'audioProgress',
-    width: '25%',
-    render: (_: React.ReactNode, record: { id: string }) => (
+    width: '20%',
+    render: (_: React.ReactNode, record: { id: number }) => (
       <BookGenAudioProgress id={record.id} />
     )
   },
   {
     title: 'Tiến trình xác minh',
     key: 'progress',
-    width: '25%',
+    width: '20%',
     render: (_: React.ReactNode, record: { id: string }) => (
       <BookProgress id={record.id} />
     )
   },
+  {
+    title: 'Giọng mặc định',
+    key: 'default_voice',
+    dataIndex: 'default_voice',
+    render: (text: string) => <VoiceColumn voice_id={text} />
+  },
+  {
+    title: 'Upload lúc',
+    key: 'created_at',
+    dataIndex: 'created_at',
+    render: (text: string) => <>{text && new Date(text).toLocaleString()}</>
+  },
+
   {
     title: 'Chức năng',
     width: '15%',
@@ -54,59 +64,13 @@ export const columns = (
         name: string
         audio_url: string
         acceptAudioDownload: boolean
+        default_voice: string
       }
     ) => {
-      const menu = (
-        <Menu>
-          <Menu.Item>
-            <Button type='link'>
-              <Link to={`/book/${record.id}`}>Kiểm tra</Link>
-            </Button>
-          </Menu.Item>
-          <Menu.Item>
-            <Button type='link' onClick={() => onClickGenBookAudio(record.id)}>
-              Gen All Audio
-            </Button>
-          </Menu.Item>
-          {record.acceptAudioDownload && (
-            <Menu.Item>
-              <AudioDownload
-                id={record.id}
-                audio_url={record.audio_url}
-                acceptAudioDownload={record.acceptAudioDownload}
-              />
-            </Menu.Item>
-          )}
-          <Menu.Item>
-            <Button
-              type='link'
-              onClick={() => onClickDownloadBook(record.saved_name)}
-            >
-              <a
-                href={config.serverUrl + 'books/download/' + record.saved_name}
-                // eslint-disable-next-line react/jsx-no-target-blank
-                target='_blank'
-                download={record.name}
-              >
-                <DownloadOutlined />
-                <Text>Download Book</Text>
-              </a>
-            </Button>
-          </Menu.Item>
-          <Menu.Item danger>
-            <Button
-              type='link'
-              danger
-              onClick={() => onModalVisible(record.id)}
-            >
-              <DeleteOutlined />
-              Xoá
-            </Button>
-          </Menu.Item>
-        </Menu>
-      )
       return (
-        <Dropdown overlay={menu}>
+        <Dropdown
+          overlay={<DropdownMenu {...record} onModalVisible={onModalVisible} />}
+        >
           <a className='ant-dropdown-link' onClick={e => e.preventDefault()}>
             Thao tác <DownOutlined />
           </a>
@@ -119,5 +83,62 @@ export const columns = (
 const Button = styled(ButtonAntd)``
 
 const Text = styled.span`
-  margin-left: 8px;
+  //margin-left: 8px;
 `
+
+const DropdownMenu = ({
+  id,
+  acceptAudioDownload,
+  audio_url,
+  saved_name,
+  name,
+  default_voice,
+  onModalVisible
+}) => {
+  return (
+    <Menu>
+      <Menu.Item>
+        <Button type='link'>
+          <Link to={`/book/${id}`}>Kiểm tra</Link>
+        </Button>
+      </Menu.Item>
+      <Menu.Item>
+        <GenAllAudioModal id={id} default_voice={default_voice} />
+      </Menu.Item>
+      <Menu.Item>
+        <CloneBookModal id={id} />
+      </Menu.Item>
+      {acceptAudioDownload && (
+        <Menu.Item>
+          <AudioDownload
+            id={id}
+            audio_url={audio_url}
+            acceptAudioDownload={acceptAudioDownload}
+          />
+        </Menu.Item>
+      )}
+      <Menu.Item>
+        <Button
+          type='link'
+          // onClick={() => onClickDownloadBook(saved_name)}
+        >
+          <a
+            href={config.serverUrl + 'books/download/' + saved_name}
+            // eslint-disable-next-line react/jsx-no-target-blank
+            target='_blank'
+            download={name}
+          >
+            {/*<DownloadOutlined />*/}
+            <Text>Download Book</Text>
+          </a>
+        </Button>
+      </Menu.Item>
+      <Menu.Item danger>
+        <Button type='link' danger onClick={() => onModalVisible(id)}>
+          {/*<DeleteOutlined />*/}
+          Xoá
+        </Button>
+      </Menu.Item>
+    </Menu>
+  )
+}

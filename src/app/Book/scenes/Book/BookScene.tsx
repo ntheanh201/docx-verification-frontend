@@ -20,6 +20,8 @@ import { TextArea } from '../../components/TextArea/TextArea'
 import { NormalText } from '../../components/NormalText/NormalText'
 import { AudioBox } from '../../components/AudioBox/AudioBox'
 import { NormValueContext } from '../../components/TextArea/norm-value.context'
+import VoiceSelect from '../../../Dashboard/components/VoiceSelect'
+
 const { Option } = Select
 
 export const BookScene = () => {
@@ -28,11 +30,11 @@ export const BookScene = () => {
   let { bookId } = useParams<any>()
   const { bookDetail } = useSelector(getBooksState)
   const { book } = useSelector(getPageState)
-  const { voices } = useSelector(getAudioState)
+  // const { voices } = useSelector(getAudioState)
 
   const [state, setState] = useState({
-    currentPage: 1,
-    voiceId: (voices && voices[0]?.id) || '11'
+    currentPage: 1
+    // voiceId: (voices && voices[0]?.id) || '11'
     // reGenAudio: false
   })
   const [normText, setNormtext] = useState('')
@@ -42,7 +44,7 @@ export const BookScene = () => {
     }
   }, [book])
 
-  const { currentPage, voiceId } = state
+  const { currentPage } = state
 
   const fetchBookDetail = useCallback(async () => {
     await dispatch(getPageInfoActionCreator(bookId, currentPage))
@@ -50,7 +52,7 @@ export const BookScene = () => {
 
   useEffect(() => {
     const getBookInfo = async () => {
-      await dispatch(getVoicesActionCreator())
+      // await dispatch(getVoicesActionCreator())
       await dispatch(getBookInfoActionCreator(bookId))
       await fetchBookDetail()
     }
@@ -96,7 +98,7 @@ export const BookScene = () => {
     //   await setState({ reGenAudio: true })
     // }
     await onSubmitNormText()
-    await dispatch(genAudioActionCreator(book.id, voiceId))
+    await dispatch(genAudioActionCreator(book.id, book.default_voice))
     toast('Audio sẽ được xử lý trong vài phút')
 
     if (!book.audio_url) {
@@ -106,23 +108,13 @@ export const BookScene = () => {
     }
   }
 
-  const { text_raw, status } = book
+  const { text_raw, status, voice_id } = book
 
   return (
     <Wrapper>
       <PageHeader onBack={() => history.push('/')} title='Kiểm tra sách' />
       <ActionBar>
-        <Select
-          defaultValue={voices[0].id}
-          style={{ width: 240 }}
-          onChange={onChangeVoice}
-        >
-          {voices?.map(({ id, name }) => (
-            <Option key={id} value={id}>
-              {name}
-            </Option>
-          ))}
-        </Select>
+        <VoiceName voice_id={voice_id} />
         <AudioContainer>
           <AudioWrapper>
             <AudioBox reGenAudio={isGenerating} />
@@ -132,15 +124,15 @@ export const BookScene = () => {
           </Button>
 
           {isGenerated &&
-            (status === 'verified' ? (
-              <Button type='primary' danger onClick={onClickVerify}>
-                Bỏ xác minh
-              </Button>
-            ) : (
-              <Button type='primary' onClick={onClickVerify}>
-                Xác minh
-              </Button>
-            ))}
+          (status === 'verified' ? (
+            <Button type='primary' danger onClick={onClickVerify}>
+              Bỏ xác minh
+            </Button>
+          ) : (
+            <Button type='primary' onClick={onClickVerify}>
+              Xác minh
+            </Button>
+          ))}
         </AudioContainer>
 
         {/* <Button type='primary' onClick={onSubmitNormText}>
@@ -202,3 +194,7 @@ const ContentWrapper = styled.div`
   justify-content: center;
   padding: 1rem 0;
 `
+
+function VoiceName({ voice_id }) {
+  return <VoiceSelect value={voice_id} disabled />
+}

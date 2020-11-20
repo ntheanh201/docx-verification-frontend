@@ -10,6 +10,8 @@ export interface Book {
   audio_url: string
   status?: Pick<'status', 'done'>
   acceptAudioDownload?: boolean
+  created_at?: string
+  default_voice?: string
 }
 
 export interface BooksPaged {

@@ -29,9 +29,10 @@ class BookService extends BaseService<Book> {
       })
   }
 
-  uploadBook(file: any): Promise<Book> {
+  uploadBook(file: any, voice_id: string): Promise<Book> {
     const data = new FormData()
     data.append('file', file)
+    data.append('default_voice', voice_id)
     return axios
       .post(this.baseURL + '/upload', data, {
         headers: { 'Content-Type': 'multipart/form-data' }
@@ -57,6 +58,19 @@ class BookService extends BaseService<Book> {
     return axios
       .post(this.baseURL + '/merge_audio', {
         book_id: bookId
+      })
+      .then(res => res.data)
+      .catch(err => {
+        console.log(err)
+        throw err
+      })
+  }
+
+  async cloneBook(book_id: number, voice_id: string): Promise<Book> {
+    return axios
+      .post(this.baseURL + '/clone', {
+        book_id,
+        voice_id
       })
       .then(res => res.data)
       .catch(err => {

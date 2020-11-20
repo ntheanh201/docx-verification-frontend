@@ -2,13 +2,15 @@ import { docSlice } from './slice'
 
 import { bookService } from 'service'
 import { Book } from 'type'
+import { message } from 'antd'
 
 const {
   getAllBooks,
   getBookInfo,
   uploadBook,
   deleteBook,
-  mergeAudio
+  mergeAudio,
+  appendBook
 } = docSlice.actions
 
 export const getAllBooksActionCreator = (
@@ -31,13 +33,34 @@ export const getBookInfoActionCreator = (bookId: number) => async dispatch => {
   }
 }
 
-export const uploadBookActionCreator = (book: any) => async dispatch => {
+export const uploadBookActionCreator = (
+  book: any,
+  defaultVoice: string
+) => async dispatch => {
   try {
-    const data = await bookService.uploadBook(book)
+    const data = await bookService.uploadBook(book, defaultVoice)
     await dispatch(uploadBook(data))
+    await dispatch(appendBook(data))
     return data as Book
   } catch (e) {
-    return console.error(e.message)
+    message.error(e.message)
+    console.error(e)
+    return null
+  }
+}
+
+export const cloneBookActionCreator = (
+  book_id: number,
+  defaultVoice: string
+) => async dispatch => {
+  try {
+    const data = await bookService.cloneBook(book_id, defaultVoice)
+    await dispatch(appendBook(data))
+    return data as Book
+  } catch (e) {
+    message.error(e.message)
+    console.error(e)
+    return null
   }
 }
 
@@ -46,7 +69,9 @@ export const deleteBookActionCreator = (bookId: number) => async dispatch => {
     await bookService.delete(bookId)
     await dispatch(deleteBook({ id: bookId }))
   } catch (e) {
-    return console.error(e.message)
+    message.error(e.message)
+    console.error(e)
+    return null
   }
 }
 
@@ -55,6 +80,7 @@ export const mergeAudioActionCreator = (bookId: number) => async dispatch => {
     const { audio_url } = await bookService.mergeAudio(bookId)
     await dispatch(mergeAudio({ id: bookId, audio_url }))
   } catch (e) {
-    return console.error(e.message)
+    message.error(e.message)
+    return null
   }
 }

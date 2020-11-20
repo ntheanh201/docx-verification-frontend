@@ -15,7 +15,7 @@ import { useDispatch, useSelector } from 'redux-core'
 // import { useHistory } from 'router'
 
 import { columns } from './UploadListHelper'
-import { GenAllAudio } from '../../components/GenAllAudio/GenAllAudio'
+import { UploadModal } from '../../components/UploadModal'
 
 const _UploadList: FC<{ className?: string }> = ({ className }) => {
   const dispatch = useDispatch()
@@ -42,20 +42,20 @@ const _UploadList: FC<{ className?: string }> = ({ className }) => {
     await dispatch(getAllBooksActionCreator(currentPage - 1))
   }, [dispatch, currentPage])
 
-  const onHandleUpload = async event => {
-    const file = event?.target?.files[0]
-    await setState({ transmitting: true })
-    const book = await dispatch(uploadBookActionCreator(file))
-    await setState({
-      transmitting: false,
-      //@ts-ignore
-      bookId: book?.id,
-      genAllAudioVisible: true
-    })
-    await getAllBooks()
-
-    // history.push(`/book/${book?.id}`)
-  }
+  // const onHandleUpload = async event => {
+  //   const file = event?.target?.files[0]
+  //   await setState({ transmitting: true })
+  //   const book = await dispatch(uploadBookActionCreator(file))
+  //   await setState({
+  //     transmitting: false,
+  //     //@ts-ignore
+  //     bookId: book?.id,
+  //     genAllAudioVisible: true
+  //   })
+  //   await getAllBooks()
+  //
+  //   // history.push(`/book/${book?.id}`)
+  // }
 
   const onChangePage = page => {
     setState({ currentPage: page })
@@ -74,35 +74,37 @@ const _UploadList: FC<{ className?: string }> = ({ className }) => {
     await setState({ deleteModalVisible: false })
   }
 
-  const onClickDownloadBook = async (savedName: string) => {
-    const data = await bookService.downloadBook(savedName)
-    // console.log(data)
-    await setState({ file: data })
-  }
+  // const onClickDownloadBook = async (savedName: string) => {
+  //   const data = await bookService.downloadBook(savedName)
+  //   // console.log(data)
+  //   await setState({ file: data })
+  // }
 
-  const onConfirmGenAudio = async () => {
-    pageService.genAllAudio(bookId, voiceId).then(res => {
-      console.log(res)
-    })
-    await setState({ genAllAudioVisible: false })
-    toast('Gen audio đang được xử lý')
-  }
+  // const onConfirmGenAudio = async () => {
+  //   pageService.genAllAudio(bookId, voiceId).then(res => {
+  //     console.log(res)
+  //   })
+  //   await setState({ genAllAudioVisible: false })
+  //   toast('Gen audio đang được xử lý')
+  // }
+  //
+  // const onChangeVoice = async voiceId => {
+  //   await setState({ voiceId })
+  // }
 
-  const onChangeVoice = async voiceId => {
-    await setState({ voiceId })
-  }
-
-  const onClickGenBookAudio = async id => {
-    await setState({
-      bookId: id,
-      genAllAudioVisible: true
-    })
-  }
+  // const onClickGenBookAudio = async id => {
+  //   await setState({
+  //     bookId: id,
+  //     genAllAudioVisible: true
+  //   })
+  // }
 
   useEffect(() => {
     getAllBooks()
-    audioService.getPendingTasks().then(res => setState({ pendingTasks: res }))
   }, [getAllBooks])
+  useEffect(() => {
+    audioService.getPendingTasks().then(res => setState({ pendingTasks: res }))
+  }, [])
 
   if (!books || state.transmitting || loadingMergeAudio) {
     return <LoadingIndicator />
@@ -112,29 +114,26 @@ const _UploadList: FC<{ className?: string }> = ({ className }) => {
     <Container className={className}>
       <Header>
         <Title>Sách</Title>
-        <Button>
-          <input
-            accept='.docx'
-            type='file'
-            name='file'
-            id='file'
-            onChange={onHandleUpload}
-          />
-          <Label htmlFor='file'>
-            <CloudUploadOutlined /> Tải sách lên
-          </Label>
-        </Button>
+        {/*<Button>*/}
+        {/*  <input*/}
+        {/*    accept='.docx'*/}
+        {/*    type='file'*/}
+        {/*    name='file'*/}
+        {/*    id='file'*/}
+        {/*    onChange={onHandleUpload}*/}
+        {/*  />*/}
+        {/*  <Label htmlFor='file'>*/}
+        {/*    <CloudUploadOutlined /> Tải sách lên*/}
+        {/*  </Label>*/}
+        {/*</Button>*/}
+        <UploadModal />
       </Header>
       <div className='ant-table-wrapper space-bottom'>
         <Button type='dashed'>Pending tasks: {pendingTasks} </Button>
       </div>
       <Table
         //@ts-ignore
-        columns={columns(
-          onModalVisible,
-          onClickDownloadBook,
-          onClickGenBookAudio
-        )}
+        columns={columns(onModalVisible)}
         dataSource={books}
         rowKey={record => record.id}
         pagination={{
@@ -151,14 +150,14 @@ const _UploadList: FC<{ className?: string }> = ({ className }) => {
       >
         <p>Bạn có chắc chắn muốn xoá sách này?</p>
       </Modal>
-      <Modal
-        title='Gen Audio'
-        visible={state.genAllAudioVisible}
-        onOk={onConfirmGenAudio}
-        onCancel={onModalCancel}
-      >
-        <GenAllAudio onChangeVoice={onChangeVoice} />
-      </Modal>
+      {/*<Modal*/}
+      {/*  title='Gen Audio'*/}
+      {/*  visible={state.genAllAudioVisible}*/}
+      {/*  onOk={onConfirmGenAudio}*/}
+      {/*  onCancel={onModalCancel}*/}
+      {/*>*/}
+      {/*  <GenAllAudio onChangeVoice={onChangeVoice} id={record.id} />*/}
+      {/*</Modal>*/}
     </Container>
   )
 }

@@ -101,11 +101,11 @@ class PageService extends BaseService<Book> {
       })
   }
 
-  async genAllAudio(bookId, voiceId): Promise<any> {
+  async genAllAudio(bookId): Promise<any> {
     return axios
       .post(this.baseURL + '/gen_audio/all', {
-        book_id: bookId,
-        voice_id: voiceId
+        book_id: bookId
+        // voice_id: voiceId
       })
       .then(res => res.data)
       .catch(err => {

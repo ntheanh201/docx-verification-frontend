@@ -22,6 +22,7 @@ const GenAllAudioModal = ({ id, default_voice }) => {
       .catch(e => {
         message.error(e.message)
       })
+      .finally(() => setVisible(false))
   }, [id])
   return (
     <div>

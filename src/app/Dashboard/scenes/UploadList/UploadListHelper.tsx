@@ -140,7 +140,7 @@ const DropdownMenu = ({
             download={name}
           >
             {/*<DownloadOutlined />*/}
-            <Text>Download Book</Text>
+            <Text>Download </Text>
           </a>
         </Button>
       </Menu.Item>

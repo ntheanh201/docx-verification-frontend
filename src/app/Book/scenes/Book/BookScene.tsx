@@ -46,7 +46,7 @@ export const BookScene = () => {
 
   const fetchBookDetail = useCallback(async () => {
     bookId &&
-      (await dispatch(getPageInfoActionCreator(bookId, currentPage - 1)))
+    (await dispatch(getPageInfoActionCreator(bookId, currentPage - 1)))
   }, [bookId, currentPage, dispatch])
 
   // useEffect(() => {
@@ -68,9 +68,9 @@ export const BookScene = () => {
   useEffect(() => {
     const tracePage = localStorage?.getItem(`page-${bookId}`)
     if (tracePage) {
-      onChangePage(tracePage)
+      onChangePage(Number(tracePage))
     }
-  })
+  }, [bookId])
   useEffect(() => {
     bookId && dispatch(getBookInfoActionCreator(bookId))
   }, [bookId, dispatch])
@@ -144,15 +144,15 @@ export const BookScene = () => {
           </Button>
 
           {isGenerated &&
-            (status === 'verified' ? (
-              <Button type='primary' danger onClick={onClickVerify}>
-                Bỏ xác minh
-              </Button>
-            ) : (
-              <Button type='primary' onClick={onClickVerify}>
-                Xác minh
-              </Button>
-            ))}
+          (status === 'verified' ? (
+            <Button type='primary' danger onClick={onClickVerify}>
+              Bỏ xác minh
+            </Button>
+          ) : (
+            <Button type='primary' onClick={onClickVerify}>
+              Xác minh
+            </Button>
+          ))}
         </AudioContainer>
 
         {/* <Button type='primary' onClick={onSubmitNormText}>
@@ -214,6 +214,7 @@ const ContentWrapper = styled.div`
   justify-content: center;
   padding: 1rem 0;
   overflow: hidden;
+  margin-bottom: 10px;
 `
 
 function VoiceName({ voice_id }) {

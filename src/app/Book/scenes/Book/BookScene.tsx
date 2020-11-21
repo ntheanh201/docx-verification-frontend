@@ -46,7 +46,7 @@ export const BookScene = () => {
 
   const fetchBookDetail = useCallback(async () => {
     bookId &&
-    (await dispatch(getPageInfoActionCreator(bookId, currentPage - 1)))
+      (await dispatch(getPageInfoActionCreator(bookId, currentPage - 1)))
   }, [bookId, currentPage, dispatch])
 
   // useEffect(() => {
@@ -60,17 +60,20 @@ export const BookScene = () => {
 
   // console.log(bookDetail, book)
 
-  const onChangePage = page => {
-    localStorage.setItem(`page-${bookId}`, page)
-    setState({ currentPage: page })
-  }
+  const onChangePage = useCallback(
+    page => {
+      localStorage.setItem(`page-${bookId}`, page)
+      setState({ currentPage: page })
+    },
+    [bookId]
+  )
 
   useEffect(() => {
     const tracePage = localStorage?.getItem(`page-${bookId}`)
     if (tracePage) {
       onChangePage(Number(tracePage))
     }
-  }, [bookId])
+  }, [bookId, onChangePage])
   useEffect(() => {
     bookId && dispatch(getBookInfoActionCreator(bookId))
   }, [bookId, dispatch])
@@ -144,15 +147,15 @@ export const BookScene = () => {
           </Button>
 
           {isGenerated &&
-          (status === 'verified' ? (
-            <Button type='primary' danger onClick={onClickVerify}>
-              Bỏ xác minh
-            </Button>
-          ) : (
-            <Button type='primary' onClick={onClickVerify}>
-              Xác minh
-            </Button>
-          ))}
+            (status === 'verified' ? (
+              <Button type='primary' danger onClick={onClickVerify}>
+                Bỏ xác minh
+              </Button>
+            ) : (
+              <Button type='primary' onClick={onClickVerify}>
+                Xác minh
+              </Button>
+            ))}
         </AudioContainer>
 
         {/* <Button type='primary' onClick={onSubmitNormText}>

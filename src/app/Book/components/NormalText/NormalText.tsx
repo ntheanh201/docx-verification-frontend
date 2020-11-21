@@ -2,9 +2,11 @@ import { React, styled, useEffect, useState } from 'core'
 
 import { ZoomInOutlined, ZoomOutOutlined } from '@ant-design/icons'
 import { Button } from 'antd'
-import FileViewer from 'react-file-viewer'
+// import FileViewer from 'react-file-viewer'
+import { Document, Page, pdfjs } from 'react-pdf'
 
 // import { TextBox } from '../TextArea/TextArea'
+pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.js`
 
 export const NormalText = ({ content }) => {
   const [zoom, setZoom] = useState(654)
@@ -39,12 +41,17 @@ const BookView = ({ zoom, content }) => {
     }
   }, [zoom])
 
-  const onError = () => {
-    console.log('error in file-viewer')
+  const onDocumentLoadSuccess = () => {
+    console.log('abc')
   }
 
-  return <FileViewer fileType='pdf' filePath={content} onError={onError} />
-  // return null
+  return (
+    <Document file={content} onLoadSuccess={onDocumentLoadSuccess}>
+      <Page pageNumber={1} />
+    </Document>
+  )
+
+  // return <FileViewer fileType='pdf' filePath={pdf} onError={onError} />
 }
 
 const Wrapper = styled.div`

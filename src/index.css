@@ -43,3 +43,7 @@ code {
 .space-bottom {
   margin-bottom: 10px !important;
 }
+
+.react-pdf__Page__annotations {
+  display: none;
+}

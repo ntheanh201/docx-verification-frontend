@@ -21,7 +21,7 @@ export const NormalText = ({ content }) => {
       {/* <Title>Văn bản gốc</Title>
       <TextBox value={content} /> */}
 
-      {/* <BookView content={content} zoom={zoom} /> */}
+      <BookView content={content} zoom={zoom} />
     </Wrapper>
   )
 }

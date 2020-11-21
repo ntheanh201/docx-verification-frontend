@@ -18,7 +18,7 @@ const VoiceSelect: React.FC<InputProps> = ({
   disabled
 }) => {
   const voices = useSelector(getVoices)
-  console.log(value)
+  // console.log(value)
   // const [voices, setVoices] = useState([])
   // useEffect(() => {
   //   audioService.getAudioVoice().then(res => {

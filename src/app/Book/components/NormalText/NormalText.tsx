@@ -6,9 +6,6 @@ import FileViewer from 'react-file-viewer'
 
 // import { TextBox } from '../TextArea/TextArea'
 
-//@ts-ignore
-import example from './sample.pdf'
-
 export const NormalText = ({ content }) => {
   const [zoom, setZoom] = useState(654)
 
@@ -46,18 +43,8 @@ const BookView = ({ zoom, content }) => {
     console.log('error in file-viewer')
   }
 
-  const CustomErrorComponent = () => (
-    <FileViewer fileType='pdf' filePath={example} onError={onError} />
-  )
-
-  return (
-    <FileViewer
-      fileType='pdf'
-      filePath={content}
-      errorComponent={CustomErrorComponent}
-      onError={onError}
-    />
-  )
+  return <FileViewer fileType='pdf' filePath={content} onError={onError} />
+  // return null
 }
 
 const Wrapper = styled.div`

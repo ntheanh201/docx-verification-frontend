@@ -168,7 +168,7 @@ export const BookScene = () => {
       <Pagination
         style={{ textAlign: 'center' }}
         showQuickJumper
-        current={currentPage + 1}
+        current={currentPage}
         pageSize={1}
         defaultCurrent={1}
         total={bookDetail.total_pages}
@@ -213,6 +213,7 @@ const ContentWrapper = styled.div`
   display: flex;
   justify-content: center;
   padding: 1rem 0;
+  overflow: hidden;
 `
 
 function VoiceName({ voice_id }) {

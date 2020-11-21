@@ -1,6 +1,9 @@
-import { React, styled, useEffect } from 'core'
-import { useState } from 'react'
+import { React, styled, useEffect, useState } from 'core'
+
+import { ZoomInOutlined, ZoomOutOutlined } from '@ant-design/icons'
+import { Button } from 'antd'
 import FileViewer from 'react-file-viewer'
+
 // import { TextBox } from '../TextArea/TextArea'
 
 //@ts-ignore
@@ -15,12 +18,16 @@ export const NormalText = ({ content }) => {
 
   return (
     <Wrapper>
-      {/* <span onClick={() => onChangeZoom(zoom - 20)}>-</span>
-      <span onClick={() => onChangeZoom(zoom + 20)}>+</span> */}
-
-      {/* <Title>Văn bản gốc</Title>
-      <TextBox value={content} /> */}
-
+      <Title>Văn bản gốc</Title>
+      <ButtonWrapper>
+        <ZoomOutButton onClick={() => onChangeZoom(zoom - 20)}>
+          <ZoomOutOutlined />
+        </ZoomOutButton>
+        <Button onClick={() => onChangeZoom(zoom + 20)}>
+          <ZoomInOutlined />
+        </Button>
+      </ButtonWrapper>
+      {/* <TextBox value={content} /> */}
       <BookView content={content} zoom={zoom} />
     </Wrapper>
   )
@@ -58,6 +65,14 @@ const Wrapper = styled.div`
   margin-right: 10px;
 `
 
-// const Title = styled.h2`
-//   text-align: center;
-// `
+const Title = styled.h2`
+  text-align: center;
+`
+
+const ButtonWrapper = styled.div`
+  text-align: center;
+`
+
+const ZoomOutButton = styled(Button)`
+  margin-right: 10px;
+`

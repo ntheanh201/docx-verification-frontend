@@ -43,8 +43,8 @@ const Title = styled.h2`
 `
 
 export const TextBox = styled(TextInput)`
-  // height: 65vh !important;
-  height: 100%;
+  height: 65vh !important;
+  // height: 100%;
 `
 
 // const Button = styled(ButtonAntd)`

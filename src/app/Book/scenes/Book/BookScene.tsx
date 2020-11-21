@@ -60,6 +60,17 @@ export const BookScene = () => {
 
   // console.log(bookDetail, book)
 
+  const onChangePage = page => {
+    localStorage.setItem(`page-${bookId}`, page)
+    setState({ currentPage: page })
+  }
+
+  useEffect(() => {
+    const tracePage = localStorage?.getItem(`page-${bookId}`)
+    if (tracePage) {
+      onChangePage(tracePage)
+    }
+  })
   useEffect(() => {
     bookId && dispatch(getBookInfoActionCreator(bookId))
   }, [bookId, dispatch])
@@ -85,10 +96,6 @@ export const BookScene = () => {
 
   if (!book || !bookDetail || loadingBookDetail) {
     return <LoadingIndicator />
-  }
-
-  const onChangePage = page => {
-    setState({ currentPage: page })
   }
 
   // const onChangeVoice = id => {
@@ -124,7 +131,7 @@ export const BookScene = () => {
     <Wrapper>
       <PageHeader
         onBack={() => history.push('/')}
-        title={`Kiểm tra sách : ${bookDetail.name}`}
+        title={`Kiểm tra sách: ${bookDetail.name}`}
       />
       <ActionBar>
         <VoiceName voice_id={voice_id} />
@@ -161,7 +168,7 @@ export const BookScene = () => {
       <Pagination
         style={{ textAlign: 'center' }}
         showQuickJumper
-        current={currentPage}
+        current={currentPage + 1}
         pageSize={1}
         defaultCurrent={1}
         total={bookDetail.total_pages}

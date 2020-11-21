@@ -57,7 +57,10 @@ export const columns = [
     title: 'Upload lúc',
     key: 'created_at',
     dataIndex: 'created_at',
-    render: (text: string) => <>{text && new Date(text).toLocaleString()}</>
+    render: (text: string) => {
+      const d = text && new Date(text)
+      return <>{d && d.toLocaleString()}</>
+    }
   },
 
   {

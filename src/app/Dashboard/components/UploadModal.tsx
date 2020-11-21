@@ -1,13 +1,13 @@
-import { Button, Modal } from 'antd'
-import React from 'react'
-import { useCallback, useState } from 'core'
+import { React, useCallback, useState } from 'core'
 import { CloudUploadOutlined, InboxOutlined } from '@ant-design/icons'
-import { Form, Upload } from 'antd'
-import VoiceSelect from './VoiceSelect'
+import { Form, Upload, Button, Modal } from 'antd'
 import { useDispatch } from 'redux-core'
-import { uploadBookActionCreator } from '../../Store/Books'
-import { message } from 'antd/es'
 import { LoadingIndicator } from 'ui'
+// import { message } from 'antd/es'
+
+import { uploadBookActionCreator } from '../../Store/Books'
+
+import VoiceSelect from './VoiceSelect'
 
 const normFile = e => {
   console.log('Upload event:', e)

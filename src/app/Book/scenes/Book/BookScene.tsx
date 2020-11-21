@@ -9,7 +9,8 @@ import {
   verifyNormTextActionCreator,
   genAudioActionCreator,
   editNormTextActionCreator,
-  checkIsGenerated, getBookInfoActionCreator
+  checkIsGenerated,
+  getBookInfoActionCreator
 } from 'Store'
 import { LoadingIndicator, toast } from 'ui'
 import { Container } from 'layout'
@@ -44,7 +45,8 @@ export const BookScene = () => {
   const { currentPage } = state
 
   const fetchBookDetail = useCallback(async () => {
-    bookId && await dispatch(getPageInfoActionCreator(bookId, currentPage - 1))
+    bookId &&
+      (await dispatch(getPageInfoActionCreator(bookId, currentPage - 1)))
   }, [bookId, currentPage, dispatch])
 
   // useEffect(() => {
@@ -55,10 +57,23 @@ export const BookScene = () => {
   //   }
   //   getBookInfo()
   // }, [dispatch, bookId, currentPage, fetchBookDetail])
-  console.log(bookDetail, book)
+
+  // console.log(bookDetail, book)
+
+  const onChangePage = page => {
+    localStorage.setItem(`page-${bookId}`, page)
+    setState({ currentPage: page })
+  }
+
+  useEffect(() => {
+    const tracePage = localStorage?.getItem(`page-${bookId}`)
+    if (tracePage) {
+      onChangePage(tracePage)
+    }
+  })
   useEffect(() => {
     bookId && dispatch(getBookInfoActionCreator(bookId))
-  }, [bookId])
+  }, [bookId, dispatch])
   useEffect(() => {
     !loadingBookDetail && fetchBookDetail()
   }, [fetchBookDetail, loadingBookDetail])
@@ -83,13 +98,9 @@ export const BookScene = () => {
     return <LoadingIndicator />
   }
 
-  const onChangePage = page => {
-    setState({ currentPage: page })
-  }
-
-  const onChangeVoice = id => {
-    setState({ voiceId: id })
-  }
+  // const onChangeVoice = id => {
+  //   setState({ voiceId: id })
+  // }
 
   const onClickVerify = async () => {
     await dispatch(verifyNormTextActionCreator(book.id))
@@ -120,7 +131,7 @@ export const BookScene = () => {
     <Wrapper>
       <PageHeader
         onBack={() => history.push('/')}
-        title={`Kiểm tra sách : ${bookDetail.name}`}
+        title={`Kiểm tra sách: ${bookDetail.name}`}
       />
       <ActionBar>
         <VoiceName voice_id={voice_id} />
@@ -133,15 +144,15 @@ export const BookScene = () => {
           </Button>
 
           {isGenerated &&
-          (status === 'verified' ? (
-            <Button type='primary' danger onClick={onClickVerify}>
-              Bỏ xác minh
-            </Button>
-          ) : (
-            <Button type='primary' onClick={onClickVerify}>
-              Xác minh
-            </Button>
-          ))}
+            (status === 'verified' ? (
+              <Button type='primary' danger onClick={onClickVerify}>
+                Bỏ xác minh
+              </Button>
+            ) : (
+              <Button type='primary' onClick={onClickVerify}>
+                Xác minh
+              </Button>
+            ))}
         </AudioContainer>
 
         {/* <Button type='primary' onClick={onSubmitNormText}>
@@ -157,7 +168,7 @@ export const BookScene = () => {
       <Pagination
         style={{ textAlign: 'center' }}
         showQuickJumper
-        current={currentPage}
+        current={currentPage + 1}
         pageSize={1}
         defaultCurrent={1}
         total={bookDetail.total_pages}

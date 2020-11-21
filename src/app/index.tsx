@@ -12,7 +12,6 @@ import Store from './Store'
 import { getVoicesActionCreator } from './Store/Audio'
 
 const Root = () => {
-
   return (
     <Provider store={Store}>
       <ToastContainer />
@@ -56,7 +55,7 @@ function MainWrapper({ children, ...props }) {
   const dispatch = useDispatch()
   useEffect(() => {
     dispatch(getVoicesActionCreator())
-  }, [])
+  }, [dispatch])
   return React.cloneElement(children, props)
 }
 

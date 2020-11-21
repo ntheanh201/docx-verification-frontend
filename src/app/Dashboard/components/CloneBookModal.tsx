@@ -1,5 +1,5 @@
 import React from 'react'
-import { Button, Form, message, Modal, Upload } from 'antd'
+import { Button, Form, message, Modal } from 'antd'
 import { useCallback, useState } from 'core'
 import { LoadingIndicator } from 'ui'
 import VoiceSelect from './VoiceSelect'
@@ -11,13 +11,18 @@ const CloneBookModal = ({ id }: { id: string }) => {
   const [loading, setLoading] = useState(false)
   const [form] = Form.useForm()
   const dispatch = useDispatch()
-  const callClone = useCallback(async (id, default_voice) => {
-    setLoading(true)
-    if (await dispatch(cloneBookActionCreator(id, default_voice))) {
-      message.success('Clone thành công !')
-    }
-    setLoading(false)
-  }, [])
+
+  const callClone = useCallback(
+    async (id, default_voice) => {
+      setLoading(true)
+      if (await dispatch(cloneBookActionCreator(id, default_voice))) {
+        message.success('Clone thành công !')
+      }
+      setLoading(false)
+    },
+    [dispatch]
+  )
+
   const onOk = useCallback(() => {
     form
       .validateFields()
@@ -30,7 +35,7 @@ const CloneBookModal = ({ id }: { id: string }) => {
         console.log('Validate Failed:', info)
         setVisible(false)
       })
-  }, [setVisible, form, id])
+  }, [setVisible, form, id, callClone])
   return (
     <>
       <Button type='link' onClick={() => setVisible(true)}>

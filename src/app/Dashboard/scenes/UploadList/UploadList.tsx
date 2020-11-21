@@ -1,21 +1,16 @@
-import { CloudUploadOutlined } from '@ant-design/icons'
-import { Modal, Table, Button as PrimaryButton } from 'antd'
+import { Table, Button as PrimaryButton } from 'antd'
 
 import { Container } from 'layout'
-import { LoadingIndicator, toast } from 'ui'
+import { LoadingIndicator } from 'ui'
 import { React, styled, useEffect, FC, useState, useCallback } from 'core'
-import { audioService, bookService, pageService } from 'service'
-import {
-  getAllBooksActionCreator,
-  getBooksState,
-  uploadBookActionCreator,
-  deleteBookActionCreator
-} from 'Store'
+import { audioService } from 'service'
+import { getAllBooksActionCreator, getBooksState } from 'Store'
 import { useDispatch, useSelector } from 'redux-core'
 // import { useHistory } from 'router'
 
-import { columns } from './UploadListHelper'
 import { UploadModal } from '../../components/UploadModal'
+
+import { columns } from './UploadListHelper'
 
 const _UploadList: FC<{ className?: string }> = ({ className }) => {
   const dispatch = useDispatch()
@@ -170,10 +165,6 @@ const Header = styled.div`
 
 const Title = styled.h2`
   margin-left: 1rem;
-`
-
-const Label = styled.label`
-  cursor: pointer;
 `
 
 const Button = styled(PrimaryButton)`

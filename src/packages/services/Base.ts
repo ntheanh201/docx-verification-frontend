@@ -55,7 +55,8 @@ export default class BaseService<T> {
       .then(res => {
         console.log(res.status)
         return 'success'
+      }).catch(e => {
+        throw e.response.data
       })
-      .catch(() => null)
   }
 }

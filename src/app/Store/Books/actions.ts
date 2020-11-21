@@ -29,6 +29,7 @@ export const getBookInfoActionCreator = (bookId: number) => async dispatch => {
     const data = await bookService.getBookInfo(bookId)
     await dispatch(getBookInfo(data))
   } catch (e) {
+    message.error(e.message)
     return console.error(e.message)
   }
 }
@@ -41,6 +42,7 @@ export const uploadBookActionCreator = (
     const data = await bookService.uploadBook(book, defaultVoice)
     await dispatch(uploadBook(data))
     await dispatch(appendBook(data))
+    message.success('Upload thành công !')
     return data as Book
   } catch (e) {
     message.error(e.message)
@@ -56,6 +58,7 @@ export const cloneBookActionCreator = (
   try {
     const data = await bookService.cloneBook(book_id, defaultVoice)
     await dispatch(appendBook(data))
+    message.success('Clone thành công')
     return data as Book
   } catch (e) {
     message.error(e.message)
@@ -68,6 +71,7 @@ export const deleteBookActionCreator = (bookId: number) => async dispatch => {
   try {
     await bookService.delete(bookId)
     await dispatch(deleteBook({ id: bookId }))
+    message.success(`Xóa thành công !`)
   } catch (e) {
     message.error(e.message)
     console.error(e)
@@ -79,6 +83,7 @@ export const mergeAudioActionCreator = (bookId: number) => async dispatch => {
   try {
     const { audio_url } = await bookService.mergeAudio(bookId)
     await dispatch(mergeAudio({ id: bookId, audio_url }))
+    message.success('Merge audio thành công')
   } catch (e) {
     message.error(e.message)
     return null

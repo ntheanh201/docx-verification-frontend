@@ -27,16 +27,16 @@ const _UploadList: FC<{ className?: string }> = ({ className }) => {
   const [state, setState] = useState({
     bookId: 1,
     currentPage: 1,
-    deleteModalVisible: false,
-    deleteId: null,
+    // deleteModalVisible: false,
+    // deleteId: null,
     transmitting: false,
     file: null,
-    genAllAudioVisible: false,
+    // genAllAudioVisible: false,
     voiceId: '11',
     pendingTasks: 0
   })
 
-  const { bookId, voiceId, currentPage, pendingTasks } = state
+  const { currentPage, pendingTasks } = state
 
   const getAllBooks = useCallback(async () => {
     await dispatch(getAllBooksActionCreator(currentPage - 1))
@@ -61,18 +61,18 @@ const _UploadList: FC<{ className?: string }> = ({ className }) => {
     setState({ currentPage: page })
   }
 
-  const onModalVisible = id => {
-    setState({ deleteModalVisible: true, deleteId: id })
-  }
+  // const onModalVisible = id => {
+  //   setState({ deleteModalVisible: true, deleteId: id })
+  // }
 
-  const onModalCancel = () => {
-    setState({ deleteModalVisible: false, genAllAudioVisible: false })
-  }
-
-  const onModalConfirm = async () => {
-    await dispatch(deleteBookActionCreator(state.deleteId))
-    await setState({ deleteModalVisible: false })
-  }
+  // const onModalCancel = () => {
+  //   setState({ deleteModalVisible: false, genAllAudioVisible: false })
+  // }
+  //
+  // const onModalConfirm = async () => {
+  //   await dispatch(deleteBookActionCreator(state.deleteId))
+  //   await setState({ deleteModalVisible: false })
+  // }
 
   // const onClickDownloadBook = async (savedName: string) => {
   //   const data = await bookService.downloadBook(savedName)
@@ -133,7 +133,7 @@ const _UploadList: FC<{ className?: string }> = ({ className }) => {
       </div>
       <Table
         //@ts-ignore
-        columns={columns(onModalVisible)}
+        columns={columns}
         dataSource={books}
         rowKey={record => record.id}
         pagination={{
@@ -142,14 +142,14 @@ const _UploadList: FC<{ className?: string }> = ({ className }) => {
           onChange: onChangePage
         }}
       />
-      <Modal
-        title='Xoá Sách'
-        visible={state.deleteModalVisible}
-        onOk={onModalConfirm}
-        onCancel={onModalCancel}
-      >
-        <p>Bạn có chắc chắn muốn xoá sách này?</p>
-      </Modal>
+      {/*<Modal*/}
+      {/*  title='Xoá Sách'*/}
+      {/*  visible={state.deleteModalVisible}*/}
+      {/*  onOk={onModalConfirm}*/}
+      {/*  onCancel={onModalCancel}*/}
+      {/*>*/}
+      {/*  <p>Bạn có chắc chắn muốn xoá sách này?</p>*/}
+      {/*</Modal>*/}
       {/*<Modal*/}
       {/*  title='Gen Audio'*/}
       {/*  visible={state.genAllAudioVisible}*/}

@@ -4,6 +4,7 @@ import { BooksPaged, Book } from 'type'
 interface BooksDetail extends BooksPaged {
   bookDetail: Book
   loadingMergeAudio: boolean
+  loadingBookDetail: boolean
 }
 
 const initialState: BooksDetail = {
@@ -12,7 +13,8 @@ const initialState: BooksDetail = {
   total_pages: null,
   page_size: null,
   bookDetail: null,
-  loadingMergeAudio: false
+  loadingMergeAudio: false,
+  loadingBookDetail: false
 }
 
 export const docSlice = createSlice({
@@ -27,6 +29,10 @@ export const docSlice = createSlice({
     },
     getBookInfo: (state, { payload }: PayloadAction<Book>) => {
       state.bookDetail = payload
+      state.loadingBookDetail = false
+    },
+    setLoadingInfo: (state) => {
+      state.loadingBookDetail = true
     },
     uploadBook: (state, { payload }: PayloadAction<Book>) => {
       state.bookDetail = payload

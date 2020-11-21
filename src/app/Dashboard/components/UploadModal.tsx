@@ -25,9 +25,7 @@ export function UploadModal() {
   const callUpload = useCallback(
     async (file: any, voice_id: string) => {
       setLoading(true)
-      if (await dispatch(uploadBookActionCreator(file, voice_id))) {
-        message.success('Upload thành công !')
-      }
+      await dispatch(uploadBookActionCreator(file, voice_id))
       setLoading(false)
     },
     [dispatch, setLoading]

@@ -1,18 +1,15 @@
 import { React, styled, useState, useEffect, useCallback, useMemo } from 'core'
 import { useDispatch, useSelector } from 'redux-core'
 import { useParams, useHistory } from 'router'
-import { Pagination, Select, Button, PageHeader } from 'antd'
+import { Pagination, Button, PageHeader } from 'antd'
 import {
   getBooksState,
-  getAudioState,
   getPageState,
   getPageInfoActionCreator,
-  getBookInfoActionCreator,
-  getVoicesActionCreator,
   verifyNormTextActionCreator,
   genAudioActionCreator,
   editNormTextActionCreator,
-  checkIsGenerated
+  checkIsGenerated, getBookInfoActionCreator
 } from 'Store'
 import { LoadingIndicator, toast } from 'ui'
 import { Container } from 'layout'
@@ -22,13 +19,13 @@ import { AudioBox } from '../../components/AudioBox/AudioBox'
 import { NormValueContext } from '../../components/TextArea/norm-value.context'
 import VoiceSelect from '../../../Dashboard/components/VoiceSelect'
 
-const { Option } = Select
+// const { Option } = Select
 
 export const BookScene = () => {
   const dispatch = useDispatch()
   const history = useHistory()
   let { bookId } = useParams<any>()
-  const { bookDetail } = useSelector(getBooksState)
+  const { bookDetail, loadingBookDetail } = useSelector(getBooksState)
   const { book } = useSelector(getPageState)
   // const { voices } = useSelector(getAudioState)
 
@@ -47,25 +44,34 @@ export const BookScene = () => {
   const { currentPage } = state
 
   const fetchBookDetail = useCallback(async () => {
-    await dispatch(getPageInfoActionCreator(bookId, currentPage))
+    bookId && await dispatch(getPageInfoActionCreator(bookId, currentPage - 1))
   }, [bookId, currentPage, dispatch])
 
+  // useEffect(() => {
+  //   const getBookInfo = async () => {
+  //     // await dispatch(getVoicesActionCreator())
+  //     await dispatch(getBookInfoActionCreator(bookId))
+  //     await fetchBookDetail()
+  //   }
+  //   getBookInfo()
+  // }, [dispatch, bookId, currentPage, fetchBookDetail])
+  console.log(bookDetail, book)
   useEffect(() => {
-    const getBookInfo = async () => {
-      // await dispatch(getVoicesActionCreator())
-      await dispatch(getBookInfoActionCreator(bookId))
-      await fetchBookDetail()
-    }
-    getBookInfo()
-  }, [dispatch, bookId, currentPage, fetchBookDetail])
+    bookId && dispatch(getBookInfoActionCreator(bookId))
+  }, [bookId])
+  useEffect(() => {
+    !loadingBookDetail && fetchBookDetail()
+  }, [fetchBookDetail, loadingBookDetail])
+
   useEffect(() => {
     if (book && book.task_id && !book.audio_url) {
       const interval = setInterval(() => {
-        dispatch(checkIsGenerated(bookId, currentPage, book.task_id))
+        dispatch(checkIsGenerated(bookId, currentPage - 1, book.task_id))
       }, 5000)
       return () => clearInterval(interval)
     }
   }, [book, dispatch, currentPage, bookId])
+
   const isGenerated = useMemo(() => {
     return book && book.task_id && book.audio_url !== ''
   }, [book])
@@ -73,7 +79,7 @@ export const BookScene = () => {
     return book && book.task_id && !book.audio_url
   }, [book])
 
-  if (!book || !bookDetail) {
+  if (!book || !bookDetail || loadingBookDetail) {
     return <LoadingIndicator />
   }
 
@@ -112,7 +118,10 @@ export const BookScene = () => {
 
   return (
     <Wrapper>
-      <PageHeader onBack={() => history.push('/')} title='Kiểm tra sách' />
+      <PageHeader
+        onBack={() => history.push('/')}
+        title={`Kiểm tra sách : ${bookDetail.name}`}
+      />
       <ActionBar>
         <VoiceName voice_id={voice_id} />
         <AudioContainer>
@@ -151,7 +160,7 @@ export const BookScene = () => {
         current={currentPage}
         pageSize={1}
         defaultCurrent={1}
-        total={bookDetail.total_pages - 1}
+        total={bookDetail.total_pages}
         showSizeChanger={false}
         onChange={onChangePage}
       />

@@ -12,20 +12,22 @@ import { AudioDownload } from '../../components/AudioDownload/AudioDownload'
 import VoiceColumn from '../../components/VoiceColumn'
 import CloneBookModal from '../../components/CloneBookModal'
 import GenAllAudioModal from '../../components/GenAllAudioModal'
+import DeleteBook from '../../components/DeleteBook'
+import BookName from '../../components/BookName'
 
-export const columns = onModalVisible => [
+export const columns = [
   {
     title: 'Tên sách',
     dataIndex: 'name',
     key: 'name',
     render: (text: React.ReactNode, record: { id: number }) => (
-      <Link to={`/book/${record.id}`}>{text}</Link>
+      <BookName id={record.id} name={text} />
     )
   },
   {
     title: 'Tiến trình audio',
     key: 'audioProgress',
-    width: '20%',
+    width: '15%',
     render: (_: React.ReactNode, record: { id: number }) => (
       <BookGenAudioProgress id={record.id} />
     )
@@ -33,10 +35,17 @@ export const columns = onModalVisible => [
   {
     title: 'Tiến trình xác minh',
     key: 'progress',
-    width: '20%',
+    width: '15%',
     render: (_: React.ReactNode, record: { id: string }) => (
       <BookProgress id={record.id} />
     )
+  },
+  {
+    title: 'Người upload',
+    key: 'uploader.name',
+    render: (text: React.ReactNode, record: { uploader: any }) => {
+      return record.uploader?.name
+    }
   },
   {
     title: 'Giọng mặc định',
@@ -69,7 +78,7 @@ export const columns = onModalVisible => [
     ) => {
       return (
         <Dropdown
-          overlay={<DropdownMenu {...record} onModalVisible={onModalVisible} />}
+          overlay={<DropdownMenu {...record} />}
         >
           <a className='ant-dropdown-link' onClick={e => e.preventDefault()}>
             Thao tác <DownOutlined />
@@ -87,14 +96,13 @@ const Text = styled.span`
 `
 
 const DropdownMenu = ({
-  id,
-  acceptAudioDownload,
-  audio_url,
-  saved_name,
-  name,
-  default_voice,
-  onModalVisible
-}) => {
+                        id,
+                        acceptAudioDownload,
+                        audio_url,
+                        saved_name,
+                        name,
+                        default_voice
+                      }) => {
   return (
     <Menu>
       <Menu.Item>
@@ -134,10 +142,11 @@ const DropdownMenu = ({
         </Button>
       </Menu.Item>
       <Menu.Item danger>
-        <Button type='link' danger onClick={() => onModalVisible(id)}>
-          {/*<DeleteOutlined />*/}
-          Xoá
-        </Button>
+        {/*<Button type='link' danger onClick={() => onModalVisible(id)}>*/}
+        {/*  /!*<DeleteOutlined />*!/*/}
+        {/*  Xoá*/}
+        {/*</Button>*/}
+        <DeleteBook id={id} />
       </Menu.Item>
     </Menu>
   )

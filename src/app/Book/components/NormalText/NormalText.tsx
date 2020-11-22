@@ -4,12 +4,17 @@ import { ZoomInOutlined, ZoomOutOutlined } from '@ant-design/icons'
 import { Button } from 'antd'
 // import FileViewer from 'react-file-viewer'
 import { Document, Page, pdfjs } from 'react-pdf'
+import { useCallback } from 'react'
 
 // import { TextBox } from '../TextArea/TextArea'
 pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.js`
 
 export const NormalText = ({ content }) => {
   const [zoom, setZoom] = useState(654)
+
+  const calculateZoom = useCallback(() => {}, [])
+
+  useEffect(() => {}, [calculateZoom])
 
   const onChangeZoom = zoom => {
     setZoom(zoom)
@@ -18,16 +23,18 @@ export const NormalText = ({ content }) => {
   return (
     <Wrapper>
       <Title>Văn bản gốc</Title>
-      <ButtonWrapper>
-        <ZoomOutButton onClick={() => onChangeZoom(zoom - 20)}>
-          <ZoomOutOutlined />
-        </ZoomOutButton>
-        <Button onClick={() => onChangeZoom(zoom + 20)}>
-          <ZoomInOutlined />
-        </Button>
-      </ButtonWrapper>
-      {/* <TextBox value={content} /> */}
-      <BookView content={content} zoom={zoom} />
+      <ViewerWrapper>
+        <ButtonWrapper>
+          <ZoomOutButton onClick={() => onChangeZoom(zoom - 20)}>
+            <ZoomOutOutlined />
+          </ZoomOutButton>
+          <Button onClick={() => onChangeZoom(zoom + 20)}>
+            <ZoomInOutlined />
+          </Button>
+        </ButtonWrapper>
+        {/* <TextBox value={content} /> */}
+        <BookView content={content} zoom={zoom} />
+      </ViewerWrapper>
     </Wrapper>
   )
 }
@@ -65,6 +72,20 @@ const Title = styled.h2`
 
 const ButtonWrapper = styled.div`
   text-align: center;
+  position: absolute;
+  top: 5px;
+  left: calc(50% - 59px);
+  z-index: 1;
+`
+const ViewerWrapper = styled.div`
+  height: 65vh;
+  position: relative;
+  border: 1px solid #d9d9d9;
+  border-radius: 2px;
+  .react-pdf__Document {
+    overflow: auto;
+    height: 100%;
+  }
 `
 
 const ZoomOutButton = styled(Button)`

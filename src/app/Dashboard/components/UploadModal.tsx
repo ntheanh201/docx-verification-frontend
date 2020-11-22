@@ -20,6 +20,7 @@ const normFile = e => {
 export function UploadModal() {
   const [visible, setVisible] = useState(false)
   const [loading, setLoading] = useState(false)
+  const [disabled, setDisabled] = useState(false)
   const [form] = Form.useForm()
   const dispatch = useDispatch()
   const callUpload = useCallback(
@@ -53,6 +54,11 @@ export function UploadModal() {
   const onShowModal = useCallback(() => {
     setVisible(visible => !visible)
   }, [setVisible])
+
+  const conChange = e => {
+    e && setDisabled(true)
+  }
+
   return (
     <>
       <Button type='dashed' onClick={onShowModal}>
@@ -80,7 +86,13 @@ export function UploadModal() {
               getValueFromEvent={normFile}
               noStyle
             >
-              <Upload.Dragger name='files' action={null} accept='.docx'>
+              <Upload.Dragger
+                disabled={disabled}
+                name='files'
+                action={null}
+                accept='.docx'
+                onChange={conChange}
+              >
                 <p className='ant-upload-drag-icon'>
                   <InboxOutlined />
                 </p>

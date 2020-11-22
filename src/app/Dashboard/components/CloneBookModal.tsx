@@ -17,6 +17,7 @@ const CloneBookModal = ({ id }: { id: string }) => {
       setLoading(true)
       if (await dispatch(cloneBookActionCreator(id, default_voice))) {
         message.success('Clone thành công !')
+        setVisible(false)
       }
       setLoading(false)
     },

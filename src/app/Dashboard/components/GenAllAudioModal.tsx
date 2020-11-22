@@ -3,9 +3,11 @@ import { Alert, Button, message, Modal } from 'antd'
 import { useCallback, useMemo, useState } from 'core'
 import useVoiceName from '../hooks/useVoiceName'
 import { pageService } from 'service'
+import { LoadingIndicator } from 'ui'
 
 const GenAllAudioModal = ({ id, default_voice }) => {
   const [visible, setVisible] = useState(false)
+  const [loading, setLoading] = useState(false)
   const voiceName = useVoiceName(default_voice)
   const text = useMemo(
     () =>
@@ -13,6 +15,7 @@ const GenAllAudioModal = ({ id, default_voice }) => {
     [voiceName]
   )
   const onOk = useCallback(() => {
+    setLoading(true)
     pageService
       .genAllAudio(id)
       .then(res => {
@@ -24,6 +27,9 @@ const GenAllAudioModal = ({ id, default_voice }) => {
       })
       .finally(() => setVisible(false))
   }, [id])
+
+  console.log(loading)
+
   return (
     <div>
       <Button type='link' onClick={() => setVisible(true)}>
@@ -36,6 +42,7 @@ const GenAllAudioModal = ({ id, default_voice }) => {
         onOk={onOk}
       >
         <Alert message={text} type='warning' />
+        {loading && <LoadingIndicator />}
       </Modal>
     </div>
   )

@@ -62,7 +62,7 @@ class BookService extends BaseService<Book> {
       .then(res => res.data)
       .catch(err => {
         console.log(err)
-        throw err
+        throw err.response.data
       })
   }
 

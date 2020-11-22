@@ -8,12 +8,13 @@ import { DownOutlined } from '@ant-design/icons'
 
 import { BookProgress } from '../../components/BookProgress/BookProgress'
 import { BookGenAudioProgress } from '../../components/BookGenAudioProgress/BookGenAudioProgress'
-import { AudioDownload } from '../../components/AudioDownload/AudioDownload'
+// import { AudioDownload } from '../../components/AudioDownload/AudioDownload'
 import VoiceColumn from '../../components/VoiceColumn'
 import CloneBookModal from '../../components/CloneBookModal'
 import GenAllAudioModal from '../../components/GenAllAudioModal'
 import DeleteBook from '../../components/DeleteBook'
 import BookName from '../../components/BookName'
+import MergeAll from '../../components/MergeAll'
 
 export const columns = [
   {
@@ -110,7 +111,7 @@ const DropdownMenu = ({
     <Menu>
       <Menu.Item>
         <Button type='link'>
-          <Link to={`/book/${id}`}>Kiểm tra</Link>
+          <Link to={`/book/${id}`}>Verify</Link>
         </Button>
       </Menu.Item>
       <Menu.Item>
@@ -119,15 +120,18 @@ const DropdownMenu = ({
       <Menu.Item>
         <CloneBookModal id={id} />
       </Menu.Item>
-      {acceptAudioDownload && (
-        <Menu.Item>
-          <AudioDownload
-            id={id}
-            audio_url={audio_url}
-            acceptAudioDownload={acceptAudioDownload}
-          />
-        </Menu.Item>
-      )}
+      <Menu.Item>
+        <MergeAll id={id} audio_url={audio_url} />
+      </Menu.Item>
+      {/*{acceptAudioDownload && (*/}
+      {/*  <Menu.Item>*/}
+      {/*    <AudioDownload*/}
+      {/*      id={id}*/}
+      {/*      audio_url={audio_url}*/}
+      {/*      acceptAudioDownload={acceptAudioDownload}*/}
+      {/*    />*/}
+      {/*  </Menu.Item>*/}
+      {/*)}*/}
       <Menu.Item>
         <Button
           type='link'

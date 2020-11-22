@@ -3,7 +3,7 @@ import { BooksPaged, Book } from 'type'
 
 interface BooksDetail extends BooksPaged {
   bookDetail: Book
-  loadingMergeAudio: boolean
+  // loadingMergeAudio: boolean
   loadingBookDetail: boolean
 }
 
@@ -13,7 +13,7 @@ const initialState: BooksDetail = {
   total_pages: null,
   page_size: null,
   bookDetail: null,
-  loadingMergeAudio: false,
+  // loadingMergeAudio: false,
   loadingBookDetail: false
 }
 
@@ -22,7 +22,9 @@ export const docSlice = createSlice({
   initialState,
   reducers: {
     getAllBooks: (state, { payload }: PayloadAction<BooksPaged>) => {
-      state.books = payload.books ? payload.books.sort((a, b) => b.created_at.localeCompare(a.created_at)) : payload.books
+      state.books = payload.books
+        ? payload.books.sort((a, b) => b.created_at.localeCompare(a.created_at))
+        : payload.books
       state.current_page = payload.current_page
       state.total_pages = payload.total_pages
       state.page_size = payload.page_size
@@ -31,7 +33,7 @@ export const docSlice = createSlice({
       state.bookDetail = payload
       state.loadingBookDetail = false
     },
-    setLoadingInfo: (state) => {
+    setLoadingInfo: state => {
       state.loadingBookDetail = true
     },
     uploadBook: (state, { payload }: PayloadAction<Book>) => {
@@ -57,14 +59,17 @@ export const docSlice = createSlice({
       const index = state.books?.findIndex(book => book.id === payload.id)
       state.books[index].audio_url = payload.audio_url
     },
-    setLoadingMergeAudio: (state, { payload }: PayloadAction<boolean>) => {
-      state.loadingMergeAudio = payload
-    },
+    // setLoadingMergeAudio: (state, { payload }: PayloadAction<boolean>) => {
+    //   state.loadingMergeAudio = payload
+    // },
     appendBook(state, { payload }: PayloadAction<Book>) {
       state.books = [payload, ...state.books]
     }
   }
 })
 
-const { acceptAudioDownload, setLoadingMergeAudio } = docSlice.actions
-export { acceptAudioDownload, setLoadingMergeAudio }
+// const { acceptAudioDownload, setLoadingMergeAudio } = docSlice.actions
+// export { acceptAudioDownload, setLoadingMergeAudio }
+
+// const { acceptAudioDownload } = docSlice.actions
+// export { acceptAudioDownload }

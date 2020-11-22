@@ -1,20 +1,20 @@
 import { React, useState } from 'core'
 import { Button } from 'antd'
-import { setLoadingMergeAudio, mergeAudioActionCreator } from 'Store'
+// import { setLoadingMergeAudio, mergeAudioActionCreator } from 'Store'
 import { useDispatch } from 'redux-core'
 
 export const AudioDownload = ({ id, audio_url, acceptAudioDownload }) => {
-  const dispatch = useDispatch()
+  // const dispatch = useDispatch()
 
   const [state, setState] = useState({
     audioUrl: null
   })
 
   const onClickDownloadAudio = async () => {
-    await dispatch(setLoadingMergeAudio(true))
-    const url = await dispatch(mergeAudioActionCreator(id))
-    await setState({ audioUrl: url })
-    await dispatch(setLoadingMergeAudio(false))
+    // await dispatch(setLoadingMergeAudio(true))
+    // const url = await dispatch(mergeAudioActionCreator(id))
+    // await setState({ audioUrl: url })
+    // await dispatch(setLoadingMergeAudio(false))
   }
 
   if (!acceptAudioDownload) {

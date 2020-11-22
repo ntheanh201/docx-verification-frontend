@@ -84,6 +84,7 @@ export const mergeAudioActionCreator = (bookId: number) => async dispatch => {
     const { audio_url } = await bookService.mergeAudio(bookId)
     await dispatch(mergeAudio({ id: bookId, audio_url }))
     message.success('Merge audio thành công')
+    return audio_url
   } catch (e) {
     message.error(e.message)
     return null

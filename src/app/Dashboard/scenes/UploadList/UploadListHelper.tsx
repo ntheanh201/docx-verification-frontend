@@ -15,7 +15,7 @@ import GenAllAudioModal from '../../components/GenAllAudioModal'
 import DeleteBook from '../../components/DeleteBook'
 import BookName from '../../components/BookName'
 import MergeAll from '../../components/MergeAll'
-import UploaderFilterDropdown from '../../UploadFilterDropdown'
+import UploaderFilterDropdown from '../../components/UploadFilterDropdown'
 
 const restructuredFilterVoices = voices =>
   voices.map(({ id, name }) => ({

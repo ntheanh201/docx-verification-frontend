@@ -1,5 +1,5 @@
 import { useCallback, useRef, useState, React, styled } from 'core'
-import { Button, Input, Space, Checkbox } from 'antd'
+import { Button, Input, Space, Checkbox, Row } from 'antd'
 import { SearchOutlined } from '@ant-design/icons'
 import { userService } from 'service'
 
@@ -23,6 +23,15 @@ const UploaderFilterDropdown = ({
     clearFilters()
   }, [])
 
+  const onChangeSelectGroup = useCallback(
+    checkedValues => {
+      console.log(checkedValues)
+      setSelectedKeys(checkedValues)
+      confirm()
+    },
+    [setSelectedKeys, confirm]
+  )
+
   return (
     <div style={{ padding: 8 }}>
       <Input
@@ -34,13 +43,19 @@ const UploaderFilterDropdown = ({
         style={{ width: 188, marginBottom: 8, display: 'block' }}
       />
       {/* {list.map(user => user.name)} */}
-      {list.map(({ name }, index) => (
-        <Wrapper>
-          <Checkbox key={index} onChange={onChange}>
-            {name}
-          </Checkbox>
-        </Wrapper>
-      ))}
+      <Wrapper>
+        <Checkbox.Group
+          style={{ width: '100%' }}
+          onChange={onChangeSelectGroup}
+          value={selectedKeys}
+        >
+          {list.map(({ name, id }, index) => (
+            <Checkbox value={id} key={index}>
+              {name}
+            </Checkbox>
+          ))}
+        </Checkbox.Group>
+      </Wrapper>
 
       <Space>
         <Button

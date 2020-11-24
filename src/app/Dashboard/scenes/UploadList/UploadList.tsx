@@ -22,6 +22,11 @@ import { columns } from './UploadListHelper'
 import { BookFilter, BookSorter } from 'type'
 import { UploaderSearchContext } from './uploaderSearchContext'
 
+const defaultSorter: BookSorter = {
+  field: 'created_at',
+  order: 'DESC'
+}
+
 const _UploadList: FC<{ className?: string }> = ({ className }) => {
   const dispatch = useDispatch()
   // const history = useHistory()
@@ -41,7 +46,7 @@ const _UploadList: FC<{ className?: string }> = ({ className }) => {
     // genAllAudioVisible: false,
     voiceId: '11',
     pendingTasks: 0,
-    sorter: undefined,
+    sorter: defaultSorter,
     filters: undefined
   })
 
@@ -66,14 +71,15 @@ const _UploadList: FC<{ className?: string }> = ({ className }) => {
         }
       })
 
-      let sr: BookSorter = undefined
+      let sr: BookSorter
       if (sorter.field) {
         sr = {
           field: sorter.field,
           order: sorter.order === 'ascend' ? 'ASC' : 'DESC'
         }
+      } else {
+        sr = defaultSorter
       }
-      console.log(filters)
       setState({ currentPage: pagination.current, sorter: sr, filters: fts })
     },
     [setState]

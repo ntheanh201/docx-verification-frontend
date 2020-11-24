@@ -4,13 +4,13 @@ import { Container } from 'layout'
 import { LoadingIndicator } from 'ui'
 import { React, styled, useEffect, FC, useState, useCallback } from 'core'
 import { audioService } from 'service'
-import { getAllBooksActionCreator, getBooksState } from 'Store'
+import { getAllBooksActionCreator, getBooksState, getVoices } from 'Store'
 import { useDispatch, useSelector } from 'redux-core'
 // import { useHistory } from 'router'
 
 import { UploadModal } from '../../components/UploadModal'
 
-import { columns } from './UploadListHelper'
+import { columns, onChangeTable } from './UploadListHelper'
 
 const _UploadList: FC<{ className?: string }> = ({ className }) => {
   const dispatch = useDispatch()
@@ -18,6 +18,8 @@ const _UploadList: FC<{ className?: string }> = ({ className }) => {
   const { books, total_pages, page_size, loadingMergeAudio } = useSelector(
     getBooksState
   )
+
+  const voices = useSelector(getVoices)
 
   const [state, setState] = useState({
     bookId: 1,
@@ -101,7 +103,7 @@ const _UploadList: FC<{ className?: string }> = ({ className }) => {
     audioService.getPendingTasks().then(res => setState({ pendingTasks: res }))
   }, [])
 
-  if (!books || state.transmitting || loadingMergeAudio) {
+  if (!books || state.transmitting || loadingMergeAudio || !voices) {
     return <LoadingIndicator />
   }
 
@@ -128,7 +130,8 @@ const _UploadList: FC<{ className?: string }> = ({ className }) => {
       </div>
       <Table
         //@ts-ignore
-        columns={columns}
+        columns={columns(voices)}
+        onChange={onChangeTable}
         dataSource={books}
         rowKey={record => record.id}
         pagination={{

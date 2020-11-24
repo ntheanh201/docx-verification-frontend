@@ -16,7 +16,13 @@ import DeleteBook from '../../components/DeleteBook'
 import BookName from '../../components/BookName'
 import MergeAll from '../../components/MergeAll'
 
-export const columns = [
+const restructuredFilterVoices = voices =>
+  voices.map(({ id, name }) => ({
+    value: id,
+    text: name
+  }))
+
+export const columns = voices => [
   {
     title: 'Tên sách',
     dataIndex: 'name',
@@ -37,6 +43,8 @@ export const columns = [
     title: 'Tiến trình xác minh',
     key: 'progress',
     width: '15%',
+    sorter: (a, b) => a.progress - b.progress,
+    sortDirections: ['ascend', 'descend'],
     render: (_: React.ReactNode, record: { id: string }) => (
       <BookProgress id={record.id} />
     )
@@ -44,6 +52,8 @@ export const columns = [
   {
     title: 'Người upload',
     key: 'uploader.name',
+    filters: [],
+    // onFilter: (value, record) => record.uploader.name.indexOf(value) === 0,
     render: (text: React.ReactNode, record: { uploader: any }) => {
       return record.uploader?.name
     }
@@ -52,12 +62,16 @@ export const columns = [
     title: 'Giọng mặc định',
     key: 'default_voice',
     dataIndex: 'default_voice',
+    filters: restructuredFilterVoices(voices),
+    // onFilter: (value, record) => record.name.indexOf(value) === 0,
     render: (text: string) => <VoiceColumn voice_id={text} />
   },
   {
     title: 'Upload lúc',
     key: 'created_at',
     dataIndex: 'created_at',
+    sortDirections: ['ascend', 'descend'],
+    sorter: (a, b) => a.created_at - b.created_at,
     render: (text: string) => {
       const d = text && new Date(text)
       return <>{d && d.toLocaleString()}</>
@@ -81,9 +95,7 @@ export const columns = [
       }
     ) => {
       return (
-        <Dropdown
-          overlay={<DropdownMenu {...record} />}
-        >
+        <Dropdown overlay={<DropdownMenu {...record} />}>
           <a className='ant-dropdown-link' onClick={e => e.preventDefault()}>
             Thao tác <DownOutlined />
           </a>
@@ -100,13 +112,13 @@ const Text = styled.span`
 `
 
 const DropdownMenu = ({
-                        id,
-                        acceptAudioDownload,
-                        audio_url,
-                        saved_name,
-                        name,
-                        default_voice
-                      }) => {
+  id,
+  acceptAudioDownload,
+  audio_url,
+  saved_name,
+  name,
+  default_voice
+}) => {
   return (
     <Menu>
       <Menu.Item>
@@ -157,4 +169,8 @@ const DropdownMenu = ({
       </Menu.Item>
     </Menu>
   )
+}
+
+export const onChangeTable = (pagination, filters, sorter, extra) => {
+  console.log('params', pagination, filters, sorter, extra)
 }

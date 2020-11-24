@@ -2,7 +2,15 @@ import { Table, Button as PrimaryButton } from 'antd'
 
 import { Container } from 'layout'
 import { LoadingIndicator } from 'ui'
-import { React, styled, useEffect, FC, useState, useCallback } from 'core'
+import {
+  React,
+  styled,
+  useEffect,
+  FC,
+  useState,
+  useCallback,
+  useMemo
+} from 'core'
 import { audioService } from 'service'
 import { getAllBooksActionCreator, getBooksState, getVoices } from 'Store'
 import { useDispatch, useSelector } from 'redux-core'
@@ -10,7 +18,9 @@ import { useDispatch, useSelector } from 'redux-core'
 
 import { UploadModal } from '../../components/UploadModal'
 
-import { columns, onChangeTable } from './UploadListHelper'
+import { columns } from './UploadListHelper'
+import { BookFilter, BookSorter } from 'type'
+import { UploaderSearchContext } from './uploaderSearchContext'
 
 const _UploadList: FC<{ className?: string }> = ({ className }) => {
   const dispatch = useDispatch()
@@ -30,75 +40,49 @@ const _UploadList: FC<{ className?: string }> = ({ className }) => {
     file: null,
     // genAllAudioVisible: false,
     voiceId: '11',
-    pendingTasks: 0
+    pendingTasks: 0,
+    sorter: undefined,
+    filters: undefined
   })
 
-  const { currentPage, pendingTasks } = state
+  const [uploader, setUploader] = useState('')
+
+  const { currentPage, pendingTasks, sorter, filters } = state
 
   const getAllBooks = useCallback(async () => {
-    await dispatch(getAllBooksActionCreator(currentPage - 1))
-  }, [dispatch, currentPage])
+    await dispatch(getAllBooksActionCreator(currentPage - 1, filters, sorter))
+  }, [dispatch, currentPage, sorter, filters])
 
-  // const onHandleUpload = async event => {
-  //   const file = event?.target?.files[0]
-  //   await setState({ transmitting: true })
-  //   const book = await dispatch(uploadBookActionCreator(file))
-  //   await setState({
-  //     transmitting: false,
-  //     //@ts-ignore
-  //     bookId: book?.id,
-  //     genAllAudioVisible: true
-  //   })
-  //   await getAllBooks()
-  //
-  //   // history.push(`/book/${book?.id}`)
-  // }
+  const renderColumns = useMemo(() => {
+    return columns(voices || [])
+  }, [voices])
 
-  const onChangePage = page => {
-    setState({ currentPage: page })
-  }
+  const onChange = useCallback(
+    (pagination, filters, sorter) => {
+      const fts: BookFilter = {}
+      Object.keys(filters).forEach(key => {
+        if (filters[key]) {
+          fts[key] = filters[key]
+        }
+      })
 
-  // const onModalVisible = id => {
-  //   setState({ deleteModalVisible: true, deleteId: id })
-  // }
-
-  // const onModalCancel = () => {
-  //   setState({ deleteModalVisible: false, genAllAudioVisible: false })
-  // }
-  //
-  // const onModalConfirm = async () => {
-  //   await dispatch(deleteBookActionCreator(state.deleteId))
-  //   await setState({ deleteModalVisible: false })
-  // }
-
-  // const onClickDownloadBook = async (savedName: string) => {
-  //   const data = await bookService.downloadBook(savedName)
-  //   // console.log(data)
-  //   await setState({ file: data })
-  // }
-
-  // const onConfirmGenAudio = async () => {
-  //   pageService.genAllAudio(bookId, voiceId).then(res => {
-  //     console.log(res)
-  //   })
-  //   await setState({ genAllAudioVisible: false })
-  //   toast('Gen audio đang được xử lý')
-  // }
-  //
-  // const onChangeVoice = async voiceId => {
-  //   await setState({ voiceId })
-  // }
-
-  // const onClickGenBookAudio = async id => {
-  //   await setState({
-  //     bookId: id,
-  //     genAllAudioVisible: true
-  //   })
-  // }
+      let sr: BookSorter = undefined
+      if (sorter.field) {
+        sr = {
+          field: sorter.field,
+          order: sorter.order === 'ascend' ? 'ASC' : 'DESC'
+        }
+      }
+      console.log(filters)
+      setState({ currentPage: pagination.current, sorter: sr, filters: fts })
+    },
+    [setState]
+  )
 
   useEffect(() => {
     getAllBooks()
   }, [getAllBooks])
+
   useEffect(() => {
     audioService.getPendingTasks().then(res => setState({ pendingTasks: res }))
   }, [])
@@ -111,51 +95,24 @@ const _UploadList: FC<{ className?: string }> = ({ className }) => {
     <Container className={className}>
       <Header>
         <Title>Sách</Title>
-        {/*<Button>*/}
-        {/*  <input*/}
-        {/*    accept='.docx'*/}
-        {/*    type='file'*/}
-        {/*    name='file'*/}
-        {/*    id='file'*/}
-        {/*    onChange={onHandleUpload}*/}
-        {/*  />*/}
-        {/*  <Label htmlFor='file'>*/}
-        {/*    <CloudUploadOutlined /> Tải sách lên*/}
-        {/*  </Label>*/}
-        {/*</Button>*/}
         <UploadModal />
       </Header>
       <div className='ant-table-wrapper space-bottom'>
         <Button type='dashed'>Pending tasks: {pendingTasks} </Button>
       </div>
-      <Table
-        //@ts-ignore
-        columns={columns(voices)}
-        onChange={onChangeTable}
-        dataSource={books}
-        rowKey={record => record.id}
-        pagination={{
-          total: total_pages * page_size,
-          defaultPageSize: page_size,
-          onChange: onChangePage
-        }}
-      />
-      {/*<Modal*/}
-      {/*  title='Xoá Sách'*/}
-      {/*  visible={state.deleteModalVisible}*/}
-      {/*  onOk={onModalConfirm}*/}
-      {/*  onCancel={onModalCancel}*/}
-      {/*>*/}
-      {/*  <p>Bạn có chắc chắn muốn xoá sách này?</p>*/}
-      {/*</Modal>*/}
-      {/*<Modal*/}
-      {/*  title='Gen Audio'*/}
-      {/*  visible={state.genAllAudioVisible}*/}
-      {/*  onOk={onConfirmGenAudio}*/}
-      {/*  onCancel={onModalCancel}*/}
-      {/*>*/}
-      {/*  <GenAllAudio onChangeVoice={onChangeVoice} id={record.id} />*/}
-      {/*</Modal>*/}
+      <UploaderSearchContext.Provider value={[uploader, setUploader]}>
+        <Table
+          //@ts-ignore
+          columns={renderColumns}
+          onChange={onChange}
+          dataSource={books}
+          rowKey={record => record.id}
+          pagination={{
+            total: total_pages * page_size,
+            defaultPageSize: page_size
+          }}
+        />
+      </UploaderSearchContext.Provider>
     </Container>
   )
 }

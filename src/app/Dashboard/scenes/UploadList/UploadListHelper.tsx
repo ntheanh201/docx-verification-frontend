@@ -15,6 +15,7 @@ import GenAllAudioModal from '../../components/GenAllAudioModal'
 import DeleteBook from '../../components/DeleteBook'
 import BookName from '../../components/BookName'
 import MergeAll from '../../components/MergeAll'
+import UploaderFilterDropdown from '../../UploadFilterDropdown'
 
 const restructuredFilterVoices = voices =>
   voices.map(({ id, name }) => ({
@@ -43,20 +44,22 @@ export const columns = voices => [
     title: 'Tiến trình xác minh',
     key: 'progress',
     width: '15%',
-    sorter: (a, b) => a.progress - b.progress,
-    sortDirections: ['ascend', 'descend'],
+    dataIndex: 'progress',
+    sorter: true,
     render: (_: React.ReactNode, record: { id: string }) => (
       <BookProgress id={record.id} />
     )
   },
   {
     title: 'Người upload',
-    key: 'uploader.name',
+    key: 'uploader',
     filters: [],
+    dataIndex: 'uploader.name',
     // onFilter: (value, record) => record.uploader.name.indexOf(value) === 0,
     render: (text: React.ReactNode, record: { uploader: any }) => {
       return record.uploader?.name
-    }
+    },
+    filterDropdown: UploaderFilterDropdown
   },
   {
     title: 'Giọng mặc định',
@@ -71,7 +74,7 @@ export const columns = voices => [
     key: 'created_at',
     dataIndex: 'created_at',
     sortDirections: ['ascend', 'descend'],
-    sorter: (a, b) => a.created_at - b.created_at,
+    sorter: true,
     render: (text: string) => {
       const d = text && new Date(text)
       return <>{d && d.toLocaleString()}</>
@@ -113,7 +116,7 @@ const Text = styled.span`
 
 const DropdownMenu = ({
   id,
-  acceptAudioDownload,
+  // acceptAudioDownload,
   audio_url,
   saved_name,
   name,
@@ -169,8 +172,4 @@ const DropdownMenu = ({
       </Menu.Item>
     </Menu>
   )
-}
-
-export const onChangeTable = (pagination, filters, sorter, extra) => {
-  console.log('params', pagination, filters, sorter, extra)
 }

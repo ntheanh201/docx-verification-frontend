@@ -1,5 +1,5 @@
 import { axios } from 'http-backend'
-import { Book, BooksPaged } from 'type'
+import { Book, BookFilter, BookSorter, BooksPaged } from 'type'
 
 import BaseService from './Base'
 
@@ -9,9 +9,17 @@ class BookService extends BaseService<Book> {
     this.baseURL += 'books'
   }
 
-  getAllBooks(currentPage: number = 0): Promise<BooksPaged> {
+  getAllBooks(
+    currentPage: number = 0,
+    filters: BookFilter,
+    sorter: BookSorter
+  ): Promise<BooksPaged> {
     return axios
-      .get(this.baseURL + `?page=${currentPage}`)
+      .post(this.baseURL, {
+        page: currentPage,
+        filters,
+        sorter
+      })
       .then(res => res.data)
       .catch(err => {
         console.log(err)

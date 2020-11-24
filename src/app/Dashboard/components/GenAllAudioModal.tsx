@@ -28,8 +28,6 @@ const GenAllAudioModal = ({ id, default_voice }) => {
       .finally(() => setVisible(false))
   }, [id])
 
-  console.log(loading)
-
   return (
     <div>
       <Button type='link' onClick={() => setVisible(true)}>

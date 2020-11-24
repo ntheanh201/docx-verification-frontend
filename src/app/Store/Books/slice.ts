@@ -22,9 +22,9 @@ export const docSlice = createSlice({
   initialState,
   reducers: {
     getAllBooks: (state, { payload }: PayloadAction<BooksPaged>) => {
-      state.books = payload.books
-        ? payload.books.sort((a, b) => b.created_at.localeCompare(a.created_at))
-        : payload.books
+      state.books = Array.isArray(payload.books)
+        ? payload.books
+        : []
       state.current_page = payload.current_page
       state.total_pages = payload.total_pages
       state.page_size = payload.page_size

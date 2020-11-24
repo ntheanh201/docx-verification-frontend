@@ -1,7 +1,7 @@
 import { docSlice } from './slice'
 
 import { bookService } from 'service'
-import { Book } from 'type'
+import { Book, BookFilter, BookSorter } from 'type'
 import { message } from 'antd'
 
 const {
@@ -14,10 +14,12 @@ const {
 } = docSlice.actions
 
 export const getAllBooksActionCreator = (
-  currentPage: number
+  currentPage: number,
+  filters: BookFilter,
+  sorter: BookSorter
 ) => async dispatch => {
   try {
-    const booksPaged = await bookService.getAllBooks(currentPage)
+    const booksPaged = await bookService.getAllBooks(currentPage, filters, sorter)
     await dispatch(getAllBooks(booksPaged))
   } catch (e) {
     return console.error(e.message)

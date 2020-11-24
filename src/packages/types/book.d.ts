@@ -34,3 +34,12 @@ export interface Page {
   book_id: number
   id?: number
 }
+
+export interface BookFilter {
+  [key: string]: string
+}
+
+export interface BookSorter {
+  field: string
+  order: string
+}

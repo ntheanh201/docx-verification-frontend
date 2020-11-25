@@ -8,6 +8,7 @@ export interface Book {
   uploader?: number
   total_pages?: number
   audio_url: string
+  compressed_url: string
   status?: Pick<'status', 'done'>
   acceptAudioDownload?: boolean
   created_at?: string

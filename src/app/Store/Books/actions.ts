@@ -10,6 +10,7 @@ const {
   uploadBook,
   deleteBook,
   mergeAudio,
+  compressAudio,
   appendBook
 } = docSlice.actions
 
@@ -19,7 +20,11 @@ export const getAllBooksActionCreator = (
   sorter: BookSorter
 ) => async dispatch => {
   try {
-    const booksPaged = await bookService.getAllBooks(currentPage, filters, sorter)
+    const booksPaged = await bookService.getAllBooks(
+      currentPage,
+      filters,
+      sorter
+    )
     await dispatch(getAllBooks(booksPaged))
   } catch (e) {
     return console.error(e.message)
@@ -87,6 +92,20 @@ export const mergeAudioActionCreator = (bookId: number) => async dispatch => {
     await dispatch(mergeAudio({ id: bookId, audio_url }))
     message.success('Merge audio thành công')
     return audio_url
+  } catch (e) {
+    message.error(e.message)
+    return null
+  }
+}
+
+export const compressAudioActionCreator = (
+  bookId: number
+) => async dispatch => {
+  try {
+    const { compressed_url } = await bookService.compressAudio(bookId)
+    await dispatch(compressAudio({ id: bookId, compressed_url }))
+    message.success('Compress audio thành công')
+    return compressed_url
   } catch (e) {
     message.error(e.message)
     return null

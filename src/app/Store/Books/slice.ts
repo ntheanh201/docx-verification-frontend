@@ -22,9 +22,7 @@ export const docSlice = createSlice({
   initialState,
   reducers: {
     getAllBooks: (state, { payload }: PayloadAction<BooksPaged>) => {
-      state.books = Array.isArray(payload.books)
-        ? payload.books
-        : []
+      state.books = Array.isArray(payload.books) ? payload.books : []
       state.current_page = payload.current_page
       state.total_pages = payload.total_pages
       state.page_size = payload.page_size
@@ -58,6 +56,13 @@ export const docSlice = createSlice({
     ) => {
       const index = state.books?.findIndex(book => book.id === payload.id)
       state.books[index].audio_url = payload.audio_url
+    },
+    compressAudio: (
+      state,
+      { payload }: PayloadAction<{ id: number; compressed_url: string }>
+    ) => {
+      const index = state.books?.findIndex(book => book.id === payload.id)
+      state.books[index].compressed_url = payload.compressed_url
     },
     // setLoadingMergeAudio: (state, { payload }: PayloadAction<boolean>) => {
     //   state.loadingMergeAudio = payload

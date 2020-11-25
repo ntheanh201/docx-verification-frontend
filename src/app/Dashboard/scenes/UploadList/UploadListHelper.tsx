@@ -16,6 +16,7 @@ import DeleteBook from '../../components/DeleteBook'
 import BookName from '../../components/BookName'
 import MergeAll from '../../components/MergeAll'
 import UploaderFilterDropdown from '../../components/UploadFilterDropdown'
+import CompressAudio from '../../components/CompressAudio'
 
 const restructuredFilterVoices = voices =>
   voices.map(({ id, name }) => ({
@@ -93,6 +94,7 @@ export const columns = voices => [
         saved_name: string
         name: string
         audio_url: string
+        compressed_url: string
         acceptAudioDownload: boolean
         default_voice: string
       }
@@ -118,6 +120,7 @@ const DropdownMenu = ({
   id,
   // acceptAudioDownload,
   audio_url,
+  compressed_url,
   saved_name,
   name,
   default_voice
@@ -137,6 +140,9 @@ const DropdownMenu = ({
       </Menu.Item>
       <Menu.Item>
         <MergeAll id={id} audio_url={audio_url} />
+      </Menu.Item>
+      <Menu.Item>
+        <CompressAudio id={id} audio_url={compressed_url} />
       </Menu.Item>
       {/*{acceptAudioDownload && (*/}
       {/*  <Menu.Item>*/}

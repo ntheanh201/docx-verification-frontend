@@ -74,6 +74,18 @@ class BookService extends BaseService<Book> {
       })
   }
 
+  async compressAudio(bookId): Promise<any> {
+    return axios
+      .post(this.baseURL + '/compress_audio', {
+        book_id: bookId
+      })
+      .then(res => res.data)
+      .catch(err => {
+        console.log(err)
+        throw err.response.data
+      })
+  }
+
   async cloneBook(book_id: number, voice_id: string): Promise<Book> {
     return axios
       .post(this.baseURL + '/clone', {

@@ -45,7 +45,7 @@ export const columns = voices => [
     key: 'progress',
     width: '15%',
     dataIndex: 'progress',
-    sorter: true,
+    // sorter: true,
     render: (_: React.ReactNode, record: { id: string }) => (
       <BookProgress id={record.id} />
     )

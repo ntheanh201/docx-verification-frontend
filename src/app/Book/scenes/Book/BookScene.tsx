@@ -1,6 +1,7 @@
 import { React, styled, useState, useEffect, useCallback, useMemo } from 'core'
 import { useDispatch, useSelector } from 'redux-core'
 import { useParams, useHistory } from 'router'
+import Sound from 'react-sound'
 import { Pagination, Button, PageHeader } from 'antd'
 import {
   getBooksState,
@@ -10,10 +11,19 @@ import {
   genAudioActionCreator,
   editNormTextActionCreator,
   checkIsGenerated,
-  getBookInfoActionCreator
+  getBookInfoActionCreator,
+  updatePlayStatus,
+  updatePlaying,
+  getAudioState,
+  updatePlayAll,
+  updateFinished
 } from 'Store'
 import { LoadingIndicator, toast } from 'ui'
 import { Container } from 'layout'
+
+import PlayIcon from 'assets/play.svg'
+import ResumeIcon from 'assets/pause.svg'
+
 import { TextArea } from '../../components/TextArea/TextArea'
 import { NormalText } from '../../components/NormalText/NormalText'
 import { AudioBox } from '../../components/AudioBox/AudioBox'
@@ -28,6 +38,9 @@ export const BookScene = () => {
   let { bookId } = useParams<any>()
   const { bookDetail, loadingBookDetail } = useSelector(getBooksState)
   const { book } = useSelector(getPageState)
+  const { playStatus, playing, playAll, finished1Page } = useSelector(
+    getAudioState
+  )
   // const { voices } = useSelector(getAudioState)
 
   const [state, setState] = useState({
@@ -97,6 +110,19 @@ export const BookScene = () => {
     return book && book.task_id && !book.audio_url
   }, [book])
 
+  useEffect(() => {
+    if (playAll) {
+      dispatch(updatePlaying(true))
+      dispatch(updatePlayStatus(Sound.status.PLAYING))
+    }
+    if (finished1Page) {
+      if (currentPage < bookDetail?.total_pages) {
+        onChangePage(currentPage + 1)
+      }
+      dispatch(updateFinished(false))
+    }
+  }, [playAll, dispatch, onChangePage, finished1Page, currentPage, bookDetail])
+
   if (!book || !bookDetail || loadingBookDetail) {
     return <LoadingIndicator />
   }
@@ -104,6 +130,18 @@ export const BookScene = () => {
   // const onChangeVoice = id => {
   //   setState({ voiceId: id })
   // }
+
+  const onPlayAll = async () => {
+    await dispatch(updatePlayAll(!playAll))
+    await dispatch(updatePlaying(!playing))
+    await dispatch(
+      updatePlayStatus(
+        playStatus === Sound.status.PLAYING
+          ? Sound.status.STOPPED
+          : Sound.status.PLAYING
+      )
+    )
+  }
 
   const onClickVerify = async () => {
     await dispatch(verifyNormTextActionCreator(book.id))
@@ -133,7 +171,12 @@ export const BookScene = () => {
   return (
     <Wrapper>
       <PageHeader
-        onBack={() => history.push('/')}
+        onBack={() => {
+          dispatch(updatePlayAll(false))
+          dispatch(updatePlaying(false))
+          dispatch(updatePlayStatus('STOPPED'))
+          history.push('/')
+        }}
         title={`Kiểm tra sách: ${bookDetail.name}`}
       />
       <ActionBar>
@@ -142,6 +185,12 @@ export const BookScene = () => {
           <AudioWrapper>
             <AudioBox reGenAudio={isGenerating} />
           </AudioWrapper>
+          {bookDetail.audio_url && (
+            <PlayAllButton type='primary' onClick={onPlayAll}>
+              <PlayAllLabel>Nghe tất cả</PlayAllLabel>
+              {playAll ? <Img src={ResumeIcon} /> : <Img src={PlayIcon} />}
+            </PlayAllButton>
+          )}
           <Button type='primary' onClick={onClickGenAudio}>
             Gen Audio
           </Button>
@@ -205,7 +254,7 @@ const AudioContainer = styled.div`
 const AudioWrapper = styled.div`
   flex-grow: 1;
   > * {
-    width: 400px;
+    width: 300px;
     border-radius: 5px;
   }
 
@@ -223,3 +272,18 @@ const ContentWrapper = styled.div`
 function VoiceName({ voice_id }) {
   return <VoiceSelect value={voice_id} disabled />
 }
+
+const Img = styled.img`
+  cursor: pointer;
+  width: 26px;
+  height: 26px;
+`
+
+const PlayAllButton = styled(Button)`
+  display: flex;
+  align-items: center;
+`
+
+const PlayAllLabel = styled.span`
+  margin-right: 8px;
+`

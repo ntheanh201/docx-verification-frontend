@@ -3,7 +3,13 @@ import styled from 'styled-components'
 
 import { useHistory, useLocation } from 'router'
 import { Layout, Menu } from 'antd'
-import { getCurrentUser, logout } from 'Store'
+import {
+  getCurrentUser,
+  logout,
+  updatePlayAll,
+  updatePlaying,
+  updatePlayStatus
+} from 'Store'
 import { useSelector, useDispatch } from 'redux-core'
 
 const { Header: HeaderAntd } = Layout
@@ -26,7 +32,15 @@ const _Header: FC<{ className?: string }> = ({ className }) => {
         defaultSelectedKeys={['1']}
         selectedKeys={pathname.includes('book') ? ['2'] : ['1']}
       >
-        <Menu.Item key='1' onClick={() => history.push('/')}>
+        <Menu.Item
+          key='1'
+          onClick={() => {
+            dispatch(updatePlayAll(false))
+            dispatch(updatePlaying(false))
+            dispatch(updatePlayStatus('STOPPED'))
+            history.push('/')
+          }}
+        >
           Trang chủ
         </Menu.Item>
         {pathname.includes('book') && <Menu.Item key='2'>Sách</Menu.Item>}

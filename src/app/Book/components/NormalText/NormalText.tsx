@@ -49,7 +49,7 @@ const BookView = ({ zoom, content }) => {
   }, [zoom])
 
   const onDocumentLoadSuccess = () => {
-    console.log('abc')
+    // console.log('abc')
   }
 
   return (

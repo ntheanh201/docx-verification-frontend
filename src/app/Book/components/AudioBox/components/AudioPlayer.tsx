@@ -7,7 +7,9 @@ import {
   updatePlayStatus,
   updateAudioPosition,
   getPageState,
-  updateDuration
+  updateDuration,
+  updatePlaying,
+  updateFinished
 } from 'Store'
 
 import PlayIcon from 'assets/play.svg'
@@ -20,28 +22,28 @@ export const AudioPlayer = () => {
   const dispatch = useDispatch()
 
   const [state, setState] = useState({
-    playing: false,
     onFetch: true,
     resumePos: 0
   })
 
-  const { playing, resumePos, onFetch } = state
+  const { resumePos, onFetch } = state
 
-  const { playStatus } = useSelector(getAudioState)
+  const { playStatus, playing, playAll } = useSelector(getAudioState)
   const { book } = useSelector(getPageState)
 
   const onFetchPlayButton = () => {
-    setState({ playing: !playing })
+    dispatch(updatePlaying(!playing))
     dispatch(updatePlayStatus(Sound.status.PLAYING))
   }
 
   const onClickPlayButton = () => {
-    setState({ playing: true })
+    dispatch(updatePlaying(true))
     dispatch(updatePlayStatus(Sound.status.PLAYING))
   }
 
   const onClickPausedButton = () => {
-    setState({ playing: false, onFetch: false })
+    dispatch(updatePlaying(false))
+    setState({ onFetch: false })
     dispatch(updatePlayStatus(Sound.status.PAUSED))
   }
 
@@ -63,12 +65,17 @@ export const AudioPlayer = () => {
         }}
         onResume={sound => {
           setState({ resumePos: sound.position })
-
           dispatch(updateAudioPosition(sound.position))
         }}
         onFinishedPlaying={() => {
-          setState({ resumePos: 0, playing: false, onFetch: true })
-          dispatch(updatePlayStatus(Sound.status.STOPPED))
+          setState({ resumePos: 0, onFetch: true })
+          dispatch(updatePlaying(false))
+          if (playAll) {
+            dispatch(updateAudioPosition(0))
+            dispatch(updateFinished(true))
+          } else {
+            dispatch(updatePlayStatus(Sound.status.STOPPED))
+          }
         }}
       />
       <MediaPlayer>
@@ -85,8 +92,9 @@ export const AudioPlayer = () => {
           playing={!playing && onFetch}
           src={StopIcon}
           onClick={() => {
-            setState({ resumePos: 0, playing: false, onFetch: true })
+            setState({ resumePos: 0, onFetch: true })
             dispatch(updateAudioPosition(0))
+            dispatch(updatePlaying(false))
             dispatch(updatePlayStatus(Sound.status.STOPPED))
           }}
         />
@@ -109,7 +117,7 @@ const StyledStop = styled(Img)<{ playing: boolean }>`
 `
 
 const MediaPlayer = styled.div`
-  background-color: #227ca2;
+  background-color: #1890ff;
   padding: 0.1rem 4rem;
   display: grid;
   grid-template-columns: 24px 24px auto;

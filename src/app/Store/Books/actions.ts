@@ -102,10 +102,10 @@ export const compressAudioActionCreator = (
   bookId: number
 ) => async dispatch => {
   try {
-    const { compressed_url } = await bookService.compressAudio(bookId)
-    await dispatch(compressAudio({ id: bookId, compressed_url }))
+    const { audio_url } = await bookService.compressAudio(bookId)
+    await dispatch(compressAudio({ id: bookId, audio_url }))
     message.success('Compress audio thành công')
-    return compressed_url
+    return audio_url
   } catch (e) {
     message.error(e.message)
     return null

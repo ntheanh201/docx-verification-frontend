@@ -118,9 +118,17 @@ export const BookScene = () => {
     if (finished1Page) {
       if (currentPage < bookDetail?.total_pages) {
         onChangePage(currentPage + 1)
+      } else {
+        dispatch(updatePlayAll(false))
+        // dispatch(updatePlaying(false))
+        // dispatch(updatePlayStatus(Sound.status.STOPPED))
+        dispatch(updateFinished(false))
       }
-      dispatch(updateFinished(false))
     }
+    // if (currentPage === bookDetail?.total_pages && !playAll) {
+    //   dispatch(updatePlaying(false))
+    //   dispatch(updatePlayStatus(Sound.status.STOPPED))
+    // }
   }, [playAll, dispatch, onChangePage, finished1Page, currentPage, bookDetail])
 
   if (!book || !bookDetail || loadingBookDetail) {
